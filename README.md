@@ -1,4 +1,4 @@
-# AfterHours– Database Proposal
+# AfterHours – Database Proposal
 
 ## Group Members
 
