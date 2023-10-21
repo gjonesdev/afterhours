@@ -14,32 +14,53 @@ Michael Medrano Mejia - 20011981
 
 ## Brief Description
 
-This website acts as a resource for bars list their happy hour specials and any special events such as karaoke, trivia or open mic. Users can search for happy hour depending on different features such as music, events, happy hour hours and deals. Users will also have the opportunity to review a list of bars based on their personal preference.
-
-Some examples of information that will be available will be information about the bars, menus, events and type of music. Users will also have the opportunity to view and leave reviews.
-
-This purpose of this application is to provide a convenient tool to bar goers to take advantage of offers in the area.
+This website serves as a one-stop resource for bar enthusiasts, offering a comprehensive list of local 
+bars with their respective happy hour specials and event schedules, including karaoke, trivia, live 
+music, and open mic nights. Users can easily search for the perfect happy hour spot based on specific 
+criteria like music genre, events, hours, deals, types of bars (such as sports bars, wine bar, tiki bar or 
+dive bar), and we will also highlight the key features and categories of each bar. Additionally, users 
+can access information about each bar, browse menus, explore music genres played at that bar, and 
+leave reviews. The primary aim of this application is to provide a convenient tool for bar-goers, 
+helping them discover and make the most of enticing offers in their area while tailoring their search to 
+their specific preferences and gaining insights into what each bar uniquely offer through the comment 
+and favorite feature.
 
 ## Core Features:
 
-User Profile:
+User Profile 
+Users can create and personalize their profiles, enabling them to save their preferences, review history, and manage their favorites. This feature enhances the user's experience by tailoring recommendations based on their previous interactions with the website. 
 
-Bar/Restuarant Profile:
+Bar Profile: 
+Bar owners can create profiles that offer detailed information about individual bars. Bar users can add the bar's unique features, happy hour specials, event schedules, menus, and the type of music they offer, etc. These profiles are a comprehensive resource to help users make informed decisions about where to go. 
 
-Restaurant List Page (Search/Filter):
+Bar List Page (Search/Filter): 
+The Bar List Page allows users to search and filter bars based on various criteria like location, type of drinks and food, happy hour hours, types of bars, special events, type of music, and more. This feature helps users quickly discover bars that match their preferences and criteria. 
 
-Reviews:
+Reviews: 
+Users can leave reviews for bars they have visited, sharing their experiences and insights with the community. These reviews help other users make informed decisions and provide valuable feedback to bar owners to improve their offerings. 
 
-Favorite:
+Favorite: 
+The favorite feature allows users to bookmark their preferred bars for easy access. By saving their favorite bars, users can quickly plan outings and revisit bars they enjoy without having to search for them each time. 
+
+ 
 
 ### Extra Features:
 
-Report False Advertising:
+Report false advertising:
+Users can report instances of false advertising or inaccurate information on the website. This feature 
+ensures the accuracy of bar listings and helps maintain the integrity of the platform.
 
-Bar/Restuarant of the day:
+Bar of the day:
+This feature highlights a specific bar each day as the "Bar of the Day." It can highlight a special 
+promotion, event, or a particularly noteworthy establishment to encourage users to explore new 
+bars.
 
-Suggest Bar/Restuarant:
+Suggest Bars:
+Users can suggest new bars to be added to the platform. This feature allows the community to 
+contribute to the website's database, ensuring it remains comprehensive and up to date.
 
-Reservations Request:
+Reservations request:
+This feature allows users to make reservations at selected bars
 
 Proximity/Location:
+This feature helps users find bars near their current location. This feature will help us
