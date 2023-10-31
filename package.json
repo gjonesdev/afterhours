@@ -4,8 +4,9 @@
 	"description": "Afterhours happy hour bar search website.",
 	"main": "app.js",
 	"scripts": {
-		"start": "app.js"
+		"start": "node app.js"
 	},
+	"type": "module",
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/gjonesdev/afterhours.git"
