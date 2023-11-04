@@ -43,5 +43,7 @@ let exportedMethods = {
 
     return theBar;
   },
+
+  async barById() {},
 };
 export default exportedMethods;
