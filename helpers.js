@@ -28,6 +28,17 @@ export const validateOptionalStr = (str) => {
   return str;
 };
 
+//Validating number rating
+export const validateRequiredRating = (num) => {
+  if (!num) throw "Input must be provided!";
+  if (typeof num !== "number") throw "Input must be a valid number!";
+  validNums = [1,2,3,4,5,6,7,8,9,10];
+  if (!validNums.includes(num)) {
+    throw "Invalid Rating"
+  }
+  return num;
+};
+
 //Validating email
 export const validateEmail = (email) => {
   if (
