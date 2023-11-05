@@ -1,3 +1,4 @@
+import { ObjectId, Timestamp } from "mongodb";
 import { bars } from "../config/mongoCollections.js";
 import * as validation from "../helpers.js";
 
@@ -19,7 +20,7 @@ let exportedMethods = {
         }
       });
     }
-    //Creating event
+    //Creating bar
     let newBar = {
       name: name,
       description: description,
@@ -30,7 +31,10 @@ let exportedMethods = {
       schedule: [],
       tags: validTags,
       reviews: [],
+      reviewsCount: 0,
+      reviewsAverage: 0,
       likesCount: 0,
+      creationDate: new Date(),
     };
     const barsCollection = await bars();
     const insertInfo = await barsCollection.insertOne(newBar);
@@ -39,11 +43,53 @@ let exportedMethods = {
     const newBarId = insertInfo.insertedId;
 
     const theBar = await barsCollection.findOne({ _id: newBarId });
-    if (theBar === null) throw "No event with that id";
+    if (theBar === null) throw "No bar with that id";
 
     return theBar;
   },
 
-  async barById() {},
+  async barById(barId) {
+    validation.validateId(barId);
+    const barsCollection = await bars();
+    const thebar = await barsCollection.findOne({ _id: new ObjectId(barId) });
+    if (thebar === null) throw "No bar with that id";
+    return thebar;
+  },
+
+  async allBars() {
+    const barCollection = await bars();
+    let allbars = await barCollection
+      .find({})
+      .project({
+        _id: 1,
+        name: 1,
+        location: 1,
+        tags: 1,
+        reviewsAverage: 1,
+        reviewsCount: 1,
+        likesCount: 1,
+      })
+      .toArray();
+    if (!allbars) throw "Was not able to get all bars!";
+    allbars = allbars.map((element) => {
+      return element;
+    });
+    return allbars;
+  },
+  async removeBar(barId) {
+    validation.validateId(barId);
+    const barCol = await bars();
+    const barToDelete = await barCol.findOneAndDelete({
+      _id: new ObjectId(barId),
+    });
+    if (!barToDelete) throw `Could not delete bar with id: ${barId}`;
+    const deletedbar = {
+      barName: barToDelete.name,
+      deleted: true,
+    };
+
+    return deletedbar;
+  },
 };
+
 export default exportedMethods;
