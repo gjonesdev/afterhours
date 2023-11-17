@@ -1,17 +1,19 @@
-<main>
-    <ul>
-        {{#each bars}}
-        <div>
-            <li>
-                <a href="/marvelcharacter/{{_id}}">
-                    {{name}} <br>
-                    {{location.city}} <br>
-                    {{reviewsAverage}} <br>
-                    {{reviewsCount}} reviews <br>
-                    {{likesCount}} likes <br>
-                </a>
-            </li>
+<ul>
+    {{#each bars}}
+
+    <li>
+        <div class="row"></div>
+        <a href="/marvelcharacter/{{_id}}">
+            <div class="card">
+                {{name}} <br>
+                {{location.city}} <br>
+                {{reviewsAverage}} <br>
+                {{reviewsCount}} reviews <br>
+                {{likesCount}} likes <br>
+            </div>
+        </a>
         </div>
-        {{/each}}
-    </ul>
-</main>
+    </li>
+
+    {{/each}}
+</ul>
