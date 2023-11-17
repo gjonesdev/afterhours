@@ -64,6 +64,7 @@ let exportedMethods = {
       .project({
         _id: 1,
         name: 1,
+        description: 1,
         location: 1,
         tags: 1,
         reviewsAverage: 1,
