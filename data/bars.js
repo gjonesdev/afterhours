@@ -32,7 +32,8 @@ let exportedMethods = {
       tags: validTags,
       reviews: [],
       reviewsCount: 0,
-      reviewsAverage: 0,
+      ratingAverage: 0,
+      likes: [],
       likesCount: 0,
       creationDate: new Date(),
     };
@@ -89,6 +90,83 @@ let exportedMethods = {
     };
 
     return deletedbar;
+  },
+  async barProfileUpdate(barId, name, description, location, email, website) {
+    name = validation.validateRequiredStr(name);
+    description = validation.validateRequiredStr(description);
+    location = validation.validateLocation(location);
+    email = validation.validateEmail(email);
+    barId = validation.validateId(barId);
+    website = validation.validateWebsite(website);
+
+    let toUpdate = {
+      name: name,
+      description: description,
+      location: location,
+      email: email,
+      webesite: website,
+      lastModified: new Date(),
+    };
+    const barCol = await bars();
+    const updatedData = await barCol.findOneAndUpdate(
+      { _id: new ObjectId(barId) },
+      { $set: toUpdate },
+      { returnDocument: "after" }
+    );
+
+    if (!updatedData) {
+      throw "Could not update event successfully";
+    }
+    return updatedData;
+  },
+  //Add Likes
+  async addBarLike(barId, userId) {
+    barId = validation.validateId(barId);
+    userId = validation.validateId(userId);
+    const theBar = await this.barById(barId);
+
+    let theLike = {
+      user: userId,
+      likeDate: new Date(),
+    };
+    const barCol = await bars();
+    const addLike = await barCol.updateOne(
+      { _id: new ObjectId(barId) },
+      { $push: { likes: theLike } }
+    );
+
+    if (addLike.modifiedCount === 0) throw " Like could not be added!";
+    const updatedbar = await this.barById(barId);
+
+    const likesCount = updatedbar.likes.length;
+    await barCol.updateOne(
+      { _id: new ObjectId(barId) },
+      { $set: { likesCount: likesCount } }
+    );
+    return await this.barById(barId);
+  },
+  //Update reviews
+  async addReview(barId, reviewId, ratingAverage) {
+    barId = validation.validateId(barId);
+    reviewId = validation.validateId(reviewId);
+    const theBar = await this.barById(barId);
+
+    const barCol = await bars();
+    const addReview = await barCol.updateOne(
+      { _id: new ObjectId(barId) },
+      { $push: { reviews: reviewId }, $set: { ratingAverage: ratingAverage } }
+    );
+
+    if (addReview.modifiedCount === 0) throw " Review could not be added!";
+    const updatedbar = await this.barById(barId);
+    const reviewsCount = updatedbar.reviews.length;
+
+    await barCol.updateOne(
+      { _id: new ObjectId(barId) },
+      { $set: { reviewsCount: reviewsCount } }
+    );
+
+    return await this.barById(barId);
   },
 };
 

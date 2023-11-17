@@ -32,9 +32,9 @@ export const validateOptionalStr = (str) => {
 export const validateRequiredRating = (num) => {
   if (!num) throw "Input must be provided!";
   if (typeof num !== "number") throw "Input must be a valid number!";
-  validNums = [1,2,3,4,5,6,7,8,9,10];
+  validNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   if (!validNums.includes(num)) {
-    throw "Invalid Rating"
+    throw "Invalid Rating";
   }
   return num;
 };
@@ -55,6 +55,13 @@ export const validateWebsite = (webSite) => {
     throw "Invalid Website format.";
   }
   return webSite;
+};
+
+//Validating date
+export const validateDate = (date) => {
+  if (!date.isValid(date, "MM/DD/YYYY")) throw "Invalid event date!";
+
+  return date;
 };
 
 //Validating location
