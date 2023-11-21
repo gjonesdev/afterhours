@@ -5,34 +5,15 @@ import { validateUser, validateId } from "../helpers.js";
 
 export const createUser = async (userInfo) => {
 	const newUser = validateUser(userInfo);
-	newUser.businesses = [];
 
 	const userCollection = await users();
-
 	const res = await userCollection.insertOne(newUser);
 	if (!res.acknowledged || !res.insertedId) {
 		throw "Failed to add user.";
 	}
 
-	const newUserId = res.insertedId.toString();
-	const user = await getUser(newUserId);
-
-	return user;
+	return res;
 };
-
-// export const getAll = async () => {
-// 	const userCollection = await users();
-// 	let userList = await userCollection.find({}).toArray();
-// 	if (!userList) {
-// 		throw "Could not get all users";
-// 	}
-
-// 	userList = userList.map((user) => {
-// 		return { _id: user._id, email: user.email };
-// 	});
-
-// 	return userList;
-// };
 
 export const getUser = async (userId) => {
 	userId = validateId(userId);
@@ -44,26 +25,6 @@ export const getUser = async (userId) => {
 	}
 
 	return user;
-};
-
-export const deleteUser = async (userId) => {
-	userId = validateId(userId);
-
-	const userCollection = await users();
-
-	const res = await userCollection.findOneAndDelete({
-		_id: new ObjectId(userId),
-	});
-
-	if (!res) {
-		throw "No user with that id.";
-	}
-	const confirmation = {
-		email: res.email,
-		deleted: true,
-	};
-
-	return confirmation;
 };
 
 export const updateUser = async (userId, updatedInfo) => {
@@ -82,4 +43,19 @@ export const updateUser = async (userId, updatedInfo) => {
 	}
 
 	return updatedUserInfo;
+};
+
+export const deleteUser = async (userId) => {
+	userId = validateId(userId);
+
+	const userCollection = await users();
+	const res = await userCollection.findOneAndDelete({
+		_id: new ObjectId(userId),
+	});
+
+	if (!res) {
+		throw "No user with that id.";
+	}
+
+	return res;
 };
