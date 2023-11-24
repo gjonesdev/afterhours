@@ -1,7 +1,8 @@
 import { ObjectId, Timestamp } from "mongodb";
 import { bars } from "../config/mongoCollections.js";
 import * as validation from "../helpers.js";
-
+//TODO: bars by owner
+// TODO:
 let exportedMethods = {
   async createBar(name, description, location, email, website, ownerId, tags) {
     name = validation.validateRequiredStr(name);
@@ -55,6 +56,17 @@ let exportedMethods = {
     const thebar = await barsCollection.findOne({ _id: new ObjectId(barId) });
     if (thebar === null) throw "No bar with that id";
     return thebar;
+  },
+
+  async barByOwner(oId) {
+    validation.validateId(oId);
+    const barsCollection = await bars();
+    const ownerBars = await barsCollection
+      .find({ ownerId: oId })
+      .project({ _id: 1, name: 1, description: 1, location: 1 })
+      .toArray();
+    if (ownerBars.length === 0) throw "No bars found";
+    return ownerBars;
   },
 
   async allBars() {
