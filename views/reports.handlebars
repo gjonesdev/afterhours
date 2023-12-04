@@ -1,0 +1,38 @@
+<small>If you see something say something, We are here to listen to you!</small>
+<p id="error" class="error" hidden></p>
+<form action="/reports" method="POST" class="reports-form" id="reports-form">
+<div class="wrapper centered"> 
+  <article class="letter">
+    <div class="side">
+        <h1>Contact us</h1><br>
+        <label for="reasonInput">Reason:</label>
+        <select name="reasonInput" id="reasonInput" required>
+            <option value="" disabled selected hidden>Choose a reason</option>
+            <option value="Report a problem">Report a problem</option>
+            <option value="Inaccurate information">Inaccurate information</option>
+            <option value="Make a suggestion">Make a suggestion</option>
+            <option value="Give a compliment">Give a compliment</option>
+            <option value="Other">Other</option>
+        </select>
+      <p>
+        <textarea name="commentInput" id="commentInput" placeholder="Your message"></textarea><br>
+      </p>
+    </div>
+    <div class="side">
+      <p>
+        <input type="text" placeholder="Your name" >
+      </p>
+      <p>
+        <input type="email" placeholder="Your email" >
+      </p>
+      <p>
+        <button id="sendLetter">Send</button>
+      </p>
+    </div>
+  </article>
+  <div class="envelope front"></div>
+  <div class="envelope back"></div>
+</div>
+</form>
+<a href="javascript:javascript:history.go(-1)"> <-- Go back to the previous page <--</a>
+<p class="result-message centered">Message sent, Thank you for your message!</p>

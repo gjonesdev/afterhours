@@ -230,3 +230,79 @@ export const validateUser = (userInfo) => {
 
 	return userInfo;
 };
+
+//Report error check:
+/**Validate empty space for userId, reason, comment for reports*/
+export const validateReport = async (
+    userId,
+    reason,
+    comment
+  ) => {
+    //Error check:
+    if(!userId || !reason || !comment) 
+      throw "All fields need to have valid values.";
+  
+    //Change userID = string by userID = ObjectID
+    if(typeof userId !== "string" || userId.trim().length === 0 ||
+       typeof reason !== "string" || reason.trim().length === 0 ||
+       typeof comment !== "string" || comment.trim().length === 0)
+      throw "Invalid string or strings with only spaces are not valid.";
+};
+
+/**Validate user ID for reports*/
+export const validateUserId = async (
+    userId
+  ) => {
+	//If it is String validation:
+	//User Id:
+	if(userId.trim().length === 0) throw 'Empty string or just spaces not allowed for user Id.';
+	userId = userId.trim();
+	//"User Id should not contain space in the middle.
+	let userIdRegex = /[\s]+/g;
+	let regexValue = userIdRegex.exec(userId);
+	if(regexValue !== null){
+		if(regexValue.length >= 1) throw "Not space allowed for user Id";
+	}
+	//userId should not contain numbers
+	if(!isNaN(userId)) throw'User Id should not contain numbers';
+	if(userId.trim().length < 2 || userId.trim().length > 50) throw "User Id should be at least 2 characters long and a max of 50 characters.";
+
+	return userId;
+	//If it is an Object ID validation
+	/*userId = userId.trim();
+	if (userId.length === 0) {
+		throw "Error: User ID cannot be an empty string or just spaces";
+	}
+	if (!ObjectId.isValid(userId)) {
+		throw "invalid object ID";
+	}
+	return userId;*/
+};
+
+/**Validate reason for reports*/
+export const validateReason = async (
+    reason
+  ) => {
+	 //Reason:
+	 if(reason.trim().length === 0) throw 'Empty string or just spaces not allowed for reason.';
+	 reason = reason.trim();
+	 //Reason should not contain numbers
+	 if(!isNaN(reason)) throw'Reason should not contain numbers';
+	 let notNumbersRegex = /^[a-zA-Z ]*$/;
+	 if(notNumbersRegex.exec(reason) === null) throw 'Reason should not contain numbers and not symbols';
+	 if(reason.trim().length < 2 || reason.trim().length > 50) throw "Reason should be at least 2 characters long and a max of 50 characters.";
+	 return reason;
+};
+
+/**Validate comment for reports*/
+export const validateComment = async (
+    comment
+  ) => {
+	//Comment or Message:
+	if(comment.trim().length === 0) throw 'Empty string or just spaces not allowed for comment or message.';
+	comment = comment.trim();
+	//Comment or message should not contain numbers
+	if(!isNaN(comment)) throw'Comment or message should not contain only numbers';
+	if(comment.trim().length < 2 || comment.trim().length > 500) throw "Comment or message should be at least 2 characters long and a max of 500 characters.";
+	return comment; 
+};
