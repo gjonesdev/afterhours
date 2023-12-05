@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validateId, validateAccount, validateUser } from "../helpers.js";
-import { accountData } from "../data/index.js";
+import { accountData, userData } from "../data/index.js";
 
 const router = Router();
 
@@ -12,30 +12,47 @@ router.route("/").post(async (req, res) => {
 	}
 
 	let accountInfo = {
-		email: req.body.email,
-		password: req.body.password,
-		accountType: req.body.accountType,
+		email: req.body.emailInput,
+		password: req.body.passwordInput,
+		accountType: req.body.accountTypeInput,
 	};
 
 	let userInfo = {
-		firstName: req.body.firstName,
-		lastName: req.body.lastName,
-		phone: req.body.phone,
+		firstName: req.body.firstNameInput,
+		lastName: req.body.lastNameInput,
+		phone: req.body.phoneInput,
 	};
 
 	try {
-		accountInfo = req.body = await validateAccount(accountInfo);
-		userInfo = req.body = await validateUser(userInfo);
+		accountInfo = validateAccount(accountInfo);
+		userInfo = validateUser(userInfo);
 	} catch (e) {
 		return res.status(400).json({ error: e });
 	}
 
-	try {
-		const result = await accountData.createAccount({
-			accountInfo,
-			userInfo,
+	if (!req.body.confirmPasswordInput) {
+		return res.status(400).render("register", {
+			title: "Register",
+			form: req.body,
+			error: { status: 400, message: "Must confirm your password." },
 		});
-		return res.json(result);
+	}
+
+	if (accountInfo.password !== req.body.confirmPasswordInput.trim()) {
+		return res.status(400).render("register", {
+			title: "Register",
+			form: req.body,
+			error: { status: 400, message: "Passwords do not match." },
+		});
+	}
+
+	try {
+		const result = await accountData.createAccount(accountInfo, userInfo);
+		if (result) {
+			return res.redirect(303, "/login");
+		} else {
+			return res.status(500).send("Internal Server Error");
+		}
 	} catch (e) {
 		return res.sendStatus(500);
 	}
@@ -50,8 +67,15 @@ router
 			return res.status(400).json({ error: e });
 		}
 		try {
-			const result = await accountData.getAccount(req.params.accountId);
-			return res.json(result);
+			const account = await accountData.getAccount(req.params.accountId);
+			console.log(account);
+			const user = await userData.getUser(account.userId);
+			return res.render("account", {
+				title: "Account",
+				email: account.email,
+				firstName: user.firstName,
+				lastName: user.lastName,
+			});
 		} catch (e) {
 			return res.status(404).json({ error: e });
 		}
