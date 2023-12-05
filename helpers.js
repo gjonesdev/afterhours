@@ -32,7 +32,7 @@ export const validateOptionalStr = (str) => {
 export const validateRequiredRating = (num) => {
 	if (!num) throw "Input must be provided!";
 	if (typeof num !== "number") throw "Input must be a valid number!";
-	let validNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+let validNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 	if (!validNums.includes(num)) {
 		throw "Invalid Rating";
 	}
@@ -305,4 +305,18 @@ export const validateComment =  (
 	if(!isNaN(comment)) throw'Comment or message should not contain only numbers';
 	if(comment.trim().length < 2 || comment.trim().length > 500) throw "Comment or message should be at least 2 characters long and a max of 500 characters.";
 	return comment; 
+};
+
+export const validateReview = async (userId, barId, rating, comment) => {
+	const validatedUserId = validateRequiredStr(userId);
+	const validatedBarId = validateRequiredStr(barId);
+	const validatedRating = validateRequiredRating(rating);
+	const validatedComment = validateOptionalStr(comment);
+
+	return {
+		userId: validatedUserId,
+		barId: validatedBarId,
+		rating: validatedRating,
+		comment: validatedComment,
+	};
 };
