@@ -233,7 +233,7 @@ export const validateUser = (userInfo) => {
 
 //Report error check:
 /**Validate empty space for userId, reason, comment for reports*/
-export const validateReport = async (
+export const validateReport = (
     userId,
     reason,
     comment
@@ -250,7 +250,7 @@ export const validateReport = async (
 };
 
 /**Validate user ID for reports*/
-export const validateUserId = async (
+export const validateUserId =  (
     userId
   ) => {
 	//If it is String validation:
@@ -280,7 +280,7 @@ export const validateUserId = async (
 };
 
 /**Validate reason for reports*/
-export const validateReason = async (
+export const validateReason =  (
     reason
   ) => {
 	 //Reason:
@@ -295,7 +295,7 @@ export const validateReason = async (
 };
 
 /**Validate comment for reports*/
-export const validateComment = async (
+export const validateComment =  (
     comment
   ) => {
 	//Comment or Message:
