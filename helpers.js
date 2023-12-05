@@ -11,7 +11,7 @@ export const validateId = (id) => {
 	return id;
 };
 
-//Validating string
+// Validate string
 export const validateRequiredStr = (str) => {
 	if (!str) throw "Input must be provided!";
 	if (typeof str !== "string") throw "Input must be a valid string!";
@@ -21,14 +21,14 @@ export const validateRequiredStr = (str) => {
 	return str;
 };
 
-//Validating optional string
+// Validate optional string
 export const validateOptionalStr = (str) => {
 	if (typeof str !== "string") throw "Input must be a valid string!";
 	str = str.trim();
 	return str;
 };
 
-//Validating number rating
+// Validate number rating
 export const validateRequiredRating = (num) => {
 	if (!num) throw "Input must be provided!";
 	if (typeof num !== "number") throw "Input must be a valid number!";
@@ -39,24 +39,57 @@ export const validateRequiredRating = (num) => {
 	return num;
 };
 
-//Validating email
+// Validate email
 export const validateEmail = (email) => {
+	if (email === undefined || email === null || email === "") {
+		throw `You must provide an email.`;
+	}
+
+	if (typeof email !== "string") {
+		throw `Email must be of type string.`;
+	}
+
+	email = email.trim();
+
 	if (
-		!/^[^\W_]+([._-][^\W_]+)*@[^\W_]+([._-][^\W_]+)*.[^\W_]{2,}$/.test(
+		!/^[^\W_]+([._-][^\W_]+)*@[^\W_]{1,}(\.[^\W_]{2,})(\.[^\W_]{2,})?/.test(
 			email
 		)
 	) {
-		throw "Invalid Email format.";
+		throw "Email must be in valid email address format.";
 	}
-	return email;
+
+	return email.toLowerCase();
+};
+
+export const validatePassword = (password) => {
+	if (password === undefined || password === null || password === "") {
+		throw `You must provide a password.`;
+	}
+
+	if (typeof password !== "string") {
+		throw `password must be of type string.`;
+	}
+
+	password = password.trim();
+
+	if (/\s/.test(password)) {
+		throw "password cannot contain spaces.";
+	}
+
+	if (!/(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}/.test(password)) {
+		throw "password must be at least 8 characters, contain at least one uppercase character, one number, and one special character.";
+	}
+
+	return password;
 };
 
 //Validating website
-export const validateWebsite = (webSite) => {
-	if (!/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b/.test(webSite)) {
+export const validateWebsite = (website) => {
+	if (!/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b/.test(website)) {
 		throw "Invalid Website format.";
 	}
-	return webSite;
+	return website;
 };
 
 //Validating date
@@ -163,37 +196,32 @@ export const validateLocation = (location) => {
 	return location;
 };
 
-export const validateAccount = async (accountInfo) => {
-	const args = {
-		email: accountInfo.email,
-		password: accountInfo.password,
-		accountType: accountInfo.accountType,
-	};
+export const validateAccount = (accountInfo) => {
+	accountInfo.email = validateEmail(accountInfo.email);
+	accountInfo.password = validatePassword(accountInfo.password);
 
-	Object.keys(args).forEach((arg) => {
-		if (args[arg] === undefined || args[arg] === null || args[arg] === "") {
-			throw `You must provide the ${arg} argument.`;
-		}
-		if (typeof accountInfo[arg] !== "string") {
-			throw `${arg} must be of type string.`;
-		}
-	});
+	if (
+		accountInfo.accountType === undefined ||
+		accountInfo.accountType === null ||
+		accountInfo.accountType === ""
+	) {
+		throw `You must provide the account type.`;
+	}
 
-	accountInfo.email = accountInfo.email.trim();
-	accountInfo.password = accountInfo.password.trim();
+	if (typeof accountInfo.accountType !== "string") {
+		throw `Account type must be a string.`;
+	}
+
 	accountInfo.accountType = accountInfo.accountType.trim();
 
 	if (
-		!/^[^\W_]+([._-][^\W_]+)*@[^\W_]+([._-][^\W_]+)*.[^\W_]{2,}$/.test(
-			accountInfo.email
+		!(
+			accountInfo.accountType === "patron" ||
+			accountInfo.accountType === "owner"
 		)
 	) {
-		throw "email must be in valid email format.";
+		throw "Account type must either be patron or owner.";
 	}
-
-	// validate password
-
-	// validate accountType enum
 
 	return accountInfo;
 };

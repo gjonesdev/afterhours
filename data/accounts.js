@@ -1,11 +1,18 @@
 import { ObjectId } from "mongodb";
+import bcrypt from "bcrypt";
 import { accounts } from "../config/mongoCollections.js";
 import { userData } from "./index.js";
-import { validateAccount, validateId } from "../helpers.js";
+import {
+	validateAccount,
+	validateId,
+	validateUser,
+	validateEmail,
+	validatePassword,
+} from "../helpers.js";
 
 export const createAccount = async (accountInfo, userInfo) => {
-	const newAccount = await validateAccount(accountInfo);
-	const newUser = await validateUser(userInfo);
+	accountInfo = validateAccount(accountInfo);
+	userInfo = validateUser(userInfo);
 
 	const accountCollection = await accounts();
 	const existing = await accountCollection.findOne({
@@ -16,12 +23,13 @@ export const createAccount = async (accountInfo, userInfo) => {
 		throw "Account with that email already exists.";
 	}
 
-	const userId = userData.createUser(newUser).insertedId.toString();
+	const userId = await userData.createUser(userInfo);
 
-	accountInfo.userId = userId; //hash(userId);
-	// accountInfo.password = hash("password");
+	const saltRounds = 16;
+	accountInfo.password = await bcrypt.hash(accountInfo.password, saltRounds);
+	accountInfo.userId = userId;
 
-	const res = await accountCollection.insertOne(newAccount);
+	const res = await accountCollection.insertOne(accountInfo);
 	if (!res.acknowledged || !res.insertedId) {
 		throw "Failed to add account.";
 	}
@@ -30,6 +38,7 @@ export const createAccount = async (accountInfo, userInfo) => {
 };
 
 export const getAccount = async (accountId) => {
+	//check validated
 	accountId = validateId(accountId);
 
 	const accountCollection = await accounts();
@@ -40,28 +49,39 @@ export const getAccount = async (accountId) => {
 		throw "No account with that id.";
 	}
 
-	account.user = getUser(account.userId); // unhash(account.userId)
-	// account.bars = getBarsByOwner(accountId);
+	const accountDetails = {
+		id: account._id,
+		email: account.email,
+		accountType: account.accountType,
+		userId: account.userId,
+	};
 
-	return account;
+	return accountDetails;
 };
 
 export const updateAccount = async (accountId, updatedInfo) => {
 	accountId = validateId(accountId);
-	updatedAccount = validateAccount(updatedInfo);
+	updatedInfo = validateAccount(updatedInfo);
 
 	const accountCollection = await accounts();
 
-	const updatedAccountInfo = await accountCollection.findOneAndUpdate(
+	const updatedAccount = await accountCollection.findOneAndUpdate(
 		{ _id: new ObjectId(accountId) },
-		{ $set: updatedAccount },
+		{ $set: updated },
 		{ returnDocument: "after" }
 	);
-	if (!updatedAccountInfo) {
+	if (!updatedAccount) {
 		throw "No account with that id.";
 	}
 
-	return updatedAccountInfo;
+	const accountInfo = {
+		email: updatedAccount.email,
+		accountId: updatedAccount.accountId,
+		userId: updatedAccount.userId,
+		accountType: updatedAccount.accountType,
+	};
+
+	return accountInfo;
 };
 
 export const deleteAccount = async (accountId) => {
@@ -69,17 +89,44 @@ export const deleteAccount = async (accountId) => {
 
 	const accountCollection = await accounts();
 
-	const res = await accountCollection.findOneAndDelete({
+	const deletedAccount = await accountCollection.findOneAndDelete({
 		_id: new ObjectId(accountId),
 		$project: userId,
 	});
 
-	if (!res) {
+	if (!deletedAccount) {
 		throw "No account with that id.";
 	}
 
-	const userId = res.userId.toString();
+	const userId = deletedAccount.userId.toString();
 	userData.deleteUser(userId);
 
-	return res;
+	return { deleted: true };
+};
+
+export const login = async (loginInfo) => {
+	loginInfo.email = validateEmail(loginInfo.email);
+	loginInfo.password = validatePassword(loginInfo.password);
+
+	const accountCollection = await accounts();
+	const account = await accountCollection.findOne({
+		emailAddress: loginInfo.emailAddress,
+	});
+
+	if (!account) {
+		throw "Incorrect Password/Email.";
+	}
+
+	const valid = await bcrypt.compare(loginInfo.password, account.password);
+
+	if (!valid) {
+		throw "Incorrect Password/Email.";
+	}
+
+	const accountInfo = {
+		accountId: account.accountId,
+		accountType: account.accountType,
+	};
+
+	return accountInfo;
 };
