@@ -1,0 +1,40 @@
+{{#if error}}
+<p class="response-error">Error {{error.status}}: {{error.message}}</p>
+{{/if}}
+
+<ul id="error-list" class="error-list hide"></ul>
+
+<form class="registration-form" id="registration-form" action="/accounts" method="POST">
+	<label class="input-label" for="firstNameInput">First Name</label>
+	<input class="input" type="text" id="firstNameInput" name="firstNameInput" placeholder="First Name"
+		value="{{form.firstNameInput}}">
+
+	<label class="input-label" for="lastNameInput">Last Name</label>
+	<input class="input" type="text" id="lastNameInput" name="lastNameInput" placeholder="Last Name"
+		value="{{form.lastNameInput}}">
+
+	<label class="input-label" for="emailInput">Email</label>
+	<input class="input" type="email" id="emailInput" name="emailInput" placeholder="Email" value="{{form.emailInput}}">
+
+	<label class="input-label" for="phoneInput">Phone Number</label>
+	<input class="input" type="phone" id="phoneInput" name="phoneInput" placeholder="Phone Number"
+		value="{{form.phoneInput}}">
+
+	<label class="input-label" for="passwordInput">Password</label>
+	<input class="input" type="password" id="passwordInput" name="passwordInput" placeholder="Password">
+
+	<label class="input-label" for="confirmPasswordInput">Password</label>
+	<input class="input" type="password" id="confirmPasswordInput" name="confirmPasswordInput"
+		placeholder="Confirm Password">
+
+	<label class="input-label" for="accountTypeInput">Account Type</label>
+	<select class="input" id="accountTypeInput" name="accountTypeInput">
+		<option value="patron">patron</option>
+		<option value="owner">owner</option>
+	</select>
+
+	<button type="submit" class="submit-button">Register</button>
+
+</form>
+
+<a class="link" href="/login">Already have an account? Click here to log-in</a>

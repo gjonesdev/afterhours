@@ -4,15 +4,15 @@ import { users } from "../config/mongoCollections.js";
 import { validateUser, validateId } from "../helpers.js";
 
 export const createUser = async (userInfo) => {
-	const newUser = validateUser(userInfo);
+	userInfo = validateUser(userInfo);
 
 	const userCollection = await users();
-	const res = await userCollection.insertOne(newUser);
+	const res = await userCollection.insertOne(userInfo);
 	if (!res.acknowledged || !res.insertedId) {
 		throw "Failed to add user.";
 	}
 
-	return res;
+	return res.insertedId.toString();
 };
 
 export const getUser = async (userId) => {
@@ -29,20 +29,20 @@ export const getUser = async (userId) => {
 
 export const updateUser = async (userId, updatedInfo) => {
 	userId = validateId(userId);
-	updatedUser = validateUser(updatedInfo);
+	updatedInfo = validateUser(updatedInfo);
 
 	const userCollection = await users();
 
-	const updatedUserInfo = await userCollection.findOneAndUpdate(
+	const updatedUser = await userCollection.findOneAndUpdate(
 		{ _id: new ObjectId(userId) },
 		{ $set: updatedUser },
 		{ returnDocument: "after" }
 	);
-	if (!updatedUserInfo) {
+	if (!updatedUser) {
 		throw "No user with that id.";
 	}
 
-	return updatedUserInfo;
+	return updatedUser;
 };
 
 export const deleteUser = async (userId) => {

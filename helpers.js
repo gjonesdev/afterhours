@@ -11,7 +11,7 @@ export const validateId = (id) => {
   return id;
 };
 
-//Validating string
+// Validate string
 export const validateRequiredStr = (str) => {
   if (!str) throw "Input must be provided!";
   if (typeof str !== "string") throw "Input must be a valid string!";
@@ -21,14 +21,14 @@ export const validateRequiredStr = (str) => {
   return str;
 };
 
-//Validating optional string
+// Validate optional string
 export const validateOptionalStr = (str) => {
   if (typeof str !== "string") throw "Input must be a valid string!";
   str = str.trim();
   return str;
 };
 
-//Validating number rating
+// Validate number rating
 export const validateRequiredRating = (num) => {
   if (!num) throw "Input must be provided!";
   if (typeof num !== "number") throw "Input must be a valid number!";
@@ -39,32 +39,57 @@ export const validateRequiredRating = (num) => {
   return num;
 };
 
-//Validating email
+// Validate email
 export const validateEmail = (email) => {
-  if (
-    !/^[^\W_]+([._-][^\W_]+)*@[^\W_]+([._-][^\W_]+)*.[^\W_]{2,}$/.test(email)
-  ) {
-    throw "Invalid Email format.";
+  if (email === undefined || email === null || email === "") {
+    throw `You must provide an email.`;
   }
-  return email;
+
+  if (typeof email !== "string") {
+    throw `Email must be of type string.`;
+  }
+
+  email = email.trim();
+
+  if (
+    !/^[^\W_]+([._-][^\W_]+)*@[^\W_]{1,}(\.[^\W_]{2,})(\.[^\W_]{2,})?/.test(
+      email
+    )
+  ) {
+    throw "Email must be in valid email address format.";
+  }
+
+  return email.toLowerCase();
+};
+
+export const validatePassword = (password) => {
+  if (password === undefined || password === null || password === "") {
+    throw `You must provide a password.`;
+  }
+
+  if (typeof password !== "string") {
+    throw `password must be of type string.`;
+  }
+
+  password = password.trim();
+
+  if (/\s/.test(password)) {
+    throw "password cannot contain spaces.";
+  }
+
+  if (!/(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}/.test(password)) {
+    throw "password must be at least 8 characters, contain at least one uppercase character, one number, and one special character.";
+  }
+
+  return password;
 };
 
 //Validating website
-export const validateWebsite = (webSite) => {
-  if (!/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b/.test(webSite)) {
+export const validateWebsite = (website) => {
+  if (!/[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b/.test(website)) {
     throw "Invalid Website format.";
   }
-  return webSite;
-};
-//TODO: fix the phone validation
-//Validating phone
-export const validatePhone = (str) => {
-  if (!str) throw "Input must be provided!";
-  if (typeof str !== "string") throw "Input must be a valid string!";
-  str = str.trim();
-  if (str.length === 0) throw "Input is an empty string!";
-
-  return str;
+  return website;
 };
 
 //Validating date
@@ -178,37 +203,32 @@ export const validateLocation = (location) => {
   return location;
 };
 
-export const validateAccount = async (accountInfo) => {
-  const args = {
-    email: accountInfo.email,
-    password: accountInfo.password,
-    accountType: accountInfo.accountType,
-  };
+export const validateAccount = (accountInfo) => {
+  accountInfo.email = validateEmail(accountInfo.email);
+  accountInfo.password = validatePassword(accountInfo.password);
 
-  Object.keys(args).forEach((arg) => {
-    if (args[arg] === undefined || args[arg] === null || args[arg] === "") {
-      throw `You must provide the ${arg} argument.`;
-    }
-    if (typeof accountInfo[arg] !== "string") {
-      throw `${arg} must be of type string.`;
-    }
-  });
+  if (
+    accountInfo.accountType === undefined ||
+    accountInfo.accountType === null ||
+    accountInfo.accountType === ""
+  ) {
+    throw `You must provide the account type.`;
+  }
 
-  accountInfo.email = accountInfo.email.trim();
-  accountInfo.password = accountInfo.password.trim();
+  if (typeof accountInfo.accountType !== "string") {
+    throw `Account type must be a string.`;
+  }
+
   accountInfo.accountType = accountInfo.accountType.trim();
 
   if (
-    !/^[^\W_]+([._-][^\W_]+)*@[^\W_]+([._-][^\W_]+)*.[^\W_]{2,}$/.test(
-      accountInfo.email
+    !(
+      accountInfo.accountType === "patron" ||
+      accountInfo.accountType === "owner"
     )
   ) {
-    throw "email must be in valid email format.";
+    throw "Account type must either be patron or owner.";
   }
-
-  // validate password
-
-  // validate accountType enum
 
   return accountInfo;
 };
@@ -244,4 +264,97 @@ export const validateUser = (userInfo) => {
   // validate phone
 
   return userInfo;
+};
+
+//Report error check:
+/**Validate empty space for userId, reason, comment for reports*/
+export const validateReport = (userId, reason, comment) => {
+  //Error check:
+  if (!userId || !reason || !comment)
+    throw "All fields need to have valid values.";
+
+  //Change userID = string by userID = ObjectID
+  if (
+    typeof userId !== "string" ||
+    userId.trim().length === 0 ||
+    typeof reason !== "string" ||
+    reason.trim().length === 0 ||
+    typeof comment !== "string" ||
+    comment.trim().length === 0
+  )
+    throw "Invalid string or strings with only spaces are not valid.";
+};
+
+/**Validate user ID for reports*/
+export const validateUserId = (userId) => {
+  //If it is String validation:
+  //User Id:
+  if (userId.trim().length === 0)
+    throw "Empty string or just spaces not allowed for user Id.";
+  userId = userId.trim();
+  //"User Id should not contain space in the middle.
+  let userIdRegex = /[\s]+/g;
+  let regexValue = userIdRegex.exec(userId);
+  if (regexValue !== null) {
+    if (regexValue.length >= 1) throw "Not space allowed for user Id";
+  }
+  //userId should not contain numbers
+  if (!isNaN(userId)) throw "User Id should not contain numbers";
+  if (userId.trim().length < 2 || userId.trim().length > 50)
+    throw "User Id should be at least 2 characters long and a max of 50 characters.";
+
+  return userId;
+  //If it is an Object ID validation
+  /*userId = userId.trim();
+	if (userId.length === 0) {
+		throw "Error: User ID cannot be an empty string or just spaces";
+	}
+	if (!ObjectId.isValid(userId)) {
+		throw "invalid object ID";
+	}
+	return userId;*/
+};
+
+/**Validate reason for reports*/
+export const validateReason = (reason) => {
+  //Reason:
+  if (reason.trim().length === 0)
+    throw "Empty string or just spaces not allowed for reason.";
+  reason = reason.trim();
+  //Reason should not contain numbers
+  if (!isNaN(reason)) throw "Reason should not contain numbers";
+  let notNumbersRegex = /^[a-zA-Z ]*$/;
+  if (notNumbersRegex.exec(reason) === null)
+    throw "Reason should not contain numbers and not symbols";
+  if (reason.trim().length < 2 || reason.trim().length > 50)
+    throw "Reason should be at least 2 characters long and a max of 50 characters.";
+  return reason;
+};
+
+/**Validate comment for reports*/
+export const validateComment = (comment) => {
+  //Comment or Message:
+  if (comment.trim().length === 0)
+    throw "Empty string or just spaces not allowed for comment or message.";
+  comment = comment.trim();
+  //Comment or message should not contain numbers
+  if (!isNaN(comment))
+    throw "Comment or message should not contain only numbers";
+  if (comment.trim().length < 2 || comment.trim().length > 500)
+    throw "Comment or message should be at least 2 characters long and a max of 500 characters.";
+  return comment;
+};
+
+export const validateReview = async (userId, barId, rating, comment) => {
+  const validatedUserId = validateRequiredStr(userId);
+  const validatedBarId = validateRequiredStr(barId);
+  const validatedRating = validateRequiredRating(rating);
+  const validatedComment = validateOptionalStr(comment);
+
+  return {
+    userId: validatedUserId,
+    barId: validatedBarId,
+    rating: validatedRating,
+    comment: validatedComment,
+  };
 };

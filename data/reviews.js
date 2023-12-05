@@ -2,18 +2,18 @@ import { ObjectId } from "mongodb";
 import { reviews } from "../config/mongoCollections.js";
 import * as validation from "../helpers.js";
 
-export const createReview = async (userId, barId, rating, comment) => {
+export const createReview = async (accountId, barId, rating, comment) => {
   //each review will have its own objectId
   //user Id comes from the user leaving the review
   //bar Id comes from the bar being reviewed
-  userId = validation.validateRequiredStr(userId);
+  accountId = validation.validateRequiredStr(accountId);
   barId = validation.validateRequiredStr(barId);
   rating = validation.validateRequiredRating(rating);
   comment = validation.validateOptionalStr(comment);
   let date = new Date().toString();
 
   const review = {
-    userId,
+    accountId,
     barId,
     rating,
     comment,
@@ -49,17 +49,17 @@ export const deleteReview = async (reviewId) => {
   return res;
 };
 
-export const updateReview = async (reviewId, userId, barId, rating, comment) => {
+export const updateReview = async (reviewId, accountId, barId, rating, comment) => {
 
   reviewId = validation.validateId(reviewId);
-  userId = validation.validateRequiredStr(userId);
+  accountId = validation.validateRequiredStr(accountId);
   barId = validation.validateRequiredStr(barId);
   rating = validation.validateRequiredRating(rating);
   comment = validation.validateOptionalStr(comment);
   let date = new Date().toString();
   
   const review = {
-    userId,
+    accountId,
     barId,
     rating,
     comment,
