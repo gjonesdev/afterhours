@@ -1,10 +1,19 @@
 import { ObjectId, Timestamp } from "mongodb";
 import { bars } from "../config/mongoCollections.js";
 import * as validation from "../helpers.js";
-//TODO: bars by owner
-// TODO:
+
 let exportedMethods = {
-  async createBar(name, description, location, email, website, ownerId, tags) {
+  //Create bar
+  async createBar(
+    name,
+    description,
+    location,
+    phoneNumber,
+    email,
+    website,
+    ownerId,
+    tags
+  ) {
     name = validation.validateRequiredStr(name);
     description = validation.validateRequiredStr(description);
     location = validation.validateLocation(location);
@@ -26,8 +35,9 @@ let exportedMethods = {
       name: name,
       description: description,
       location: location,
+      phone: phoneNumber,
       email: email,
-      webesite: website,
+      website: website,
       ownerId: ownerId,
       schedule: [],
       tags: validTags,
@@ -49,7 +59,7 @@ let exportedMethods = {
 
     return theBar;
   },
-
+  // Bar by id
   async barById(barId) {
     validation.validateId(barId);
     const barsCollection = await bars();
@@ -57,7 +67,7 @@ let exportedMethods = {
     if (thebar === null) throw "No bar with that id";
     return thebar;
   },
-
+  // Bar by owner
   async barByOwner(oId) {
     validation.validateId(oId);
     const barsCollection = await bars();
@@ -68,7 +78,7 @@ let exportedMethods = {
     if (ownerBars.length === 0) throw "No bars found";
     return ownerBars;
   },
-
+  // All of the bars
   async allBars() {
     const barCollection = await bars();
     let allbars = await barCollection
@@ -104,20 +114,30 @@ let exportedMethods = {
 
     return deletedbar;
   },
-  async barProfileUpdate(barId, name, description, location, email, website) {
+  async barProfileUpdate(
+    barId,
+    name,
+    description,
+    location,
+    email,
+    website,
+    phoneNumber
+  ) {
     name = validation.validateRequiredStr(name);
     description = validation.validateRequiredStr(description);
     location = validation.validateLocation(location);
     email = validation.validateEmail(email);
     barId = validation.validateId(barId);
     website = validation.validateWebsite(website);
+    phoneNumber = validation.validatePhone(phoneNumber);
 
     let toUpdate = {
       name: name,
       description: description,
       location: location,
       email: email,
-      webesite: website,
+      website: website,
+      phone: phoneNumber,
       lastModified: new Date(),
     };
     const barCol = await bars();
@@ -180,6 +200,41 @@ let exportedMethods = {
     );
 
     return await this.barById(barId);
+  },
+  // Adding a happy hour event to the schedule
+  async addEvent(barId, eventDate, eventName, description, startTime, endTime) {
+    barId = validation.validateId(barId);
+    eventDate = validation.validateDate(eventDate);
+    eventName = validation.validateRequiredStr(eventName);
+    description = validation.validateRequiredStr(description);
+    startTime = validation.validateTime(startTime, "Start Time");
+    endTime = validation.validateTime(endTime, "End Time");
+
+    const aEvent = {
+      _id: new ObjectId(),
+      date: eventDate,
+      eventName: eventName,
+      description: description,
+      startTime: startTime,
+      endTime: endTime,
+    };
+
+    const barCol = await bars();
+    const addEvent = await barCol.updateOne(
+      { _id: new ObjectId(barId) },
+      { $push: { schedule: aEvent } }
+    );
+
+    if (addEvent.modifiedCount === 0) throw " Event could not be added!";
+
+    const theSchedule = await eventCollection.findOne(
+      {
+        "schedule._id": aEvent._id,
+      },
+      { projection: { _id: 0, "schedule.$": 1 } }
+    );
+
+    return await theSchedule;
   },
 };
 
