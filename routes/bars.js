@@ -5,7 +5,7 @@ import * as validation from "../helpers.js";
 
 router.route("/").get(async (req, res) => {
   const bars = await barData.allBars();
-  res.render("home", {
+  res.render("bars", {
     bars: bars,
   });
 });
