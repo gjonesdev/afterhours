@@ -56,7 +56,7 @@ try {
       state: "MA",
       zipCode: "01453",
     },
-    789 - 563 - 5555,
+    "789-563-5555",
     "thegazbar@gazbar.com",
     "www.gazBar.com",
     "654438c26ec81bf9429dc36e",
