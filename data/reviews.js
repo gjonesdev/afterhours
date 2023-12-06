@@ -1,11 +1,11 @@
 import { ObjectId } from "mongodb";
 import { reviews } from "../config/mongoCollections.js";
+import { bars } from "../config/mongoCollections.js";
 import * as validation from "../helpers.js";
 
 export const createReview = async (accountId, barId, rating, comment) => {
-  //each review will have its own objectId
-  //user Id comes from the user leaving the review
-  //bar Id comes from the bar being reviewed
+  //accountId comes from the user leaving the review
+  //barId comes from the bar being reviewed
   accountId = validation.validateRequiredStr(accountId);
   barId = validation.validateRequiredStr(barId);
   rating = validation.validateRequiredRating(rating);
@@ -22,31 +22,84 @@ export const createReview = async (accountId, barId, rating, comment) => {
 
   const reviewCollection = await reviews();
 
+  // Insert the review into the reviews collection
   const res = await reviewCollection.insertOne(review);
+
   if (!res.acknowledged || !res.insertedId) {
-    throw "Failed to add user.";
+    throw "Failed to add review";
   }
 
   const newId = res.insertedId.toString();
   const newReview = await get(newId);
 
+  // Update the bar's reviews array
+  const barCollection = await bars();
+  const updateBar = await barCollection.findOneAndUpdate(
+    { _id: new ObjectId(barId) },
+    {
+      $push: { reviews: newReview },
+    },
+    { returnDocument: "after" }
+  );
+
+  if (updateBar === null) {
+    throw "Bar update unsuccessful";
+  }
+
   return newReview;
 };
 
-export const deleteReview = async (reviewId) => {
-  reviewId = validation.validateId(reviewId);
-
-  const reviewCollection = await reviews();
-  const res = await reviewCollection.findOneAndDelete({
-    _id: new ObjectId(reviewId),
-  });
-
-
-  if (!res) {
-    throw "No review with that id";
+export const getReviewsForBar = async (barId) => {
+  //Implement Code here
+  validation.validateId(barId)
+  const barCollection = await bars();
+  const bar = await barCollection.findOne({_id: new ObjectId(barId)});
+  if (bar === null) {
+    throw `No bar with that id`
   }
 
-  return res;
+  const reviews = bar.reviews;
+
+  return reviews;
+};
+
+export const deleteReview = async (reviewId, barId) => {
+  reviewId = validation.validateId(reviewId);
+  barId = validation.validateId(barId);
+
+    const reviewCollection = await reviews();
+
+    // Get the review before deleting it
+    const reviewToDelete = await reviewCollection.findOne({ _id: new ObjectId(reviewId) });
+
+    // Delete the review from the reviews collection
+    const deleteResult = await reviewCollection.deleteOne({ _id: new ObjectId(reviewId) });
+
+    if (deleteResult.deletedCount === 0) {
+      throw "Review not found or already deleted";
+    }
+
+    // Delete the review from the reviews array in the bar collection
+    const barCollection = await bars();
+    const bar = await barCollection.findOne({
+      "_id": new ObjectId(barId)
+    })
+
+    if (!bar) throw 'Could not find bar'
+
+    const updateBar = await barCollection.findOneAndUpdate(
+      { _id: bar._id },
+      {
+        $pull: { reviews: { _id: reviewId } },
+      },
+      { returnDocument: "after" }
+    );
+
+    if (updateBar === null) {
+      throw "Bar update unsuccessful";
+    }
+
+    return reviewToDelete;
 };
 
 export const updateReview = async (reviewId, accountId, barId, rating, comment) => {
@@ -74,6 +127,26 @@ export const updateReview = async (reviewId, accountId, barId, rating, comment) 
   }
 
   updateInfo._id = updateInfo._id.toString();
+
+  // Update the review in the reviews array in the bar collection
+  const barCollection = await bars();
+  const bar = await barCollection.findOne({
+    "_id": new ObjectId(barId)
+  })
+
+  if (!bar) throw 'Could not find bar'
+
+  const updateBar = await barCollection.findOneAndUpdate(
+    { _id: bar._id },
+    {
+      $set: { reviews: updateInfo },
+    },
+    { returnDocument: "after" }
+  );
+
+  if (updateBar === null) {
+    throw "Bar update unsuccessful";
+  }
 
   return updateInfo;
 }
