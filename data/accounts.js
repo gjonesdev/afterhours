@@ -34,7 +34,7 @@ export const createAccount = async (accountInfo, userInfo) => {
 		throw "Failed to add account.";
 	}
 
-	return res;
+	return { inserted: true };
 };
 
 export const getAccount = async (accountId) => {
@@ -76,7 +76,7 @@ export const updateAccount = async (accountId, updatedInfo) => {
 
 	const accountInfo = {
 		email: updatedAccount.email,
-		accountId: updatedAccount.accountId,
+		accountId: updatedAccount._Id.toString(),
 		userId: updatedAccount.userId,
 		accountType: updatedAccount.accountType,
 	};
@@ -110,7 +110,7 @@ export const login = async (loginInfo) => {
 
 	const accountCollection = await accounts();
 	const account = await accountCollection.findOne({
-		emailAddress: loginInfo.emailAddress,
+		email: loginInfo.email,
 	});
 
 	if (!account) {
@@ -124,7 +124,7 @@ export const login = async (loginInfo) => {
 	}
 
 	const accountInfo = {
-		accountId: account.accountId,
+		accountId: account._id.toString(),
 		accountType: account.accountType,
 	};
 
