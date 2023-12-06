@@ -1,0 +1,15 @@
+{{#if error}}
+<p class="response-error">Error {{error.status}}: {{error.message}}</p>
+{{/if}}
+
+<ul id="error-list" class="error-list hide"></ul>
+
+<form class="login-form" id="login-form" action="/login" method="POST">
+	<label class="input-label" for="emailInput">Email</label>
+	<input class="input" type="email" id="emailInput" name="emailInput" placeholder="Email" value="{{form.emailInput}}">
+	<label class="input-label" for="passwordInput">Password</label>
+	<input class="input" type="password" id="passwordInput" name="passwordInput" placeholder="Password">
+	<button type="submit" class="submit-button">Login</button>
+</form>
+
+<a class="link" href="/register">Click here to register!</a>
