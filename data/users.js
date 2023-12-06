@@ -57,5 +57,5 @@ export const deleteUser = async (userId) => {
 		throw "No user with that id.";
 	}
 
-	return res;
+	return { deleted: true };
 };

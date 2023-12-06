@@ -34,9 +34,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(rewriteUnsupportedBrowserMethods);
 
 app.use("/", defaultRedirect);
+app.use("/account", accountRedirect);
 app.use("/login", loginRedirect);
 app.use("/register", registerRedirect);
-app.use("/accounts", accountRedirect);
 app.use("/logout", logoutRedirect);
 
 app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));

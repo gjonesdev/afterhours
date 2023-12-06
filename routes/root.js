@@ -6,7 +6,7 @@ const router = Router();
 
 router.route("/").get(async (req, res) => {
 	try {
-		return res.render("home", { title: "AfterHours" });
+		return res.render("home", { title: "home" });
 	} catch (e) {
 		return res.status(500).json({ error: e });
 	}
@@ -14,7 +14,7 @@ router.route("/").get(async (req, res) => {
 
 router.route("/register").get(async (req, res) => {
 	try {
-		return res.render("register", { title: "Register" });
+		return res.render("register", { title: "register" });
 	} catch (e) {
 		return res.status(500).json({ error: e });
 	}
@@ -24,7 +24,7 @@ router
 	.route("/login")
 	.get(async (req, res) => {
 		try {
-			return res.render("login", { title: "Login", form: req.body });
+			return res.render("login", { title: "login", form: req.body });
 		} catch (e) {
 			return res.status(500).json({ error: e });
 		}
@@ -42,11 +42,11 @@ router
 		};
 
 		try {
-			req.body.email = validateEmail(req.body.emailInput);
-			req.body.password = validatePassword(req.body.passwordInput);
+			loginInfo.email = validateEmail(loginInfo.email);
+			loginInfo.password = validatePassword(loginInfo.password);
 		} catch (e) {
 			return res.status(400).render("login", {
-				title: "Login",
+				title: "login",
 				form: req.body,
 				error: { status: 400, message: e },
 			});
@@ -54,13 +54,14 @@ router
 
 		try {
 			const user = await login(loginInfo);
+			console.log(user);
 			if (user) {
 				req.session.user = user;
 				return res.redirect(303, "/");
 			}
 		} catch (e) {
 			return res.status(400).render("login", {
-				title: "Login",
+				title: "login",
 				form: req.body,
 				error: { status: 400, message: e },
 			});
@@ -70,7 +71,7 @@ router
 router.route("/logout").get(async (req, res) => {
 	try {
 		req.session.destroy();
-		return res.render("logout", { title: "Logout" });
+		return res.render("logout", { title: "logout" });
 	} catch (e) {
 		return res.status(500).json({ error: e });
 	}

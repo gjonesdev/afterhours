@@ -3,7 +3,8 @@
 * {
 	box-sizing: border-box;
 }
-body {
+
+.home body {
 	margin: 0;
 	padding: 0;
 	background-color: white;
@@ -12,6 +13,7 @@ body {
 	font-family: monospace;
 	overflow: hidden;
 }
+
 h1,
 p {
 	margin: 0;
