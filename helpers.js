@@ -107,6 +107,15 @@ export const validateTime = (time, type) => {
   return time;
 };
 
+export const validatePhone = (str) => {
+  if (!str) throw "Input must be provided!";
+  if (typeof str !== "string") throw "Input must be a valid string!";
+  str = str.trim();
+  if (str.length === 0) throw "Input is an empty string!";
+
+  return str;
+};
+
 //Validating location
 export const validateLocation = (location) => {
   if (!location) throw "Location is missing!";

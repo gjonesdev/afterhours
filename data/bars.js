@@ -20,6 +20,7 @@ let exportedMethods = {
     email = validation.validateEmail(email);
     ownerId = validation.validateId(ownerId);
     website = validation.validateWebsite(website);
+    phoneNumber = validation.validatePhone(phoneNumber);
 
     let validTags = [];
     if (tags.length > 0) {

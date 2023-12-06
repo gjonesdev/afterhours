@@ -5,7 +5,7 @@ const db = await dbConnection();
 import bars from "../data/bars.js";
 import * as reviews from "../data/reviews.js";
 
-// try {
+//try {
 //   let test = await bars.createBar(
 //     "GazBar",
 //     "The GazBar Sports Grill is a fresh, newly renovated sports bar and grill in Central Massachusetts. We offer everything your taste buds can handle and if you don’t see something you’d like….just ask and ourChef will personally create your meal. The GazBar offers a dining experience that Leominster has NEVER seen before.",
