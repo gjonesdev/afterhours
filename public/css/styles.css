@@ -6,7 +6,7 @@
 body {
 	margin: 0;
 	padding: 0;
-	background-color: rgb(193, 89, 196);
+	background-color: rgb(182, 196, 89);
 	color: #4e5e72;
 	text-align: center;
 	font-family: monospace;
@@ -255,3 +255,10 @@ textarea:focus {
 p.error {
 	background: red;
 }
+
+a.link {
+
+	background-color: aqua;
+	border: #4e5e72;
+}
+
