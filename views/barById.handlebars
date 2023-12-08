@@ -2,6 +2,7 @@
     <div class="bar-main-image">
         <div class=" bar-main-info">
             <form action="/bars/editBar" method="post" id="bar-edit-button">
+                <label for="barIdToEdit"></label>
                 <input type="hidden" id="barIdToEdit" name="barIdToEdit" value="{{id}}">
                 <button>Suggest edit</button>
             </form>
@@ -33,14 +34,32 @@
     </div>
     <div>
         <button>Like</button>
-        <button>write a review</button>
+
+        <form action="/reviews" method="post" id="review-button">
+            <label for="barIdToreview"></label>
+            <input type="hidden" id="barIdToreview" name="barIdToreview" value="{{id}}">
+            <label for="barNameToreview"></label>
+            <input type="hidden" id="barNameToreview" name="barNameToreview" value="{{barName}}">
+            <button>Write a review</button>
+        </form>
         <button>Add to favorite</button>
         <button>Add photo</button>
     </div>
     <div>
         <h2>
-            Bussines Reviews
+            Bar Reviews
         </h2>
+        <ul>
+            {{#each reviews}}
+            <div>
+                <li>
+                    <p>{{rating}}</p>
+                    <p>{{date}}</p>
+                    <p>{{comment}}</p>
+                </li>
+            </div>
+            {{/each}}
+        </ul>
     </div>
     <div>
         <aside>

@@ -1,0 +1,21 @@
+<div>
+    <h1>{{barName}}</h1>
+    <form action="/reviews/createReview" method="post" id="ratingForm">
+        <input type="hidden" name="barId" value="{{barId}}">
+        <fieldset class="rating">
+            <label for="ratingInput1"></label>
+            <input type="radio" name="rating" id="ratingInput1" value="1">
+            <label for="ratingInput2"></label>
+            <input type="radio" name="rating" id="ratingInput2" value="2">
+            <label for="ratingInput3"></label>
+            <input type="radio" name="rating" id="ratingInput3" value="3">
+            <label for="ratingInput4"></label>
+            <input type="radio" name="rating" id="ratingInput4" value="4">
+            <label for="ratingInput5"></label>
+            <input type="radio" name="rating" id="ratingInput5" value="5">
+        </fieldset>
+        <label for="commentInput"></label>
+        <input type="text" name="comment" id="commentInput">
+        <button type="submit">Post Review</button>
+    </form>
+</div>
