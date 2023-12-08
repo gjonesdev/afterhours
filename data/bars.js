@@ -44,6 +44,7 @@ let exportedMethods = {
       tags: validTags,
       reviews: [],
       reviewsCount: 0,
+      ratings: [],
       ratingAverage: 0,
       likes: [],
       likesCount: 0,
@@ -178,30 +179,59 @@ let exportedMethods = {
       { $set: { likesCount: likesCount } }
     );
     return await this.barById(barId);
-  },
+  } /*
   //Update reviews
-  async addReview(barId, reviewId, ratingAverage) {
+  async addReview(userId, barId, reviewId, rating, comment, date) {
+    userId = validation.validateId(userId);
     barId = validation.validateId(barId);
     reviewId = validation.validateId(reviewId);
+    //TODO: validate date
     const theBar = await this.barById(barId);
+    const ratingsArray = theBar.ratings;
+
+    ratingsArray.push(rating);
+    let totalRatings = 0;
+    if (ratingsArray.length === 0) {
+      totalRatings = rating;
+    } else {
+      ratingsArray.forEach((element) => {
+        totalRatings += element;
+      });
+    }
+
+    const ratingAverage = totalRatings / ratingsArray.length;
+
+    const review = {
+      user: userId,
+      reviewId: reviewId,
+      rating: rating,
+      comment: comment,
+      date: date,
+    };
 
     const barCol = await bars();
     const addReview = await barCol.updateOne(
       { _id: new ObjectId(barId) },
-      { $push: { reviews: reviewId }, $set: { ratingAverage: ratingAverage } }
+      {
+        $push: { reviews: review },
+        $set: { ratingAverage: ratingAverage },
+      }
     );
 
     if (addReview.modifiedCount === 0) throw " Review could not be added!";
-    const updatedbar = await this.barById(barId);
-    const reviewsCount = updatedbar.reviews.length;
+    const updatedBar = await this.barById(barId);
+    const reviewsArray = updatedBar.reviews;
 
-    await barCol.updateOne(
+    const addReviewCount = await barCol.updateOne(
       { _id: new ObjectId(barId) },
-      { $set: { reviewsCount: reviewsCount } }
+      {
+        $push: { ratings: rating },
+        $set: { reviewsCount: reviewsArray.length },
+      }
     );
-
-    return await this.barById(barId);
-  },
+    if (addReviewCount.modifiedCount === 0) throw " Review could not be added!";
+    return;
+  },*/,
   // Adding a happy hour event to the schedule
   async addEvent(barId, eventDate, eventName, description, startTime, endTime) {
     barId = validation.validateId(barId);
