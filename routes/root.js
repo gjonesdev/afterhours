@@ -12,6 +12,14 @@ router.route("/").get(async (req, res) => {
 	}
 });
 
+router.route("/about").get(async (req, res) => {
+	try {
+		return res.render("aboutUs", { title: "About" });
+	} catch (e) {
+		return res.status(500).json({ error: e });
+	}
+});
+
 router.route("/register").get(async (req, res) => {
 	try {
 		return res.render("register", { title: "register" });
