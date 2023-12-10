@@ -1,38 +1,84 @@
-<small>If you see something say something, We are here to listen to you!</small>
-<p id="error" class="error" hidden></p>
-<form action="/reports" method="POST" class="reports-form" id="reports-form">
-<div class="wrapper centered"> 
-  <article class="letter">
-    <div class="side">
-        <h1>Contact us</h1><br>
-        <label for="reasonInput">Reason:</label>
-        <select name="reasonInput" id="reasonInput" required>
-            <option value="" disabled selected hidden>Choose a reason</option>
-            <option value="Report a problem">Report a problem</option>
-            <option value="Inaccurate information">Inaccurate information</option>
-            <option value="Make a suggestion">Make a suggestion</option>
-            <option value="Give a compliment">Give a compliment</option>
-            <option value="Other">Other</option>
-        </select>
-      <p>
-        <textarea name="commentInput" id="commentInput" placeholder="Your comment"></textarea><br>
-      </p>
+<nav class="main-nav" id="main-nav">
+  <div class="content-wrapper-sm">
+    <a href="/" class="navbar-brand">After<strong>hours</strong></a>
+
+    <div class="search-bar">
+      <input type="text" placeholder="Search the #happyHour Magic">
+      <button type="submit"><i class="fa fa-search"></i></button>
     </div>
-    <div class="side">
-      <p>
-        <input type="text" placeholder="Your name" >
-      </p>
-      <p>
-        <input type="email" placeholder="Your email" >
-      </p>
-      <p>
-        <button id="submit">Send</button>
-      </p>
+
+    <div id="menu-button">
+      <div class="bar1"></div>
+      <div class="bar2"></div>
+      <div class="bar3"></div>
     </div>
-  </article>
-  <div class="envelope front"></div>
-  <div class="envelope back"></div>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/login"> LogIn</a></li>
+      <li><a href="/register">Register</a></li>
+      <li><a href="/about">About Us</a></li>
+    </ul>
+  </div>
+</nav>
+
+
+<div class="login-container">
+  <div class="login-box">
+    <form action="/reports" method="POST" class="reports-form" id="reports-form">
+      <div class="side">
+        <h2>#ContactUs 🍻</h1>
+
+          <div class="user-box">
+            <input class="input" type="text" id="firstNameInput" name="firstNameInput" required=""
+              value="{{form.firstNameInput}}">
+            <label class="input-label" for="firstNameInput">#YourName</label>
+          </div>
+
+
+          <div class="user-box">
+            <input class="input" type="email" id="emailInput" name="emailInput" required="" value="{{form.emailInput}}">
+            <label class="input-label" for="emailInput">#YourEmail</label>
+          </div>
+
+          <div class="user-box">
+            <p>Reason:</p>
+            <select name="reasonInput" id="reasonInput" required>
+              <option value="" disabled selected hidden>Choose a reason</option>
+              <option value="Report a problem">Report a problem</option>
+              <option value="Inaccurate information">Inaccurate information</option>
+              <option value="Make a suggestion">Make a suggestion</option>
+              <option value="Give a compliment">Give a compliment</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+
+          <div class="user-box">
+            <textarea name="commentInput" id="commentInput"
+              placeholder="Raise the Bar: Let us know what's on your mind. Bonus points if your message is served on the rocks 🥂💭"></textarea><br>
+          </div>
+
+          <button type="submit" class="submit-button">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            #BoozeBuzz
+          </button>
+
+      </div>
+    </form>
+  </div>
+
+  <div class="message-container">
+
+    {{#if error}}
+    <p class="response-error">Error {{error.status}}: {{error.message}}</p>
+    {{/if}}
+    <ul id="error-list" class="error-list hide"></ul>
+
+    <a class="link" href="javascript:javascript:history.go(-1)"> 🔙 #GoBack to the previous page </a>
+
+
+  </div>
+
 </div>
-</form>
-<a href="javascript:javascript:history.go(-1)"> <-- Go back to the previous page <--</a>
-<p class="result-message centered">Message sent ✅ - Thank you for your report!</p>

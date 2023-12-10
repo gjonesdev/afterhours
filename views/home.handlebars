@@ -1,12 +1,86 @@
-<h1>Hello World</h1>
+<nav class="main-nav" id="main-nav">
+    <div class="content-wrapper-sm">
+        <a href="/" class="navbar-brand">After<strong>hours</strong></a>
 
-<a class="link" href="/register">Click here to register!</a>
-<a class="link" href="/login">Already have an account? Click here to log-in</a>
-<a class="link" href="/logout">Logout</a>
+        <div class="search-bar">
+            <input type="text" placeholder="Search the #happyHour Magic">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </div>
 
-<div class="row">
-    <h3> Bar Of The Day</h3>
-    <div class="bar-of-the-day" id="BOD-area">
+        <div id="menu-button">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="/login">Login</a></li>
+            <li><a href="/register">Register</a></li>
+            <li><a href="/about"> About Us</a></li>
+            <li><a href="/reports">Contact</a></li>
+        </ul>
     </div>
+</nav>
 
+<div class="parallax-container">
+    <div class="parallax-image"></div>
+    <div class="content">
+
+        <h1>After<strong>hours</strong></h1>
+        <h2>One-Stop Resource For Bar Enthusiasts</h2>
+    </div>
 </div>
+
+<div class="bar-info">
+    <div class="laser-beams">
+        <div class="laser-beam"></div>
+        <div class="laser-beam red"></div>
+        <div class="laser-beam purple"></div>
+        <div class="laser-beam green"></div>
+
+    </div>
+    <h1><strong>#Bars</strong>Of<strong>The</strong>Day</h1>
+    <div class="bar-square">
+        <!-- Image for the first bar -->
+        <img src="https://www.themontclairgirl.com/wp-content/uploads/2023/01/new-upscale-bar-montclair-800x800.jpg"
+            alt="Bar 1">
+        <h3>Bar of the Day 1</h3>
+        <p>Welcome to "Mojito Madness</p>
+        <p>Rating: 4.5/5</p>
+    </div>
+    <div class="bar-square">
+        <!-- Image for the second bar -->
+        <img src="https://assets.bonappetit.com/photos/5703d1a5a7c350a34336d836/16:9/w_2560,c_limit/DH1A1365-2-2.JPG"
+            alt="Bar 2">
+        <h3>Bar of the Day 2</h3>
+        <p> Welcome to "The Tipsy Tumbleweed,"</p>
+        <p>Rating: 4.2/5</p>
+    </div>
+    <div class="bar-square">
+        <!-- Image for the third bar -->
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrhKBNb-6LVVm5t4YnryTjAVqrHmYov_VtaQ&usqp=CAU"
+            alt="Bar 3">
+        <h3>Bar of the Day 3</h3>
+        <p>Welcome to "The Tipsy T-Rex Tavern," 🦖🍹</p>
+        <p>Rating: 4.7/5</p>
+    </div>
+</div>
+<script>
+var prevScrollPos = window.pageYOffset;
+var navbar = document.getElementById("main-nav");
+
+window.onscroll = function() {
+  var currentScrollPos = window.pageYOffset;
+
+  if (prevScrollPos > currentScrollPos) {
+    navbar.style.top = "0";
+    navbar.style.opacity = "1";
+  } else {
+    navbar.style.top = "-50px";
+    navbar.style.opacity = "0";
+  }
+
+  prevScrollPos = currentScrollPos;
+};
+
+
+</script>
