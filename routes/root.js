@@ -32,9 +32,8 @@ router
       oldUserLoc.latitude = userLocation.latitude;
       oldUserLoc.longitude = userLocation.latitude;
     }
-
+    const allBars = await barData.allBars();
     if (oldUserLoc.isNeeded) {
-      const allBars = await barData.allBars();
       const barsDistance = await filtersFun.barsDistance(userLocation, allBars);
     }
     const barOfTheDay = await filtersFun.barOfTheDay(allBars);
