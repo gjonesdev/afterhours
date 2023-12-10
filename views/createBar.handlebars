@@ -13,11 +13,6 @@
 
     <select name="createState" id="createState">
         <option disabled selected value> -- select an option -- </option>
-        <option value=""></option>
-        <option value=""></option>
-        <option value=""></option>
-        <option value=""></option>
-        <option value=""></option>
         <option value="AL">AL</option>
         <option value="AK">AK</option>
         <option value="AZ">AZ</option>
@@ -77,6 +72,8 @@
     <input type="text" value="{{phone}}" name="createPhone" id="createPhone">
     <label for="createWebsite">Website</label>
     <input type="text" value="{{website}}" name="createWebsite" id="createWebsite">
+    <label for="imageUpload"></label>
+    <input type="file" accept="image/jpeg, image/png, image/jpg" id="imageUpload" multiple>
     <button>Submit</button>
 
 </form>

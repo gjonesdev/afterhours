@@ -2,15 +2,16 @@ import express from "express";
 import exphbs from "express-handlebars";
 import session from "express-session";
 import configRoutes from "./routes/index.js";
+import fileUpload from "express-fileupload";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import {
-	defaultRedirect,
-	loginRedirect,
-	logoutRedirect,
-	accountRedirect,
-	registerRedirect,
-	rewriteUnsupportedBrowserMethods,
+  defaultRedirect,
+  loginRedirect,
+  logoutRedirect,
+  accountRedirect,
+  registerRedirect,
+  rewriteUnsupportedBrowserMethods,
 } from "./middleware.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -20,12 +21,12 @@ const staticDir = express.static(__dirname + "/public");
 const app = express();
 
 app.use(
-	session({
-		name: "AuthState",
-		secret: "peyrovian's wine",
-		resave: false,
-		saveUninitialized: false,
-	})
+  session({
+    name: "AuthState",
+    secret: "peyrovian's wine",
+    resave: false,
+    saveUninitialized: false,
+  })
 );
 
 app.use("/public", staticDir);
@@ -34,6 +35,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(rewriteUnsupportedBrowserMethods);
 
 app.use("/", defaultRedirect);
+
 app.use("/account", accountRedirect);
 app.use("/login", loginRedirect);
 app.use("/register", registerRedirect);
@@ -45,6 +47,6 @@ app.set("view engine", "handlebars");
 configRoutes(app);
 
 app.listen(3000, () => {
-	console.log("We've now got a server!");
-	console.log("Your routes will be running on http://localhost:3000");
+  console.log("We've now got a server!");
+  console.log("Your routes will be running on http://localhost:3000");
 });
