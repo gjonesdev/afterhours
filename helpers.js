@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import date from "date-and-time";
 
 export const validateId = (id) => {
   id = id.trim();
@@ -93,14 +94,17 @@ export const validateWebsite = (website) => {
 };
 
 //Validating date
-export const validateDate = (date) => {
-  if (!date.isValid(date, "MM/DD/YYYY")) throw "Invalid event date!";
-
-  return date;
+//Event date validation
+export const validateDate = (eventDate, startTime) => {
+  if (!date.isValid(eventDate, "MM/DD/YYYY")) throw "Invalid event date!";
+  const now = new Date();
+  const dateObj = date.parse(eventDate + "" + startTime, "MM/DD/YYYY H:MM A");
+  if (now > dateObj) throw "Event date needs to be a future date!";
+  return eventDate;
 };
 //validating time
 export const validateTime = (time, type) => {
-  const validSTime = date.isValid(time.toUpperCase(), "hh:mm A");
+  const validSTime = date.isValid(time.toUpperCase(), "h:mm A");
   if (!validSTime) throw `Invalid ${type} time!`;
   //let sTimeObj = date.parse(startTime, "h:mm A");
 
