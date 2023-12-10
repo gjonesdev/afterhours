@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import date from "date-and-time";
 
 export const validateId = (id) => {
   id = id.trim();
@@ -32,7 +33,7 @@ export const validateOptionalStr = (str) => {
 export const validateRequiredRating = (num) => {
   if (!num) throw "Input must be provided!";
   if (typeof num !== "number") throw "Input must be a valid number!";
-  let validNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  let validNums = [1, 2, 3, 4, 5];
   if (!validNums.includes(num)) {
     throw "Invalid Rating";
   }
@@ -93,18 +94,30 @@ export const validateWebsite = (website) => {
 };
 
 //Validating date
-export const validateDate = (date) => {
-  if (!date.isValid(date, "MM/DD/YYYY")) throw "Invalid event date!";
-
-  return date;
+//Event date validation
+export const validateDate = (eventDate, startTime) => {
+  if (!date.isValid(eventDate, "MM/DD/YYYY")) throw "Invalid event date!";
+  const now = new Date();
+  const dateObj = date.parse(eventDate + "" + startTime, "MM/DD/YYYY H:MM A");
+  if (now > dateObj) throw "Event date needs to be a future date!";
+  return eventDate;
 };
 //validating time
 export const validateTime = (time, type) => {
-  const validSTime = date.isValid(time.toUpperCase(), "hh:mm A");
+  const validSTime = date.isValid(time.toUpperCase(), "h:mm A");
   if (!validSTime) throw `Invalid ${type} time!`;
   //let sTimeObj = date.parse(startTime, "h:mm A");
 
   return time;
+};
+
+export const validatePhone = (str) => {
+  if (!str) throw "Input must be provided!";
+  if (typeof str !== "string") throw "Input must be a valid string!";
+  str = str.trim();
+  if (str.length === 0) throw "Input is an empty string!";
+
+  return str;
 };
 
 //Validating location

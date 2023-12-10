@@ -117,7 +117,7 @@ router.route("/update").post(async (req, res) => {
   const city = req.body.updateCity;
   const state = req.body.updateState;
   const zipCode = req.body.updateZipCode;
-  const location = { streetAddress, city, state, zipCode };
+  let location = { streetAddress, city, state, zipCode };
 
   if (!req.body) {
     errors.push("Information needs to be provided");

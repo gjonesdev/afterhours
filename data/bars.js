@@ -1,6 +1,7 @@
 import { ObjectId, Timestamp } from "mongodb";
 import { bars } from "../config/mongoCollections.js";
 import * as validation from "../helpers.js";
+import date from "date-and-time";
 
 let exportedMethods = {
   //Create bar
@@ -20,6 +21,7 @@ let exportedMethods = {
     email = validation.validateEmail(email);
     ownerId = validation.validateId(ownerId);
     website = validation.validateWebsite(website);
+    phoneNumber = validation.validatePhone(phoneNumber);
 
     let validTags = [];
     if (tags.length > 0) {
@@ -43,10 +45,12 @@ let exportedMethods = {
       tags: validTags,
       reviews: [],
       reviewsCount: 0,
+      ratings: [],
       ratingAverage: 0,
       likes: [],
       likesCount: 0,
       creationDate: new Date(),
+      BODDate: "",
     };
     const barsCollection = await bars();
     const insertInfo = await barsCollection.insertOne(newBar);
@@ -89,9 +93,11 @@ let exportedMethods = {
         description: 1,
         location: 1,
         tags: 1,
-        reviewsAverage: 1,
+        ratingAverage: 1,
         reviewsCount: 1,
         likesCount: 1,
+        schedule: 1,
+        BODDate: 1,
       })
       .toArray();
     if (!allbars) throw "Was not able to get all bars!";
@@ -178,33 +184,9 @@ let exportedMethods = {
     );
     return await this.barById(barId);
   },
-  //Update reviews
-  async addReview(barId, reviewId, ratingAverage) {
-    barId = validation.validateId(barId);
-    reviewId = validation.validateId(reviewId);
-    const theBar = await this.barById(barId);
-
-    const barCol = await bars();
-    const addReview = await barCol.updateOne(
-      { _id: new ObjectId(barId) },
-      { $push: { reviews: reviewId }, $set: { ratingAverage: ratingAverage } }
-    );
-
-    if (addReview.modifiedCount === 0) throw " Review could not be added!";
-    const updatedbar = await this.barById(barId);
-    const reviewsCount = updatedbar.reviews.length;
-
-    await barCol.updateOne(
-      { _id: new ObjectId(barId) },
-      { $set: { reviewsCount: reviewsCount } }
-    );
-
-    return await this.barById(barId);
-  },
-  // Adding a happy hour event to the schedule
   async addEvent(barId, eventDate, eventName, description, startTime, endTime) {
     barId = validation.validateId(barId);
-    eventDate = validation.validateDate(eventDate);
+    eventDate = validation.validateDate(eventDate, startTime);
     eventName = validation.validateRequiredStr(eventName);
     description = validation.validateRequiredStr(description);
     startTime = validation.validateTime(startTime, "Start Time");
@@ -227,7 +209,7 @@ let exportedMethods = {
 
     if (addEvent.modifiedCount === 0) throw " Event could not be added!";
 
-    const theSchedule = await eventCollection.findOne(
+    const theSchedule = await barCol.findOne(
       {
         "schedule._id": aEvent._id,
       },
@@ -235,6 +217,23 @@ let exportedMethods = {
     );
 
     return await theSchedule;
+  },
+
+  async makeBOD(barId) {
+    barId = validation.validateId(barId);
+
+    const now = new Date();
+    const BODDate = date.format(now, "MM/DD/YYYY");
+    const barCol = await bars();
+    const makeItBOD = await barCol.updateOne(
+      { _id: new ObjectId(barId) },
+      { $set: { BODDate: BODDate } }
+    );
+
+    const theBar = await barCol.findOne({ _id: new ObjectId(barId) });
+    if (theBar === null) throw "No bar with that id";
+
+    return theBar;
   },
 };
 

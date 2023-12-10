@@ -19,12 +19,18 @@
 	"homepage": "https://github.com/gjonesdev/afterhours#readme",
 	"dependencies": {
 		"@react-google-maps/api": "^2.19.2",
+		"axios": "^1.6.2",
 		"bcrypt": "^5.1.1",
 		"date-and-time": "^3.0.3",
 		"express": "^4.18.2",
+		"express-fileupload": "^1.4.3",
 		"express-handlebars": "^7.1.2",
 		"express-session": "^1.17.3",
 		"handlebars": "^4.7.8",
-		"mongodb": "^6.2.0"
+		"mongodb": "^6.2.0",
+		"xss": "^1.0.14"
+	},
+	"devDependencies": {
+		"nodemon": "^3.0.2"
 	}
 }
