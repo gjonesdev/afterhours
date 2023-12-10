@@ -31,13 +31,13 @@ export const validateOptionalStr = (str) => {
 
 // Validate number rating
 export const validateRequiredRating = (num) => {
-	if (!num) throw "Input must be provided!";
-	if (typeof num !== "number") throw "Input must be a valid number!";
-	let validNums = [1, 2, 3, 4, 5];
-	if (!validNums.includes(num)) {
-		throw "Invalid Rating";
-	}
-	return num;
+  if (!num) throw "Rating must be provided!";
+  if (typeof num !== "number") throw "Rating must be a valid number!";
+  let validNums = [1, 2, 3, 4, 5];
+  if (!validNums.includes(num)) {
+    throw "Invalid Rating";
+  }
+  return num;
 };
 
 // Validate email
@@ -359,16 +359,18 @@ export const validateComment = (comment) => {
 	return comment;
 };
 
-export const validateReview = async (userId, barId, rating, comment) => {
-	const validatedUserId = validateRequiredStr(userId);
-	const validatedBarId = validateRequiredStr(barId);
-	const validatedRating = validateRequiredRating(rating);
-	const validatedComment = validateOptionalStr(comment);
+export const validateReview = async (accountId, barName, barId, rating, comment) => {
+    const validatedAccountId = validateRequiredStr(accountId);
+    const validatedBarName = validateRequiredStr(barName);
+    const validatedBarId = validateRequiredStr(barId);
+    const validatedRating = validateRequiredRating(rating);
+    const validatedComment = validateOptionalStr(comment);
 
-	return {
-		userId: validatedUserId,
-		barId: validatedBarId,
-		rating: validatedRating,
-		comment: validatedComment,
-	};
+    return {
+      accountId: validatedAccountId,
+      barName: validatedBarName,
+      barId: validatedBarId,
+      rating: validatedRating,
+      comment: validatedComment,
+    }
 };
