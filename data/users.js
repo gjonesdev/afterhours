@@ -35,14 +35,15 @@ export const updateUser = async (userId, updatedInfo) => {
 
 	const updatedUser = await userCollection.findOneAndUpdate(
 		{ _id: new ObjectId(userId) },
-		{ $set: updatedUser },
+		{ $set: updatedInfo },
 		{ returnDocument: "after" }
 	);
+
 	if (!updatedUser) {
 		throw "No user with that id.";
 	}
 
-	return updatedUser;
+	return { updated: true };
 };
 
 export const deleteUser = async (userId) => {
