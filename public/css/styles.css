@@ -3,6 +3,36 @@
 body {
 
 	background: radial-gradient(circle, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 42%, rgba(84, 1, 185, 1) 100%);
+	margin: 0;
+    padding: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper{
+	flex: 1;
+}
+
+
+html {
+	font-family: 'Roboto', sans-serif;
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	overflow-x: hidden;
+}
+
+/* css for navbar */
+.main-nav {
+	display: block;
+	padding: 1rem 2rem;
+	position: fixed;
+	box-sizing: border-box;
+}
+body {
+
+	background: radial-gradient(circle, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 42%, rgba(84, 1, 185, 1) 100%);
 }
 
 html {
@@ -181,6 +211,213 @@ html {
 	background-position: center;
 	position: fixed;
 	top: 0;
+	margin: auto;
+}
+.envelope.front {
+	width: 10rem;
+	height: 6rem;
+	border-radius: 0 0 1rem 1rem;
+	overflow: hidden;
+	z-index: 9999;
+	opacity: 0;
+}
+.envelope.front::before,
+.envelope.front::after {
+	position: absolute;
+	display: block;
+	width: 12rem;
+	height: 6rem;
+	background-color: #e9dc9d;
+	transform: rotate(30deg);
+	transform-origin: 0 0;
+	box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+	content: "";
+}
+.envelope.front::after {
+	right: 0;
+	transform: rotate(-30deg);
+	transform-origin: 100% 0;
+}
+
+.laser-beam.purple {
+	animation: laser 7.3s infinite;
+	background: rgba(44, 147, 236, 0.6);
+	box-shadow: 0px 0px 15px 0px rgba(44, 147, 236, 1);
+}
+
+.laser-beam.green {
+	animation: laser 7.7s infinite;
+	background: rgba(200, 52, 210, 0.6);
+	box-shadow: 0px 0px 15px 0px rgba(200, 52, 210, 1);
+}
+
+@keyframes laser {
+	0% {
+		transform: rotateZ(-90deg);
+	}
+
+	50% {
+		transform: rotateZ(90deg);
+	}
+
+	100% {
+		transform: rotateZ(-90deg);
+	}
+}
+
+.bar-info {
+	text-align: left;
+}
+
+.bar-info h1 {
+	color: rgb(217, 217, 232);
+	text-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f;
+	font-size: 4em;
+	margin-bottom: 20px;
+	text-align: left;
+	font-weight: 100;
+	text-transform: uppercase;
+
+}
+
+.bar-info h1 strong {
+	font-weight: normal;
+}
+
+
+.bar-squares {
+	display: flex;
+	justify-content: space-between;
+	flex-grow: 1;
+}
+
+.bar-square {
+	text-align: center;
+	width: 200px;
+}
+
+.bar-square img {
+	width: 100%;
+	height: 300px;
+	object-fit: cover;
+	border-radius: 8px;
+	margin-top: 40px;
+	margin-bottom: 10px;
+	box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.bar-square h3 {
+	font-size: 1.2em;
+	margin-bottom: 5px;
+	color: rgb(217, 217, 232);
+	text-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f;
+}
+
+.bar-square p {
+	font-size: 1em;
+	color: #ffffff;
+}
+
+/* footer css*/
+
+.footer {
+    
+	flex-shrink: 0;
+    background-color: transparent;
+    padding: 30px 0;
+    font-family: 'Play', sans-serif;
+    text-align: center;
+    color: #fff;
+}
+
+
+.footer .row {
+	width: 100%;
+	margin: 1% 0%;
+	padding: 0.6% 0%;
+	color: rgb(255, 255, 255);
+	font-size: 0.8em;
+}
+
+.footer .row a {
+	text-decoration: none;
+	color: rgb(255, 255, 255);
+	transition: 0.7s;
+	text-shadow: 0 0 10px #000, 0 0 20px #000;
+}
+
+.footer .row a:hover {
+	color: #fff;
+	text-shadow: 0 0 5px #000, 0 0 15px #000;
+}
+
+.footer .row ul {
+	width: 100%;
+}
+
+.footer .row ul li {
+	display: inline-block;
+	margin: 0px 30px;
+}
+
+.footer .row a i {
+	font-size: 2em;
+	margin: 0% 1%;
+	text-shadow: 0 0 5px #000, 0 0 10px #000;
+}
+
+@media (max-width:720px) {
+	.footer {
+		text-align: left;
+		padding: 5%;
+	}
+
+	.footer .row ul li {
+		display: block;
+		width: 10rem;
+		height: 10rem;
+		background-color: #e9dc9d;
+		border-radius: 1rem;
+		content: "";
+		transform: scaleY(0.6) rotate(45deg);
+	}
+}
+.result-message {
+	opacity: 0;
+	transition: all 0.3s 2s;
+	transform: translateY(9rem);
+	z-index: -9999;
+}
+.sent {
+	& .letter {
+		animation: scaleLetter 1s forwards ease-in
+			/*,
+               pushLetter 0.5s 1.33s forwards ease-out*/;
+	}
+	& .side:nth-of-type(1) {
+		transform-origin: 0 100%;
+		animation: closeLetter 0.66s forwards ease-in;
+	}
+	& .side:nth-of-type(1) h1,
+	.side:nth-of-type(1) textarea {
+		animation: fadeOutText 0.66s forwards linear;
+	}
+	& button {
+		background-color: rgba(78, 94, 114, 0.2);
+	}
+	& .envelope {
+		animation: fadeInEnvelope 0.5s 1.33s forwards ease-out;
+	}
+	& .result-message {
+		opacity: 1;
+		transform: translateY(12rem);
+	}
+	& small {
+		opacity: 0;
+	}
+}
+.centered {
+	position: absolute;
 	left: 0;
 	width: 100%;
 	height: 100%;
@@ -287,9 +524,53 @@ html {
 	}
 }
 
-.bar-info {
-	text-align: left;
+/*
+@keyframes pushLetter {
+  0% {transform: translateY(-8rem) scale(0.3, 0.5);}
+  50% {transform: translateY(-8rem) scale(0.3, 0.5);}
+  90% {transform: translateY(-8.5rem) scale(0.3, 0.5);}
+  100% {transform: translateY(-8rem) scale(0.3, 0.5);}
 }
+*/
+
+.login-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		padding-top: 300px;
+		padding-bottom: 0px;
+	}
+
+  .login-box {
+	position: relative; 
+	width: 400px;
+	margin: 0 auto;
+	padding: 40px;
+	margin-bottom: 60px; 
+	background: rgba(0, 0, 0, 0.5);
+	box-sizing: border-box;
+	box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
+	border-radius: 10px;
+  }
+
+  .message-container {
+	text-align: center;
+	color: #fff;
+	margin-bottom: 10px;
+  }
+  
+  .response-error {
+	color: #fff;
+	margin-top: 10px;
+  }
+  
+  .link {
+	color: #fff;
+	text-decoration: none;
+	display: block;
+	margin-top: 5px;
+  }
 
 .bar-info h1 {
 	color: rgb(217, 217, 232);
@@ -300,125 +581,6 @@ html {
 	font-weight: 100;
 	text-transform: uppercase;
 
-}
-
-.bar-info h1 strong {
-	font-weight: normal;
-}
-
-
-.bar-squares {
-	display: flex;
-	justify-content: space-between;
-	flex-grow: 1;
-}
-
-.bar-square {
-	text-align: center;
-	width: 200px;
-}
-
-.bar-square img {
-	width: 100%;
-	height: 300px;
-	object-fit: cover;
-	border-radius: 8px;
-	margin-top: 40px;
-	margin-bottom: 10px;
-	box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-}
-
-.bar-square h3 {
-	font-size: 1.2em;
-	margin-bottom: 5px;
-	color: rgb(217, 217, 232);
-	text-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f;
-}
-
-.bar-square p {
-	font-size: 1em;
-	color: #ffffff;
-}
-
-/* footer css*/
-
-.footer {
-	background-color: #090979;
-	padding: 30px 0px;
-	font-family: 'Play', sans-serif;
-	text-align: center;
-	bottom: 0;
-}
-
-.footer .row {
-	width: 100%;
-	margin: 1% 0%;
-	padding: 0.6% 0%;
-	color: rgb(255, 255, 255);
-	font-size: 0.8em;
-}
-
-.footer .row a {
-	text-decoration: none;
-	color: rgb(255, 255, 255);
-	transition: 0.7s;
-}
-
-.footer .row a:hover {
-	color: #fff;
-}
-
-.footer .row ul {
-	width: 100%;
-}
-
-.footer .row ul li {
-	display: inline-block;
-	margin: 0px 30px;
-}
-
-.footer .row a i {
-	font-size: 2em;
-	margin: 0% 1%;
-}
-
-@media (max-width:720px) {
-	.footer {
-		text-align: left;
-		padding: 5%;
-	}
-
-	.footer .row ul li {
-		display: block;
-		margin: 10px 0px;
-		text-align: left;
-	}
-
-	.footer .row a i {
-		margin: 0% 3%;
-	}
-}
-
-/*forms css*/
-
-.login-box {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 400px;
-    padding: 40px;
-    transform: translate(-50%, -50%);
-    background: rgba(0, 0, 0, 0.5);
-    box-sizing: border-box;
-    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
-    border-radius: 10px;
-}
-
-.login-box h2 {
-    margin: 0 0 30px;
-    padding: 0;
-    color: #fff;
-    text-align: center;
 }
 
 .login-box .user-box {
@@ -436,6 +598,42 @@ html {
     outline: none;
     background: transparent;
 }
+
+.login-box .user-box select {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 16px;
+    color: #fff !important;
+    margin-bottom: 30px;
+    border: 0;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+}
+
+.login-box .user-box select option{
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.login-box .user-box p{
+	color:#fefffe;
+}
+
+.login-box .user-box textarea{
+	width: 100%;
+	height: 150px;
+	background-color: transparent;
+	color: white;
+	border-color: white;
+	border-radius: 10px;
+	resize: none;
+	margin-top: 20px;
+	margin-bottom: 5px;
+}
+
+.login-box .user-box textarea::placeholder {
+	color: white;
+  }
 
 .login-box .user-box label {
     position: absolute;
@@ -467,7 +665,6 @@ html {
     color: #03e9f4;
     font-size: 16px;
     text-decoration: none;
-    text-transform: uppercase;
     overflow: hidden;
     transition: 0.5s;
     margin-top: 40px;

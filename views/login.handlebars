@@ -1,46 +1,61 @@
-{{#if error}}
-<p class="response-error">Error {{error.status}}: {{error.message}}</p>
-{{/if}}
+<nav class="main-nav" id="main-nav">
+    <div class="content-wrapper-sm">
+        <a href="/" class="navbar-brand">After<strong>hours</strong></a>
 
-<ul id="error-list" class="error-list hide"></ul>
-<div class="login-box">
-	<h2>Login</h2>
-	<form class="login-form" id="login-form" action="/login" method="POST">
-		<div class="user-box">
-			<label class="input-label" for="emailInput">Email</label>
-			<input class="input" type="email" id="emailInput" name="emailInput" placeholder="Email"
-				>
-		</div>
-		<div class="user-box">
-			<label class="input-label" for="passwordInput">Password</label>
-			<input class="input" type="password" id="passwordInput" name="passwordInput" placeholder="Password">
-		</div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search the #happyHour Magic">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </div>
 
-		<button type="submit" class="submit-button">
-			<span></span>
-			<span></span>
-			<span></span>
-			<span></span>
-			Login</button>
-			<script>
-				document.addEventListener('DOMContentLoaded', function () {
-  const inputs = document.querySelectorAll('.user-box input');
+        <div id="menu-button">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+        </div>
+        <ul class="nav-links">
+			<li><a href="/">Home</a></li>
+            <li><a href="/register">Register</a></li>
+            <li><a href="/about"> About Us</a></li>
+            <li><a href="/reports">Contact</a></li>
+        </ul>
+    </div>
+</nav>
 
-  inputs.forEach(input => {
-    input.addEventListener('focus', function () {
-      this.parentNode.querySelector('label').classList.add('active');
-    });
+<div class="login-container">
+	<div class="login-box">
+		<h2>#Login 🍸</h2>
+		<form class="login-form" id="login-form" action="/login" method="POST">
+			<div class="user-box">
+				<input class="input" type="email" id="emailInput" name="emailInput" required=""
+					value="{{form.emailInput}}">
+					<label class="input-label" for="emailInput">Email</label>
+			</div>
+			<div class="user-box">
+				<input class="input" type="password" id="passwordInput" name="passwordInput" required="">
+				<label class="input-label" for="passwordInput">Password</label>
+				
+			</div>
 
-    input.addEventListener('blur', function () {
-      if (this.value === '') {
-        this.parentNode.querySelector('label').classList.remove('active');
-      }
-    });
-  });
-});
+			<button type="submit" class="submit-button">
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				Cha-Cha Log-In
+			</button>
+		</form>
+	</div>
+	<div class="message-container">
+		{{#if error}}
+		<p class="response-error">Error {{error.status}}: {{error.message}}</p>
+		{{/if}}
+		<ul id="error-list" class="error-list hide"></ul>
+		<p>Do not have an account?</p></br>
+		<a class="link" href="/register">Click here to register!</a>
 
-			</script>
-	</form>
+		
+	</div>
+
+
 </div>
 
-<a class="link" href="/register">Click here to register!</a>
