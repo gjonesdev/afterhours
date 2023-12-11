@@ -1,26 +1,39 @@
 import { Router } from "express";
 import { validateId, validateUser } from "../helpers.js";
 import { userData } from "../data/index.js";
+import { getAccount } from "../data/accounts.js";
 
 const router = Router();
 
-router.route("/:userId").put(async (req, res) => {
+router.route("/").put(async (req, res) => {
+	let account;
 	if (!req.body || Object.keys(req.body).length === 0) {
 		return res
 			.status(400)
 			.json({ error: "There are no fields in the request body" });
 	}
 
+	let userInfo = {
+		firstName: req.body.firstNameInput,
+		lastName: req.body.lastNameInput,
+		phone: req.body.phoneInput,
+	};
+
 	try {
-		req.params.userId = validateId(req.params.userId);
-		req.body = validateUser(req.body);
+		account = await getAccount(req.session.user.accountId);
+		account.userId = validateId(account.userId);
+		userInfo = validateUser(userInfo);
 	} catch (e) {
 		return res.status(400).json({ error: e });
 	}
 
 	try {
-		const result = await userData.updateUser(req.params.userId, req.body);
-		return res.json(result);
+		const result = await userData.updateUser(account.userId, userInfo);
+		if (result.updated) {
+			return res.redirect(303, `/account`);
+		} else {
+			return res.status(500).send("Internal Server Error");
+		}
 	} catch (e) {
 		return res.status(404).json({ error: e });
 	}

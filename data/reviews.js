@@ -4,10 +4,11 @@ import { bars } from "../config/mongoCollections.js";
 import * as validation from "../helpers.js";
 import barsFunctions from "./bars.js";
 
-export const createReview = async (accountId, barId, rating, comment) => {
+export const createReview = async (accountId, barName, barId, rating, comment) => {
   //accountId comes from the user leaving the review
   //barId comes from the bar being reviewed
   accountId = validation.validateRequiredStr(accountId);
+  barName = validation.validateRequiredStr(barName);
   barId = validation.validateRequiredStr(barId);
   rating = validation.validateRequiredRating(rating);
   comment = validation.validateOptionalStr(comment);
@@ -30,6 +31,7 @@ export const createReview = async (accountId, barId, rating, comment) => {
 
   const review = {
     accountId,
+    barName,
     barId,
     rating,
     comment,
@@ -91,6 +93,15 @@ export const getReviewsForBar = async (barId) => {
   return reviews;
 };
 
+export const getReviewsByAccountId = async (accountId) => {
+  //Implement Code here
+  validation.validateId(accountId);
+  const reviewCollection = await reviews();
+  const reviewArray = await reviewCollection.find({ accountId: accountId }).toArray();
+  
+  return reviewArray;
+};
+
 export const deleteReview = async (reviewId, barId) => {
   reviewId = validation.validateId(reviewId);
   barId = validation.validateId(barId);
@@ -119,6 +130,15 @@ export const deleteReview = async (reviewId, barId) => {
 
   if (!bar) throw "Could not find bar";
 
+  const updateBarInfo = await barCollection.findOneAndUpdate(
+    { _id: bar._id },
+    {
+      $inc: { reviewsCount: -1 },
+      $pull: { ratings: reviewToDelete.rating },
+    },
+    { returnDocument: "after" }
+  );
+
   const updateBar = await barCollection.findOneAndUpdate(
     { _id: bar._id },
     {
@@ -126,6 +146,8 @@ export const deleteReview = async (reviewId, barId) => {
     },
     { returnDocument: "after" }
   );
+
+  console.log(updateBar)
 
   if (updateBar === null) {
     throw "Bar update unsuccessful";
@@ -137,12 +159,14 @@ export const deleteReview = async (reviewId, barId) => {
 export const updateReview = async (
   reviewId,
   accountId,
+  barName,
   barId,
   rating,
   comment
 ) => {
   reviewId = validation.validateId(reviewId);
   accountId = validation.validateRequiredStr(accountId);
+  barName = validation.validateRequiredStr(barName);
   barId = validation.validateRequiredStr(barId);
   rating = validation.validateRequiredRating(rating);
   comment = validation.validateOptionalStr(comment);
@@ -150,6 +174,7 @@ export const updateReview = async (
 
   const review = {
     accountId,
+    barName,
     barId,
     rating,
     comment,
@@ -177,10 +202,22 @@ export const updateReview = async (
 
   if (!bar) throw "Could not find bar";
 
+  const removeBar = await barCollection.findOneAndUpdate(
+    { _id: bar._id },
+    {
+      $pull: { reviews: { _id: reviewId } },
+    },
+    { returnDocument: "after" }
+  );
+
+  if (removeBar === null) {
+    throw "Bar update (pull) unsuccessful";
+  }
+
   const updateBar = await barCollection.findOneAndUpdate(
     { _id: bar._id },
     {
-      $set: { reviews: updateInfo },
+      $push: { reviews: updateInfo },
     },
     { returnDocument: "after" }
   );
