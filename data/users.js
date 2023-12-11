@@ -1,10 +1,11 @@
 import { ObjectId } from "mongodb";
-import { users } from "../config/mongoCollections.js";
+import { bars, users } from "../config/mongoCollections.js";
 
 import { validateUser, validateId } from "../helpers.js";
 
 export const createUser = async (userInfo) => {
 	userInfo = validateUser(userInfo);
+	userInfo.favorites = [];
 
 	const userCollection = await users();
 	const res = await userCollection.insertOne(userInfo);
@@ -41,6 +42,47 @@ export const updateUser = async (userId, updatedInfo) => {
 
 	if (!updatedUser) {
 		throw "No user with that id.";
+	}
+
+	return { updated: true };
+};
+
+export const updateFavorites = async (userId, barId) => {
+	let userResult;
+	let barResult;
+	userId = validateId(userId);
+	barId = validateId(barId);
+
+	const userCollection = await users();
+	const barCollection = await bars();
+
+	const exists = await userCollection.findOne({
+		_id: new ObjectId(userId),
+		favorites: new ObjectId(barId),
+	});
+
+	if (exists) {
+		barResult = await barCollection.findOneAndUpdate(
+			{ _id: new ObjectId(barId) },
+			{ $inc: { favoritesCount: -1 } }
+		);
+		userResult = await userCollection.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ $pull: { favorites: new ObjectId(barId) } }
+		);
+	} else {
+		barResult = await barCollection.findOneAndUpdate(
+			{ _id: new ObjectId(barId) },
+			{ $inc: { favoritesCount: 1 } }
+		);
+		userResult = await userCollection.findOneAndUpdate(
+			{ _id: new ObjectId(userId) },
+			{ $push: { favorites: new ObjectId(barId) } }
+		);
+	}
+
+	if (!(userResult && barResult)) {
+		throw "Something went wrong.";
 	}
 
 	return { updated: true };
