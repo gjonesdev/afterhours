@@ -65,6 +65,14 @@ router.route("/privacy").get(async (req, res) => {
 	}
 });
 
+router.route("/services").get(async (req, res) => {
+	try {
+		return res.render("services", { title: "Our Services" });
+	} catch (e) {
+		return res.status(500).json({ error: e });
+	}
+});
+
 router.route("/register").get(async (req, res) => {
   try {
     return res.render("register", { title: "register" });
