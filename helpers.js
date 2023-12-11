@@ -154,14 +154,7 @@ export const validateLocation = (location) => {
   )
     throw "Invalid location";
   location.streetAddress = trmEventAddress;
-
-  function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-  }
-  location.city = toTitleCase(trmCity);
-
+  location.city = trmCity;
   location.state = trmState.toUpperCase();
   location.zipCode = trmZip;
 
@@ -365,20 +358,27 @@ export const validateComment = (comment) => {
   return comment;
 };
 
-export const validateReview = async (accountId, firstName, barName, barId, rating, comment) => {
-    const validatedAccountId = validateRequiredStr(accountId);
-	const validatedfirstName = validateRequiredStr(firstName);
-    const validatedBarName = validateRequiredStr(barName);
-    const validatedBarId = validateRequiredStr(barId);
-    const validatedRating = validateRequiredRating(rating);
-    const validatedComment = validateOptionalStr(comment);
+export const validateReview = async (
+  accountId,
+  firstName,
+  barName,
+  barId,
+  rating,
+  comment
+) => {
+  const validatedAccountId = validateRequiredStr(accountId);
+  const validatedfirstName = validateRequiredStr(firstName);
+  const validatedBarName = validateRequiredStr(barName);
+  const validatedBarId = validateRequiredStr(barId);
+  const validatedRating = validateRequiredRating(rating);
+  const validatedComment = validateOptionalStr(comment);
 
-    return {
-      accountId: validatedAccountId,
-	  firstName: validatedfirstName,
-      barName: validatedBarName,
-      barId: validatedBarId,
-      rating: validatedRating,
-      comment: validatedComment,
-    }
+  return {
+    accountId: validatedAccountId,
+    firstName: validatedfirstName,
+    barName: validatedBarName,
+    barId: validatedBarId,
+    rating: validatedRating,
+    comment: validatedComment,
+  };
 };
