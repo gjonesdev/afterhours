@@ -1,15 +1,25 @@
+<form action="/barbycity" method="post" id="findByLocation">
+    <label for="findCityInput"></label>
+    <input type="text" id="findCityInput" name="findCityInput">
+    <button type="submit"></button>
+</form>
+
+
+
 <ul>
     {{#each bars}}
 
     <li>
         <div class="row"></div>
-        <a href="/bars/{{_id}}">
+        <a href="/bars/{{bar._id}}">
             <div class="card">
-                {{name}} <br>
-                {{location.city}} <br>
-                {{ratingAverage}} <br>
-                {{reviewsCount}} reviews <br>
-                {{likesCount}} likes <br>
+                {{bar.name}} <br>
+                {{distance}} mi from you!<br>
+                @ {{duration}} driving <br>
+                {{bar.location.city}} <br>
+                {{bar.ratingAverage}} <br>
+                {{bar.reviewsCount}} reviews <br>
+                {{bar.likesCount}} likes <br>
             </div>
         </a>
         </div>
