@@ -39,4 +39,35 @@ router.route("/").put(async (req, res) => {
 	}
 });
 
+router.route("/favorites").put(async (req, res) => {
+	let account;
+	if (!req.body || Object.keys(req.body).length === 0) {
+		return res
+			.status(400)
+			.json({ error: "There are no fields in the request body" });
+	}
+
+	try {
+		account = await getAccount(req.session.user.accountId);
+		account.userId = validateId(account.userId);
+		req.body.barId = validateId(req.body.barId);
+	} catch (e) {
+		return res.status(400).json({ error: e });
+	}
+
+	try {
+		const bar = await userData.updateFavorites(
+			account.userId,
+			req.body.barId
+		);
+		if (bar.updated) {
+			return res.redirect(303, `/bars/${req.body.barId}`);
+		} else {
+			return res.redirect(303, `/bars/${req.body.barId}`);
+		}
+	} catch (e) {
+		return res.redirect(303, `/bars/${req.body.barId}`);
+	}
+});
+
 export default router;

@@ -1,19 +1,19 @@
 <ul>
-    {{#each bars}}
+	{{#each bars}}
 
-    <li>
-        <div class="row"></div>
-        <a href="/bars/{{_id}}">
-            <div class="card">
-                {{name}} <br>
-                {{location.city}} <br>
-                {{ratingAverage}} <br>
-                {{reviewsCount}} reviews <br>
-                {{likesCount}} likes <br>
-            </div>
-        </a>
-        </div>
-    </li>
+	<li>
+		<div class="row"></div>
+		<a href="/bars/{{_id}}">
+			<div class="card">
+				{{name}} <br>
+				{{location.city}} <br>
+				{{ratingAverage}} <br>
+				{{reviewsCount}} reviews <br>
+				{{favoritesCount}} favorites <br>
+			</div>
+		</a>
+		</div>
+	</li>
 
-    {{/each}}
+	{{/each}}
 </ul>
