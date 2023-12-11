@@ -208,3 +208,22 @@ const errorCallback = (error) => {
   console.log(error);
 };
 navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+
+//nav bar 
+
+var prevScrollPos = window.pageYOffset;
+var navbar = document.getElementById("main-nav");
+
+window.onscroll = function() {
+  var currentScrollPos = window.pageYOffset;
+
+  if (prevScrollPos > currentScrollPos) {
+    navbar.style.top = "0";
+    navbar.style.opacity = "1";
+  } else {
+    navbar.style.top = "-50px";
+    navbar.style.opacity = "0";
+  }
+
+  prevScrollPos = currentScrollPos;
+};
