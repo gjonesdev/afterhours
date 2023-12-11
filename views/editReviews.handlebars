@@ -1,5 +1,8 @@
 <div>
     <h1>Edit Review</h1>
+    {{#if error}}
+        <p> {{error}} </p>
+    {{/if}}
     <form action="/reviews/edit/{{review._id}}" method="post">
         <input type="hidden" name="barId" value="{{review.barId}}">
         <input type="hidden" name="barName" value="{{review.barName}}">
@@ -18,7 +21,7 @@
         </fieldset>
 
         <label for="comment">Comment:</label>
-        <input type="text" name="comment" value="{{review.comment}}">
+        <textarea name="comment" id="commentInput" value="{{review.comment}}" cols="50" rows="5"></textarea>
 
         <button type="submit">Save Changes</button>
         <a href="/account">Cancel</a>
