@@ -619,6 +619,10 @@ html {
 	color:#fefffe;
 }
 
+.login-box  h2{
+	color: white;
+}
+
 .login-box .user-box textarea{
 	width: 100%;
 	height: 150px;
@@ -764,7 +768,6 @@ html {
 
 a.link {
 
-	background-color: aqua;
-	border: #4e5e72;
+	color: white;
 }
 
