@@ -4,13 +4,13 @@ import date from "date-and-time";
 
 //Global Variables
 let userCity = "";
+let barsDistanceList = [];
 
 let exportedMethods = {
 	async barsDistance(userLocation, bars) {
 		const myKey = "AIzaSyCNmw9imxqmAtqkfDn194OzvwuTwjMOZXw";
 		const userLoc = userLocation.latitude + "," + userLocation.longitude;
 
-		let barsDistanceList = [];
 		let destinations = "";
 		bars.forEach((bar) => {
 			if (bars[bars.length - 1] !== bar) {
@@ -126,4 +126,5 @@ let exportedMethods = {
 		}
 	},
 };
+
 export default exportedMethods;

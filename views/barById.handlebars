@@ -1,11 +1,13 @@
 <div>
 	<div class="bar-main-image">
 		<div class=" bar-main-info">
+			{{! {{#if isUser}}
 			<form action="/bars/editBar" method="post" id="bar-edit-button">
 				<label for="barIdToEdit"></label>
 				<input type="hidden" id="barIdToEdit" name="barIdToEdit" value="{{id}}">
 				<button>Suggest edit</button>
 			</form>
+			{{! {{/if}}
 			<h1>
 				{{barName}}
 			</h1>
@@ -23,16 +25,24 @@
 	<div>
 		{{#each schedule}}
 		<li>
-			{{this}}
+			<p> {{date}}</p>
+			<p> {{eventName}}</p>
+			<p> {{description}}</p>
+			<p> {{startTime}}</p>
+			<p> {{endTime}}</p>
 		</li>
 		{{/each}}
+		{{! {{#if isUser}}
 		<button>Add event</button>
+		{{! {{/if}}
 		<div>
 			<h2>Gallery</h2>
 		</div>
 
 	</div>
 	<div>
+
+		{{#if isUser}}
 		<form action="/reviews" method="post" id="review-button">
 			<label for="barIdToreview"></label>
 			<input type="hidden" id="barIdToreview" name="barIdToreview" value="{{id}}">
@@ -40,14 +50,43 @@
 			<input type="hidden" id="barNameToreview" name="barNameToreview" value="{{barName}}">
 			<button>Write a review</button>
 		</form>
-
 		<form action="/user/favorites" method="POST" id="favorite-button">
 			<input type="hidden" id="barId" name="barId" value="{{id}}">
 			<input type="hidden" name="_method" value="PUT">
 			<button type="submit" class="submit-button">Favorite</button>
 		</form>
+		{{/if}}
+		{{#if notUser}}
+		<a href="/login">You need to be a user to write reviews. Click here to log in!</a>
+		{{/if}}
+	</div>
+	<div>
+		<h2>
+			Bar Reviews
+		</h2>
 
-		<button>Add photo</button>
+		<ul>
+			{{#each reviews}}
+			<div>
+				<li>
+					<p>{{userName}}</p>
+					<p>{{rating}}</p>
+					<p>{{date}}</p>
+					<p>{{comment}}</p>
+				</li>
+			</div>
+			{{/each}}
+		</ul>
+	</div>
+	<div>
+		<aside>
+			<p>{{website}}</p>
+			<p>{{phone}}</p>
+			{{! TODO: Need to add Google map direction}}
+			<a href="">Directions</a>
+			<p> {{location.streetAddress}}, {{location.city}}, {{location.state}}, {{location.zipCode}} </p>
+
+			<button>Add photo</button>
 	</div>
 	<div>
 		<h2>

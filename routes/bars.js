@@ -1,10 +1,12 @@
-import { barData } from "../data/index.js";
+import { reviewData, accountData, barData } from "../data/index.js";
 import { Router } from "express";
 const router = Router();
 import * as validation from "../helpers.js";
+import filtersHelp from "../filterhelper.js";
 
 router.route("/").get(async (req, res) => {
-	const bars = await barData.allBars();
+	const bars = await filtersHelp.sortedBarsbyDistance();
+
 	res.render("bars", {
 		bars: bars,
 	});
@@ -199,6 +201,12 @@ router.route("/update").post(async (req, res) => {
 		res.status(404).json({ error: "Bar not found!" });
 	}
 });
+/*
+router
+  .route("/addEvent")
+  .get(async (req, res) => {})
+  .route("/addEvent")
+  .post(async (req, res) => {});*/
 
 router.route("/:barId").get(async (req, res) => {
 	try {
@@ -207,6 +215,15 @@ router.route("/:barId").get(async (req, res) => {
 		return res.status(400).json({ error: e });
 	}
 	try {
+		let isUser = false;
+		let notUser = false;
+
+		if (!req.session.user) {
+			notUser = true;
+		} else {
+			isUser = true;
+		}
+
 		const theBar = await barData.barById(req.params.barId);
 		res.render("barById", {
 			id: theBar._id,
@@ -221,7 +238,9 @@ router.route("/:barId").get(async (req, res) => {
 			reviews: theBar.reviews,
 			reviewsCount: theBar.reviewsCount,
 			ratingAverage: theBar.ratingAverage,
-			favoritesCount: theBar.favoritesCount,
+			favorites: theBar.favoritesCount,
+			isUser: isUser,
+			notUser: notUser,
 		});
 	} catch (e) {
 		res.status(404).json({ error: "Bar not found!" });
