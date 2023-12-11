@@ -365,24 +365,20 @@ export const validateComment = (comment) => {
   return comment;
 };
 
-export const validateReview = async (
-  accountId,
-  barName,
-  barId,
-  rating,
-  comment
-) => {
-  const validatedAccountId = validateRequiredStr(accountId);
-  const validatedBarName = validateRequiredStr(barName);
-  const validatedBarId = validateRequiredStr(barId);
-  const validatedRating = validateRequiredRating(rating);
-  const validatedComment = validateOptionalStr(comment);
+export const validateReview = async (accountId, firstName, barName, barId, rating, comment) => {
+    const validatedAccountId = validateRequiredStr(accountId);
+	const validatedfirstName = validateRequiredStr(firstName);
+    const validatedBarName = validateRequiredStr(barName);
+    const validatedBarId = validateRequiredStr(barId);
+    const validatedRating = validateRequiredRating(rating);
+    const validatedComment = validateOptionalStr(comment);
 
-  return {
-    accountId: validatedAccountId,
-    barName: validatedBarName,
-    barId: validatedBarId,
-    rating: validatedRating,
-    comment: validatedComment,
-  };
+    return {
+      accountId: validatedAccountId,
+	  firstName: validatedfirstName,
+      barName: validatedBarName,
+      barId: validatedBarId,
+      rating: validatedRating,
+      comment: validatedComment,
+    }
 };

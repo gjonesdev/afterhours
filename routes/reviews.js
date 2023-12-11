@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { validateId, validateReview } from "../helpers.js";
-import { reviewData, accountData, barData } from "../data/index.js";
+import { reviewData, accountData, barData, userData } from "../data/index.js";
 
 const router = Router();
 
@@ -24,8 +24,12 @@ router.route("/createReview").post(async (req, res) => {
     const account = await accountData.getAccount(req.session.user.accountId);
     const accountId = account.userId;
 
+    const user = await userData.getUser(account.userId);
+    const firstName = user.firstName;
+
     const reviewInfo = {
       accountId: accountId,
+      firstName: firstName, 
       barName: req.body.barName,
       barId: req.body.barId,
       rating: rating,
@@ -35,6 +39,7 @@ router.route("/createReview").post(async (req, res) => {
     // Validate reviewInfo
     const validatedReviewInfo = await validateReview(
       reviewInfo.accountId,
+      reviewInfo.firstName,
       reviewInfo.barName,
       reviewInfo.barId,
       reviewInfo.rating,
@@ -43,6 +48,7 @@ router.route("/createReview").post(async (req, res) => {
 
     const result = await reviewData.createReview(
       validatedReviewInfo.accountId,
+      validatedReviewInfo.firstName,
       validatedReviewInfo.barName,
       validatedReviewInfo.barId,
       validatedReviewInfo.rating,
@@ -111,6 +117,7 @@ router.route("/delete/:reviewId")
 
       let result = await reviewData.updateReview(
         reviewId, 
+        review.firstName,
         review.accountId, 
         review.barName, 
         review.barId,
@@ -118,11 +125,11 @@ router.route("/delete/:reviewId")
         req.body.comment,
       );
 
-      console.log(result)
-
       res.redirect("/account");
-    } catch (e) {
-			return res.status(404).json({ error: e });
+    } catch (error) {
+      const reviewId = req.params.reviewId;
+      const review = await reviewData.get(reviewId);
+			res.render("editReviews", { review, error });
 		}
   });
 
