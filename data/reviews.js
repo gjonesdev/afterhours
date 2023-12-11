@@ -4,10 +4,11 @@ import { bars } from "../config/mongoCollections.js";
 import * as validation from "../helpers.js";
 import barsFunctions from "./bars.js";
 
-export const createReview = async (accountId, barName, barId, rating, comment) => {
+export const createReview = async (accountId, firstName, barName, barId, rating, comment) => {
   //accountId comes from the user leaving the review
   //barId comes from the bar being reviewed
   accountId = validation.validateRequiredStr(accountId);
+  firstName = validation.validateRequiredStr(firstName);
   barName = validation.validateRequiredStr(barName);
   barId = validation.validateRequiredStr(barId);
   rating = validation.validateRequiredRating(rating);
@@ -31,6 +32,7 @@ export const createReview = async (accountId, barName, barId, rating, comment) =
 
   const review = {
     accountId,
+    firstName,
     barName,
     barId,
     rating,
@@ -158,6 +160,7 @@ export const deleteReview = async (reviewId, barId) => {
 
 export const updateReview = async (
   reviewId,
+  firstName,
   accountId,
   barName,
   barId,
@@ -166,6 +169,7 @@ export const updateReview = async (
 ) => {
   reviewId = validation.validateId(reviewId);
   accountId = validation.validateRequiredStr(accountId);
+  firstName = validation.validateRequiredStr(firstName);
   barName = validation.validateRequiredStr(barName);
   barId = validation.validateRequiredStr(barId);
   rating = validation.validateRequiredRating(rating);
@@ -174,6 +178,7 @@ export const updateReview = async (
 
   const review = {
     accountId,
+    firstName,
     barName,
     barId,
     rating,
