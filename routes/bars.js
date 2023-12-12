@@ -1,7 +1,13 @@
-import { barData } from "../data/index.js";
+import { reviewData, accountData, barData } from "../data/index.js";
 import { Router } from "express";
 const router = Router();
 import * as validation from "../helpers.js";
+import filtersHelp from "../filterhelper.js";
+import xss from "xss";
+
+router.route("/test").get(async (req, res) => {
+  res.render("test", {});
+});
 
 router.route("/").get(async (req, res) => {
   const bars = await filtersHelp.sortedBarsbyDistance();
@@ -17,6 +23,7 @@ router
     res.render("createBar");
   })
   .post(async (req, res) => {
+    req.body = req.body;
     let theBar = {};
     const errors = [];
     const streetAddress = req.body.createAddress;
@@ -78,6 +85,7 @@ router
         "65609846293d2b1722d25c38",
         ["sport", "grill"]
       );
+      filtersHelp.barDistanceHelper(true);
     } catch (e) {
       errors.push(e);
     }
@@ -179,11 +187,18 @@ router.route("/update").post(async (req, res) => {
       req.body.updateWebsite,
       req.body.updatePhone
     );
+    filtersHelp.barDistanceHelper(true);
     res.redirect("/bars/" + req.body.updateBarId);
   } catch (e) {
     res.status(404).json({ error: "Bar not found!" });
   }
 });
+/*
+router
+  .route("/addEvent")
+  .get(async (req, res) => {})
+  .route("/addEvent")
+  .post(async (req, res) => {});*/
 
 router.route("/:barId").get(async (req, res) => {
   try {

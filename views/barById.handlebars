@@ -32,9 +32,9 @@
 			<p> {{endTime}}</p>
 		</li>
 		{{/each}}
-		{{! {{#if isUser}}
+		{{#if isUser}}
 		<button>Add event</button>
-		{{! {{/if}}
+		{{/if}}
 		<div>
 			<h2>Gallery</h2>
 		</div>
@@ -69,7 +69,7 @@
 			{{#each reviews}}
 			<div>
 				<li>
-					<p>{{userName}}</p>
+					<p>{{firstName}}</p>
 					<p>{{rating}}</p>
 					<p>{{date}}</p>
 					<p>{{comment}}</p>
@@ -88,32 +88,3 @@
 
 			<button>Add photo</button>
 	</div>
-	<div>
-		<h2>
-			Bar Reviews
-		</h2>
-		<ul>
-			{{#each reviews}}
-			<div>
-				<li>
-					<p>{{rating}}</p>
-					<p>{{date}}</p>
-					<p>{{comment}}</p>
-				</li>
-			</div>
-			{{/each}}
-		</ul>
-	</div>
-	<div>
-		<aside>
-			<p>{{website}}</p>
-			<p>{{phone}}</p>
-			{{! TODO: Need to add Google map direction}}
-			<a href="">Directions</a>
-			<p> {{location.streetAddress}}, {{location.city}}, {{location.state}}, {{location.zipCode}} </p>
-
-		</aside>
-	</div>
-
-
-</div>
