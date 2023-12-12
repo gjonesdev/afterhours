@@ -1,4 +1,5 @@
 import { ObjectId } from "mongodb";
+import { reports } from "./config/mongoCollections.js";
 
 export const validateId = (id) => {
 	id = id.trim();
@@ -277,7 +278,7 @@ export const validateReport = (
       throw "Invalid string or strings with only spaces are not valid.";
 };
 
-/**Validate user ID for reports*/
+/**Validate user ID as String for reports*/
 export const validateUserId =  (
     userId
   ) => {
@@ -333,6 +334,29 @@ export const validateComment =  (
 	if(!isNaN(comment)) throw'Comment or message should not contain only numbers';
 	if(comment.trim().length < 2 || comment.trim().length > 500) throw "Comment or message should be at least 2 characters long and a max of 500 characters.";
 	return comment; 
+};
+
+/**Validate user ID as ObjectID for reports*/
+export const validateUserIdObjectId = (
+	userId
+) => {
+	if (!userId) throw 'No userId is provided';
+	if (typeof userId !== 'string') throw 'The userId provided is not a string.';
+	if (userId.trim().length === 0) throw 'Empty string or just spaces not allowed.';
+	userId = userId.trim();
+	if (!ObjectId.isValid(userId)) throw 'The userId provided is not a valid ObjectId.';
+	return userId;
+};
+
+/**404 No report found*/
+export const validateNoReportsFound = async (userId) => {
+	const reportsCollection = await reports();
+	//For objectId:
+	//const userFind = await reportsCollection.find({userId: new ObjectId(userId)}).toArray();
+	//For String:
+	const userFind = await reportsCollection.find({userId: userId}).toArray();
+	if (userFind.length <= 0) throw 'No reports found.';
+	//return userId;
 };
 
 export const validateReview = async (userId, barId, rating, comment) => {

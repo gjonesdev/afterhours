@@ -52,4 +52,39 @@ router.route("/").get(async (req, res) => {
    } 
 });
 
+router
+  .route('/:userId')
+  .get(async (req, res) => {
+    //Error handler 404
+    let id = "656ff7cc8bf60e3fd3988b4f";
+    try {
+      //bring the user id by the session************** 
+      id = validation.validateUserIdObjectId(id);
+    } catch (e) {
+      return res.status(400).render("error", 
+      { 
+        class: "error", message: e.toString(), title: "Error: 400"
+      });
+    }
+    //Check if the event id exist 404
+    try{
+      await validation.validateNoReportsFound(id);
+    } catch (e) {
+      return res.status(404).render("error", 
+      { 
+        class: "error", message: e.toString(), title: "Error: 404"
+      });
+    }
+    //Find request 200
+    try {
+      const reportListData = await reportsData.getReportsByUserId(id);
+      res.render('reportsByUserId', {title: "Reports", reportListData: reportListData});
+    } catch (e) {
+      return res.status(500).render("error", 
+      { 
+        class: "error", message: "Internal server error", title: "Error: 500"
+      });
+    }
+});
+
 export default router;

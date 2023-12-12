@@ -4,14 +4,14 @@ import session from "express-session";
 import configRoutes from "./routes/index.js";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
-import {
+/*import {
 	defaultRedirect,
 	loginRedirect,
 	logoutRedirect,
 	accountRedirect,
 	registerRedirect,
 	rewriteUnsupportedBrowserMethods,
-} from "./middleware.js";
+} from "./middleware.js";*/
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -31,13 +31,13 @@ app.use(
 app.use("/public", staticDir);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(rewriteUnsupportedBrowserMethods);
+/*app.use(rewriteUnsupportedBrowserMethods);
 
 app.use("/", defaultRedirect);
 app.use("/login", loginRedirect);
 app.use("/register", registerRedirect);
 app.use("/accounts", accountRedirect);
-app.use("/logout", logoutRedirect);
+app.use("/logout", logoutRedirect);*/
 
 app.engine("handlebars", exphbs.engine({ defaultLayout: "main" }));
 app.set("view engine", "handlebars");

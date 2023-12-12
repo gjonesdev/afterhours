@@ -148,6 +148,9 @@ function reportForm() {
             
         //Sent effect
         document.body.classList.add("sent");
+
+        //wait 3.7 second to go back to the previous page
+        setTimeout('history.go(-1)', 3700);
         }); 
     }
 }
