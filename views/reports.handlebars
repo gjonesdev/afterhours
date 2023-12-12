@@ -24,6 +24,7 @@
 
 <div class="login-container">
   <div class="login-box">
+    <p id="error" class="error" hidden></p>
     <form action="/reports" method="POST" class="reports-form" id="reports-form">
       <div class="side">
         <h2>#ContactUs 🍻</h1>
@@ -70,15 +71,7 @@
   </div>
 
   <div class="message-container">
-
-    {{#if error}}
-    <p class="response-error">Error {{error.status}}: {{error.message}}</p>
-    {{/if}}
-    <ul id="error-list" class="error-list hide"></ul>
-
     <a class="link" href="javascript:javascript:history.go(-1)"> 🔙 #GoBack to the previous page </a>
-
-
   </div>
 
 </div>
