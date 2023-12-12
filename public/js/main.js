@@ -228,3 +228,123 @@ window.onscroll = function () {
 
 	prevScrollPos = currentScrollPos;
 };
+
+//WriteReviewForm
+(function () {
+	let ratingForm = document.getElementById('ratingForm');
+	let commentInput = document.getElementById('commentInput')
+	let barIdInput = document.getElementById('barIdInput')
+	let barNameInput = document.getElementById('barNameInput')
+	let errorDiv = document.getElementById('error_div')
+
+	let errors = [];
+
+	function isEmpty(value) {
+        return value.trim() === '';
+    }
+
+	if (ratingForm) {
+		ratingForm.addEventListener('submit', (event) => {
+
+			errors = [];
+
+			if (errorDiv) {
+				errorDiv.hidden = true;
+				errorDiv.innerHTML = '';
+			}
+
+			const ratingInputs = document.getElementsByName('rating');
+			let ratingSelected = false;
+	
+			// Check if any radio button is checked
+			for (const input of ratingInputs) {
+				if (input.checked) {
+					ratingSelected = true;
+					break;
+				}
+			}
+
+			if (!ratingSelected) {
+				errors.push('Client Side: Rating must be selected')
+			}
+
+			if ((isEmpty(barIdInput.value)) || (isEmpty(barNameInput.value))) {
+				errors.push('Unable to retrieve barId and or barName')
+			}
+
+			if (errors.length > 0) {
+				let myUL = document.createElement('ul');
+		
+				event.preventDefault();
+				for (let i = 0; i < errors.length; i++) {
+					let myLi = document.createElement('li');
+					myLi.classList.add('error');
+					myLi.innerHTML = errors[i];
+					myUL.appendChild(myLi);
+				}
+				errorDiv.appendChild(myUL);
+				errorDiv.hidden = false;
+			}
+		});
+	}
+})();
+
+//EditReviewForm
+(function () {
+	let ratingForm = document.getElementById('editReviewForm');
+	let commentInput = document.getElementById('commentInput')
+	let barIdInput = document.getElementById('barIdInput')
+	let barNameInput = document.getElementById('barNameInput')
+	let errorDiv = document.getElementById('error_div')
+
+	let errors = [];
+
+	function isEmpty(value) {
+        return value.trim() === '';
+    }
+
+	if (ratingForm) {
+		ratingForm.addEventListener('submit', (event) => {
+
+			errors = [];
+
+			if (errorDiv) {
+				errorDiv.hidden = true;
+				errorDiv.innerHTML = '';
+			}
+
+			const ratingInputs = document.getElementsByName('rating');
+			let ratingSelected = false;
+	
+			// Check if any radio button is checked
+			for (const input of ratingInputs) {
+				if (input.checked) {
+					ratingSelected = true;
+					break;
+				}
+			}
+
+			if (!ratingSelected) {
+				errors.push('Client Side: Rating must be selected')
+			}
+
+			if ((isEmpty(barIdInput.value)) || (isEmpty(barNameInput.value))) {
+				errors.push('Unable to retrieve barId and or barName')
+			}
+
+			if (errors.length > 0) {
+				let myUL = document.createElement('ul');
+		
+				event.preventDefault();
+				for (let i = 0; i < errors.length; i++) {
+					let myLi = document.createElement('li');
+					myLi.classList.add('error');
+					myLi.innerHTML = errors[i];
+					myUL.appendChild(myLi);
+				}
+				errorDiv.appendChild(myUL);
+				errorDiv.hidden = false;
+			}
+		});
+	}
+})();
