@@ -38,12 +38,20 @@ export const registerReport = async (
 export const getAllReports = async (
   ) => {
 
-
 };
 
 /**Get all reports by User ID */
 export const getReportsByUserId = async (
+  userId
   ) => {
-  
-  
+  //Error Check:
+  userId = validation.validateUserIdObjectId(userId); 
+  //Get the reports by userid 
+  const reportsCollection = await reports();
+  const userFind = await reportsCollection.find({userId: userId}).toArray();
+  if (userFind.length <= 0) throw 'No reports found.';
+  //Sort the report by descending order
+  userFind.sort((a, b) => b.date - a.date);
+
+  return userFind;
 };

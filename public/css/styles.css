@@ -441,15 +441,6 @@ html {
 	}
 }
 
-/*
-@keyframes pushLetter {
-  0% {transform: translateY(-8rem) scale(0.3, 0.5);}
-  50% {transform: translateY(-8rem) scale(0.3, 0.5);}
-  90% {transform: translateY(-8.5rem) scale(0.3, 0.5);}
-  100% {transform: translateY(-8rem) scale(0.3, 0.5);}
-}
-*/
-
 .login-container {
 	display: flex;
 	flex-direction: column;
@@ -824,3 +815,50 @@ a {
 	font-weight: bold;
 	margin-top: 2rem;
 }
+
+.reportsbyuser{
+	align-items: center;
+	align-content: center;
+}
+
+/* List */
+ol.myreportsol {
+	counter-reset: index;  
+	padding: 0;
+	max-width: 1000px;
+	text-align: center;
+  }
+  
+  /* List element */
+  li.myreportsli {
+	counter-increment: index; 
+	display: flex;
+	align-items: center;
+	padding: 14px 0;
+	box-sizing: border-box;
+  }
+  
+  /* Element counter */
+  li.myreportsli::before {
+	content: counters(index, ".", decimal-leading-zero);
+	font-size: 1.5rem;
+	text-align: right;
+	font-weight: bold;
+	min-width: 50px;
+	padding-right: 12px;
+	font-variant-numeric: tabular-nums;
+	align-self: flex-start;
+	background-image: linear-gradient(to bottom, aquamarine, orangered);
+	background-attachment: fixed;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+  }
+  
+  /* Element separation */
+   li.myreportsli + li.myreportsli {
+	border-top: 1px solid black;
+  }
+  /*Error*/
+  p.error {
+	background: red;
+  }
