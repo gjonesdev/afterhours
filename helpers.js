@@ -155,14 +155,7 @@ export const validateLocation = (location) => {
   )
     throw "Invalid location";
   location.streetAddress = trmEventAddress;
-
-  function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-  }
-  location.city = toTitleCase(trmCity);
-
+  location.city = trmCity;
   location.state = trmState.toUpperCase();
   location.zipCode = trmZip;
 
@@ -307,22 +300,22 @@ export const validateReport = (userId, reason, comment) => {
 };
 
 /**Validate user ID as String for reports*/
-export const validateUserId =  (
-    userId
-  ) => {
-	//If it is String validation:
-	//User Id:
-	if(userId.trim().length === 0) throw 'Empty string or just spaces not allowed for user Id.';
-	userId = userId.trim();
-	//"User Id should not contain space in the middle.
-	let userIdRegex = /[\s]+/g;
-	let regexValue = userIdRegex.exec(userId);
-	if(regexValue !== null){
-		if(regexValue.length >= 1) throw "Not space allowed for user Id";
-	}
-	//userId should not contain numbers
-	if(!isNaN(userId)) throw'User Id should not contain numbers';
-	if(userId.trim().length < 2 || userId.trim().length > 50) throw "User Id should be at least 2 characters long and a max of 50 characters.";
+export const validateUserId = (userId) => {
+  //If it is String validation:
+  //User Id:
+  if (userId.trim().length === 0)
+    throw "Empty string or just spaces not allowed for user Id.";
+  userId = userId.trim();
+  //"User Id should not contain space in the middle.
+  let userIdRegex = /[\s]+/g;
+  let regexValue = userIdRegex.exec(userId);
+  if (regexValue !== null) {
+    if (regexValue.length >= 1) throw "Not space allowed for user Id";
+  }
+  //userId should not contain numbers
+  if (!isNaN(userId)) throw "User Id should not contain numbers";
+  if (userId.trim().length < 2 || userId.trim().length > 50)
+    throw "User Id should be at least 2 characters long and a max of 50 characters.";
 
   return userId;
   //If it is an Object ID validation
@@ -367,42 +360,49 @@ export const validateComment = (comment) => {
 };
 
 /**Validate user ID as ObjectID for reports*/
-export const validateUserIdObjectId = (
-	userId
-) => {
-	if (!userId) throw 'No userId is provided';
-	if (typeof userId !== 'string') throw 'The userId provided is not a string.';
-	if (userId.trim().length === 0) throw 'Empty string or just spaces not allowed.';
-	userId = userId.trim();
-	if (!ObjectId.isValid(userId)) throw 'The userId provided is not a valid ObjectId.';
-	return userId;
+export const validateUserIdObjectId = (userId) => {
+  if (!userId) throw "No userId is provided";
+  if (typeof userId !== "string") throw "The userId provided is not a string.";
+  if (userId.trim().length === 0)
+    throw "Empty string or just spaces not allowed.";
+  userId = userId.trim();
+  if (!ObjectId.isValid(userId))
+    throw "The userId provided is not a valid ObjectId.";
+  return userId;
 };
 
 /**404 No report found*/
 export const validateNoReportsFound = async (userId) => {
-	const reportsCollection = await reports();
-	//For objectId:
-	//const userFind = await reportsCollection.find({userId: new ObjectId(userId)}).toArray();
-	//For String:
-	const userFind = await reportsCollection.find({userId: userId}).toArray();
-	if (userFind.length <= 0) throw 'No reports found.';
-	//return userId;
+  const reportsCollection = await reports();
+  //For objectId:
+  //const userFind = await reportsCollection.find({userId: new ObjectId(userId)}).toArray();
+  //For String:
+  const userFind = await reportsCollection.find({ userId: userId }).toArray();
+  if (userFind.length <= 0) throw "No reports found.";
+  //return userId;
 };
 
-export const validateReview = async (accountId, firstName, barName, barId, rating, comment) => {
-    const validatedAccountId = validateRequiredStr(accountId);
-	const validatedfirstName = validateRequiredStr(firstName);
-    const validatedBarName = validateRequiredStr(barName);
-    const validatedBarId = validateRequiredStr(barId);
-    const validatedRating = validateRequiredRating(rating);
-    const validatedComment = validateOptionalStr(comment);
+export const validateReview = async (
+  accountId,
+  firstName,
+  barName,
+  barId,
+  rating,
+  comment
+) => {
+  const validatedAccountId = validateRequiredStr(accountId);
+  const validatedfirstName = validateRequiredStr(firstName);
+  const validatedBarName = validateRequiredStr(barName);
+  const validatedBarId = validateRequiredStr(barId);
+  const validatedRating = validateRequiredRating(rating);
+  const validatedComment = validateOptionalStr(comment);
 
-    return {
-      accountId: validatedAccountId,
-	  firstName: validatedfirstName,
-      barName: validatedBarName,
-      barId: validatedBarId,
-      rating: validatedRating,
-      comment: validatedComment,
-    }
+  return {
+    accountId: validatedAccountId,
+    firstName: validatedfirstName,
+    barName: validatedBarName,
+    barId: validatedBarId,
+    rating: validatedRating,
+    comment: validatedComment,
+  };
 };
