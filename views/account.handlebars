@@ -1,3 +1,77 @@
-<p class="body-text">Welcome {{firstName}} {{lastName}}, your email is: {{email}}.</p>
+<p class="body-text">Welcome {{user.firstName}} {{user.lastName}}, your email is: {{account.email}}.</p>
+
+<div>
+	<form class="account-form" id="account-form" action="/account" method="POST">
+
+		<label class="input-label" for="emailInput">Email</label>
+		<input class="input" type="email" id="emailInput" name="emailInput" placeholder="Email"
+			value="{{account.email}}">
+
+		<label class="input-label" for="newPasswordInput">New Password</label>
+		<input class="input" type="password" id="newPasswordInput" name="newPasswordInput" placeholder="New Password">
+
+		<label class="input-label" for="confirmPasswordInput">Password</label>
+		<input class="input" type="password" id="confirmPasswordInput" name="confirmPasswordInput"
+			placeholder="Confirm New Password">
+
+		<label class="input-label" for="currentPasswordInput">Current Password</label>
+		<input class="input" type="password" id="currentPasswordInput" name="currentPasswordInput"
+			placeholder="Current Password">
+
+		<input type="hidden" name="_method" value="PUT">
+		<button type="submit" class="submit-button">Save</button>
+	</form>
+</div>
+
+<div>
+	<form class="user-form" id="user-form" action="/user" method="POST">
+		<label class="input-label" for="firstNameInput">First Name</label>
+		<input class="input" type="text" id="firstNameInput" name="firstNameInput" placeholder="First Name"
+			value="{{user.firstName}}">
+
+		<label class="input-label" for="lastNameInput">Last Name</label>
+		<input class="input" type="text" id="lastNameInput" name="lastNameInput" placeholder="Last Name"
+			value="{{user.lastName}}">
+
+		<label class="input-label" for="phoneInput">Phone Number</label>
+		<input class="input" type="phone" id="phoneInput" name="phoneInput" placeholder="Phone Number"
+			value="{{user.phone}}">
+
+		<input type="hidden" name="_method" value="PUT">
+		<button type="submit" class="submit-button">Save</button>
+	</form>
+</div>
+
+<button id="delete-button">
+	Delete Account
+</button>
+
+<div>
+	Enter your password and confirm.
+	<form class="delete-form hidden" id="delete-form" action="/account" method="POST">
+		<label class="input-label" for="passwordInput">Password</label>
+		<input class="input" type="password" id="passwordInput" name="passwordInput" placeholder="Password">
+
+		<input type="hidden" name="_method" value="DELETE">
+		<button type="submit" class="submit-button">Confirm Delete Account</button>
+	</form>
+</div>
+
+<h1>Reviews From You:</h1>
+{{#if userReviews}}
+<div>
+    {{#each userReviews}}
+        <div>
+            <p>Bar Name: {{this.barName}}</p>
+            <p>Rating: {{this.rating}}</p>
+            <p>Comment: {{this.comment}}</p>
+            <a href="/reviews/edit/{{this._id}}">Edit</a>
+            <a href="/reviews/delete/{{this._id}}">Delete</a>
+        </div>
+    {{/each}}
+</div>
+{{else}}
+  <p>No reviews yet.</p>
+{{/if}}
 
 <a class="link" href="/logout">Logout</a>

@@ -10,6 +10,8 @@ import {
 	validatePassword,
 } from "../helpers.js";
 
+const saltRounds = 16;
+
 export const createAccount = async (accountInfo, userInfo) => {
 	accountInfo = validateAccount(accountInfo);
 	userInfo = validateUser(userInfo);
@@ -25,7 +27,6 @@ export const createAccount = async (accountInfo, userInfo) => {
 
 	const userId = await userData.createUser(userInfo);
 
-	const saltRounds = 16;
 	accountInfo.password = await bcrypt.hash(accountInfo.password, saltRounds);
 	accountInfo.userId = userId;
 
@@ -34,7 +35,7 @@ export const createAccount = async (accountInfo, userInfo) => {
 		throw "Failed to add account.";
 	}
 
-	return res;
+	return { inserted: true };
 };
 
 export const getAccount = async (accountId) => {
@@ -59,46 +60,79 @@ export const getAccount = async (accountId) => {
 	return accountDetails;
 };
 
-export const updateAccount = async (accountId, updatedInfo) => {
+export const updateAccount = async (
+	accountId,
+	updatedInfo,
+	currentPassword
+) => {
 	accountId = validateId(accountId);
-	updatedInfo = validateAccount(updatedInfo);
+	updatedInfo.email = validateEmail(updatedInfo.email);
 
 	const accountCollection = await accounts();
 
+	const account = await accountCollection.findOne({
+		_id: new ObjectId(accountId),
+	});
+	if (account === null) {
+		throw "No account with that id.";
+	}
+
+	const valid = await bcrypt.compare(currentPassword, account.password);
+
+	if (!valid) {
+		throw "Incorrect Password.";
+	}
+
+	if (updatedInfo.password) {
+		updatedInfo.password = validatePassword(updatedInfo.password);
+		updatedInfo.password = await bcrypt.hash(
+			updatedInfo.password,
+			saltRounds
+		);
+	}
+
 	const updatedAccount = await accountCollection.findOneAndUpdate(
 		{ _id: new ObjectId(accountId) },
-		{ $set: updated },
+		{ $set: updatedInfo },
 		{ returnDocument: "after" }
 	);
 	if (!updatedAccount) {
 		throw "No account with that id.";
 	}
 
-	const accountInfo = {
-		email: updatedAccount.email,
-		accountId: updatedAccount.accountId,
-		userId: updatedAccount.userId,
-		accountType: updatedAccount.accountType,
-	};
-
-	return accountInfo;
+	return { updated: true };
 };
 
-export const deleteAccount = async (accountId) => {
+export const deleteAccount = async (accountId, password) => {
 	accountId = validateId(accountId);
 
 	const accountCollection = await accounts();
 
-	const deletedAccount = await accountCollection.findOneAndDelete({
+	const account = await accountCollection.findOne({
 		_id: new ObjectId(accountId),
-		$project: userId,
 	});
 
-	if (!deletedAccount) {
+	if (account === null) {
 		throw "No account with that id.";
 	}
 
-	const userId = deletedAccount.userId.toString();
+	const valid = await bcrypt.compare(password, account.password);
+
+	if (!valid) {
+		throw "Incorrect Password.";
+	}
+
+	const deleted = await accountCollection.findOneAndDelete({
+		_id: new ObjectId(accountId),
+	});
+
+	console.log(deleted);
+
+	if (!deleted) {
+		throw "No account with that id.";
+	}
+
+	const userId = deleted.userId.toString();
 	userData.deleteUser(userId);
 
 	return { deleted: true };
@@ -110,7 +144,7 @@ export const login = async (loginInfo) => {
 
 	const accountCollection = await accounts();
 	const account = await accountCollection.findOne({
-		emailAddress: loginInfo.emailAddress,
+		email: loginInfo.email,
 	});
 
 	if (!account) {
@@ -124,7 +158,7 @@ export const login = async (loginInfo) => {
 	}
 
 	const accountInfo = {
-		accountId: account.accountId,
+		accountId: account._id.toString(),
 		accountType: account.accountType,
 	};
 

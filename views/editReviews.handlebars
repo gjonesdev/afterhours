@@ -1,0 +1,36 @@
+<!-- Client Side Error -->
+<div class="form-group" id="error_div">
+        <div class="alert alert-danger">
+        </div>
+</div>
+
+<div>
+    <h1>Edit Review</h1>
+    <!-- Server Side Error -->
+    {{#if error}}
+        <p> {{error}} </p>
+    {{/if}}
+    <form action="/reviews/edit/{{review._id}}" method="post" id="editReviewForm">
+        <input type="hidden" name="barId" value="{{review.barId}}" id="barIdInput">
+        <input type="hidden" name="barName" value="{{review.barName}}" id="barNameInput">
+        
+        <fieldset class="rating">
+            <label for="ratingInput1"></label>
+            <input type="radio" name="rating" id="ratingInput1" value="1">
+            <label for="ratingInput2"></label>
+            <input type="radio" name="rating" id="ratingInput2" value="2">
+            <label for="ratingInput3"></label>
+            <input type="radio" name="rating" id="ratingInput3" value="3">
+            <label for="ratingInput4"></label>
+            <input type="radio" name="rating" id="ratingInput4" value="4">
+            <label for="ratingInput5"></label>
+            <input type="radio" name="rating" id="ratingInput5" value="5">
+        </fieldset>
+
+        <label for="comment">Comment:</label>
+        <textarea name="comment" id="commentInput" value="{{review.comment}}" cols="50" rows="5"></textarea>
+
+        <button type="submit">Save Changes</button>
+        <a href="/account">Cancel</a>
+    </form>
+</div>

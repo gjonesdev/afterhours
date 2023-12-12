@@ -1,0 +1,33 @@
+<!-- Client Side Error -->
+<div class="form-group" id="error_div">
+        <div class="alert alert-danger">
+        </div>
+</div>
+
+<div>
+    <!-- Server Side Error -->
+    <h1>{{barName}}</h1>
+    {{#if error}}
+        <p> {{error}} </p>
+    {{/if}}
+
+    <form action="/reviews/createReview" method="post" id="ratingForm">
+        <input type="hidden" name="barId" value="{{barId}}" id="barIdInput">
+        <input type="hidden" name="barName" value="{{barName}}" id="barNameInput">
+        <fieldset class="rating">
+            <label for="ratingInput1"></label>
+            <input type="radio" name="rating" id="ratingInput1" value="1">
+            <label for="ratingInput2"></label>
+            <input type="radio" name="rating" id="ratingInput2" value="2">
+            <label for="ratingInput3"></label>
+            <input type="radio" name="rating" id="ratingInput3" value="3">
+            <label for="ratingInput4"></label>
+            <input type="radio" name="rating" id="ratingInput4" value="4">
+            <label for="ratingInput5"></label>
+            <input type="radio" name="rating" id="ratingInput5" value="5">
+        </fieldset>
+        <label for="commentInput"></label>
+        <textarea name="comment" id="commentInput" cols="50" rows="5"></textarea>
+        <button type="submit">Post Review</button>
+    </form>
+</div>
