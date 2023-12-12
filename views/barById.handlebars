@@ -1,13 +1,13 @@
 <div>
 	<div class="bar-main-image">
 		<div class=" bar-main-info">
-			{{! {{#if isUser}}
+			{{#if isUser}}
 			<form action="/bars/editBar" method="post" id="bar-edit-button">
 				<label for="barIdToEdit"></label>
 				<input type="hidden" id="barIdToEdit" name="barIdToEdit" value="{{id}}">
 				<button>Suggest edit</button>
 			</form>
-			{{! {{/if}}
+			{{/if}}
 			<h1>
 				{{barName}}
 			</h1>
