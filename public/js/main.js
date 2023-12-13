@@ -228,7 +228,7 @@ const successCallback = (position) => {
   })(window.jQuery); //End jQuery
 }; //End success
 const errorCallback = (error) => {
-  event.preventDefault();
+  preventDefault();
   alert(
     "Allow Afterhours to use your device location to find bars and events near you!"
   );
