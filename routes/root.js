@@ -49,6 +49,7 @@ router.route("/about").get(async (req, res) => {
   try {
     return res.render("aboutUs", { title: "About" });
   } catch (e) {
+    const test = 0;
     return res.status(500).json({ error: e });
   }
 });
