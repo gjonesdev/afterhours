@@ -112,27 +112,21 @@ export const validateTime = (time, type) => {
 	return time;
 };
 
-export const validatePhone = (str) => {
-	if (
-		phoneInput.value === undefined ||
-		phoneInput.value === null ||
-		phoneInput.value === ""
-	) {
+export const validatePhone = (phone) => {
+	if (phone === undefined || phone === null || phone === "") {
 		throw `Phone number required.`;
 	}
 
-	if (typeof phoneInput.value !== "string") {
+	if (typeof phone !== "string") {
 		throw `Phone number must be of type string.`;
 	}
-	phoneInput.value = phoneInput.value.trim();
+	phone = phone.trim();
 
-	if (
-		!/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(phoneInput.value)
-	) {
+	if (!/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(phone)) {
 		throw "Phone number must be valid.";
 	}
 
-	return phoneInput.value.replace(/\D/g, "");
+	return phone.replace(/\D/g, "");
 };
 
 //Validating location
