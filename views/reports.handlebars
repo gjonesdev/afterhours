@@ -1,77 +1,54 @@
-<nav class="main-nav" id="main-nav">
-  <div class="content-wrapper-sm">
-    <a href="/" class="navbar-brand">After<strong>hours</strong></a>
-
-    <div class="search-bar">
-      <input type="text" placeholder="Search the #happyHour Magic">
-      <button type="submit"><i class="fa fa-search"></i></button>
-    </div>
-
-    <div id="menu-button">
-      <div class="bar1"></div>
-      <div class="bar2"></div>
-      <div class="bar3"></div>
-    </div>
-    <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="/login"> LogIn</a></li>
-      <li><a href="/register">Register</a></li>
-      <li><a href="/about">About Us</a></li>
-    </ul>
-  </div>
-</nav>
-
-
 <div class="login-container">
-  <div class="login-box">
-    <p id="error" class="error" hidden></p>
-    <form action="/reports" method="POST" class="reports-form" id="reports-form">
-      <div class="side">
-        <h2>#ContactUs 🍻</h1>
+	<div class="login-box">
+		<p id="error" class="error" hidden></p>
+		<form action="/reports" method="POST" class="reports-form" id="reports-form">
+			<div class="side">
+				<h2>#ContactUs 🍻</h1>
 
-          <div class="user-box">
-            <input class="input" type="text" id="firstNameInput" name="firstNameInput" required=""
-              value="{{form.firstNameInput}}">
-            <label class="input-label" for="firstNameInput">#YourName</label>
-          </div>
+					<div class="user-box">
+						<input class="input" type="text" id="firstNameInput" name="firstNameInput" required=""
+							value="{{form.firstNameInput}}">
+						<label class="input-label" for="firstNameInput">#YourName</label>
+					</div>
 
 
-          <div class="user-box">
-            <input class="input" type="email" id="emailInput" name="emailInput" required="" value="{{form.emailInput}}">
-            <label class="input-label" for="emailInput">#YourEmail</label>
-          </div>
+					<div class="user-box">
+						<input class="input" type="email" id="emailInput" name="emailInput" required=""
+							value="{{form.emailInput}}">
+						<label class="input-label" for="emailInput">#YourEmail</label>
+					</div>
 
-          <div class="user-box">
-            <p>Reason:</p>
-            <select name="reasonInput" id="reasonInput" required>
-              <option value="" disabled selected hidden>Choose a reason</option>
-              <option value="Report a problem">Report a problem</option>
-              <option value="Inaccurate information">Inaccurate information</option>
-              <option value="Make a suggestion">Make a suggestion</option>
-              <option value="Give a compliment">Give a compliment</option>
-              <option value="Other">Other</option>
-            </select>
-          </div>
+					<div class="user-box">
+						<p>Reason:</p>
+						<select name="reasonInput" id="reasonInput" required>
+							<option value="" disabled selected hidden>Choose a reason</option>
+							<option value="Report a problem">Report a problem</option>
+							<option value="Inaccurate information">Inaccurate information</option>
+							<option value="Make a suggestion">Make a suggestion</option>
+							<option value="Give a compliment">Give a compliment</option>
+							<option value="Other">Other</option>
+						</select>
+					</div>
 
-          <div class="user-box">
-            <textarea name="commentInput" id="commentInput"
-              placeholder="Raise the Bar: Let us know what's on your mind. Bonus points if your message is served on the rocks 🥂💭"></textarea><br>
-          </div>
+					<div class="user-box">
+						<textarea name="commentInput" id="commentInput"
+							placeholder="Raise the Bar: Let us know what's on your mind. Bonus points if your message is served on the rocks 🥂💭"></textarea><br>
+					</div>
 
-          <button type="submit" class="submit-button">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            #BoozeBuzz
-          </button>
+					<button type="submit" class="submit-button">
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						#BoozeBuzz
+					</button>
 
-      </div>
-    </form>
-  </div>
+			</div>
+		</form>
+	</div>
 
-  <div class="message-container">
-    <a class="link" href="javascript:javascript:history.go(-1)"> 🔙 #GoBack to the previous page </a>
-  </div>
+	<div class="message-container">
+		<a class="link" href="javascript:javascript:history.go(-1)"> 🔙 #GoBack to the previous page </a>
+	</div>
 
 </div>
