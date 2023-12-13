@@ -15,6 +15,8 @@ let exportedMethods = {
     let userLoc = "";
     //Call all bars
     const bars = await barData.allBars();
+    if (!bars.length) throw "No bars in the data base yet. Try to create one!";
+
     //Google key
     const myKey = "AIzaSyCNmw9imxqmAtqkfDn194OzvwuTwjMOZXw";
     if (typeof userLocation !== "string") {
@@ -173,6 +175,16 @@ let exportedMethods = {
     let sortedBars = barsAndDistance.sort(function (a, b) {
       return (
         a.distance - b.distance || b.bar.ratingAverage - a.bar.ratingAverage
+      );
+    });
+
+    return sortedBars;
+  },
+
+  async sortedByRating(bars) {
+    let sortedBars = bars.sort(function (a, b) {
+      return (
+        a.ratingAverage - b.ratingAverage || a.favoritesCount - b.favoritesCount
       );
     });
 

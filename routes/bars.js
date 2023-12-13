@@ -10,10 +10,20 @@ router.route("/test").get(async (req, res) => {
 });
 
 router.route("/").get(async (req, res) => {
-  const bars = await filtersHelp.sortedBarsbyDistance();
+  let bars = await filtersHelp.sortedBarsbyDistance();
+  if (!bars.length) {
+    const allBars = await barData.allBars();
+    const sortedBars = await filtersHelp.sortedByRating(allBars);
+    bars = sortedBars;
+    return res.render("bars", {
+      bars: bars,
+      hasLocation: false,
+    });
+  }
 
   res.render("bars", {
     bars: bars,
+    hasLocation: true,
   });
 });
 
