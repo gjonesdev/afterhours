@@ -234,6 +234,7 @@ html {
 	width: 100%;
 	height: 100vh;
 	overflow: hidden;
+	margin-top: 0;
 }
 
 .parallax-image {
@@ -426,7 +427,7 @@ html {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	padding-top: 300px;
+	 padding-top: 30px; 
 	padding-bottom: 0px;
 }
 
@@ -842,3 +843,59 @@ li.myreportsli + li.myreportsli {
 p.error {
 	background: red;
 }
+
+/* Term and conditions */
+.terms-wrapper {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	padding-top: 100px;
+	padding-bottom: 0px;
+	background-color: rgba(0, 0, 0, 0.5);
+	margin: 50px;
+	margin-top: 0;
+	margin-bottom: 0;
+	border-radius: 30px;
+
+}
+
+.terms-wrapper h2 {
+	font-size: 3em;
+	color: rgb(217, 217, 232);
+	text-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f;
+	text-align: center;
+	margin-top: 0;
+}
+
+.terms-wrapper p {
+	color: white;
+	font-size: 1.2em;
+	margin: 60px;
+	margin-top: 0;
+	margin-bottom: 20px;
+	text-align: left;
+}
+
+.terms-wrapper ol {
+	color: white;
+	font-size: 1.2em;
+	margin: 100px;
+	margin-top: 0;
+	margin-bottom: 20px;
+}
+
+.terms-wrapper ul {
+	color: white;
+	font-size: 1.2em;
+	margin: 100px;
+	margin-top: 0;
+	margin-bottom: 20px;
+	text-align: left;
+	margin-left: 0;
+}
+
+
+
+
+
