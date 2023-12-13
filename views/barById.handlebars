@@ -1,7 +1,7 @@
 <div>
 	<div class="bar-main-image">
 		<div class=" bar-main-info">
-			{{#if isUser}}
+			{{#if isOwner}}
 			<form action="/bars/editBar" method="post" id="bar-edit-button">
 				<label for="barIdToEdit"></label>
 				<input type="hidden" id="barIdToEdit" name="barIdToEdit" value="{{id}}">
@@ -13,7 +13,7 @@
 			</h1>
 			<p>{{ratingAverage}}</p>
 			<p> ({{reviewsCount}} reviews)</p>
-
+			<p> ({{favoritesCount}} favorites)</p>
 			{{#each tags}}
 			<li>
 				{{this}}
@@ -42,7 +42,7 @@
 	</div>
 	<div>
 
-		{{#if isUser}}
+		{{#if authenticated}}
 		<form action="/reviews" method="post" id="review-button">
 			<label for="barIdToreview"></label>
 			<input type="hidden" id="barIdToreview" name="barIdToreview" value="{{id}}">
@@ -55,8 +55,7 @@
 			<input type="hidden" name="_method" value="PUT">
 			<button type="submit" class="submit-button">Favorite</button>
 		</form>
-		{{/if}}
-		{{#if notUser}}
+		{{else}}
 		<a href="/login">You need to be a user to write reviews. Click here to log in!</a>
 		{{/if}}
 	</div>

@@ -369,33 +369,31 @@ const validateAccountType = (accountTypeInput) => {
 	}
 };
 
-const validatePhone = (str) => {
-	phoneInput.classList.remove("invalid-input");
+const validatePhone = (phone) => {
+	phone.classList.remove("invalid-input");
 	if (
-		phoneInput.value === undefined ||
-		phoneInput.value === null ||
-		phoneInput.value === ""
+		phone.value === undefined ||
+		phone.value === null ||
+		phone.value === ""
 	) {
 		errors.push(`Phone number required.`);
-		phoneInput.classList.add("invalid-input");
+		phone.classList.add("invalid-input");
 		return;
 	}
 
-	if (typeof phoneInput.value !== "string") {
+	if (typeof phone.value !== "string") {
 		errors.push(`Phone number must be of type string.`);
-		phoneInput.classList.add("invalid-input");
+		phone.classList.add("invalid-input");
 		return;
 	}
-	phoneInput.value = phoneInput.value.trim();
+	phone.value = phone.value.trim();
 
-	if (
-		!/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(phoneInput.value)
-	) {
+	if (!/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(phone.value)) {
 		errors.push("Phone number must be valid.");
-		passwordInput.classList.add("invalid-input");
+		password.classList.add("invalid-input");
 	}
 
-	return phoneInput.value.replace(/\D/g, "");
+	return phone.value.replace(/\D/g, "");
 };
 
 if (registrationForm) {
