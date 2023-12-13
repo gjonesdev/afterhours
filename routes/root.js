@@ -32,14 +32,17 @@ router
       oldUserLoc.latitude = userLocation.latitude;
       oldUserLoc.longitude = userLocation.longitude;
     }
-
-    if (oldUserLoc.isNeeded) {
-      const barsDistance = await filtersFun.barsDistance(userLocation);
-      oldUserLoc.isNeeded = false;
-      // oldBarsList = barsDistance;
+    try {
+      if (oldUserLoc.isNeeded) {
+        const barsDistance = await filtersFun.barsDistance(userLocation);
+        oldUserLoc.isNeeded = false;
+        // oldBarsList = barsDistance;
+      }
+      const barOfTheDay = await filtersFun.barOfTheDay();
+      res.json({ BOD: barOfTheDay });
+    } catch (e) {
+      res.status(500).json({ BOD: e });
     }
-    const barOfTheDay = await filtersFun.barOfTheDay();
-    res.json({ BOD: barOfTheDay });
   });
 
 router.route("/about").get(async (req, res) => {
