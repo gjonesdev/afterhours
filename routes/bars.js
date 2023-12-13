@@ -203,12 +203,10 @@ router.route("/update").post(async (req, res) => {
     res.status(404).json({ error: "Bar not found!" });
   }
 });
-/*
-router
-  .route("/addEvent")
-  .get(async (req, res) => {})
-  .route("/addEvent")
-  .post(async (req, res) => {});*/
+
+router.route("/addEvent").get(async (req, res) => {
+  res.render("newEvent", {});
+});
 
 router.route("/:barId").get(async (req, res) => {
   try {
