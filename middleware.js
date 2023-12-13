@@ -11,10 +11,14 @@ export const rewriteUnsupportedBrowserMethods = (req, res, next) => {
 	next();
 };
 
-export const defaultRedirect = async (req, res, next) => {
+export const defaultRedirect = async (req, res, next, app) => {
+	app.locals.authenticated = !!req.session.user;
+
 	console.log(
 		`[${new Date().toUTCString()}]: ${req.method} ${req.originalUrl} (${
-			req.session.user ? "Authenticated User" : "Non-Authenticated User"
+			app.locals.authenticated
+				? "Authenticated User"
+				: "Non-Authenticated User"
 		})`
 	);
 

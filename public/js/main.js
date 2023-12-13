@@ -221,9 +221,6 @@ const successCallback = (position) => {
 			</div>
 		</a>`);
       }
-
-      //bindEventsToTodoItem(element);
-      // todoItem.replaceWith(element);
     });
   })(window.jQuery); //End jQuery
 }; //End success
@@ -235,24 +232,280 @@ const errorCallback = (error) => {
 };
 navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 
-//nav bar
+// Registration/Login Form
+const registrationForm = document.getElementById("registration-form");
+const loginForm = document.getElementById("login-form");
+const accountForm = document.getElementById("account-form");
+const userForm = document.getElementById("user-form");
+const errorList = document.getElementById("error-list");
+const userErrorList = document.getElementById("user-error-list");
+const accountErrorList = document.getElementById("account-error-list");
+let errors = [];
 
-var prevScrollPos = window.pageYOffset;
-var navbar = document.getElementById("main-nav");
-
-window.onscroll = function () {
-  var currentScrollPos = window.pageYOffset;
-
-  if (prevScrollPos > currentScrollPos) {
-    navbar.style.top = "0";
-    navbar.style.opacity = "1";
-  } else {
-    navbar.style.top = "-50px";
-    navbar.style.opacity = "0";
+const validateName = (type, nameInput) => {
+  nameInput.classList.remove("invalid-input");
+  if (
+    nameInput.value === undefined ||
+    nameInput.value === null ||
+    nameInput.value === ""
+  ) {
+    errors.push(`${type} name required.`);
+    nameInput.classList.add("invalid-input");
+    return;
   }
 
-  prevScrollPos = currentScrollPos;
+  if (typeof nameInput.value !== "string") {
+    errors.push(`${type} name must be of type string.`);
+    nameInput.classList.add("invalid-input");
+    return;
+  }
+
+  nameInput.value = nameInput.value.trim();
+
+  if (
+    !/^[a-zA-Z]+(?:['-][a-zA-Z']+)*$/.test(nameInput.value) ||
+    nameInput.value.length < 2 ||
+    nameInput.value.length > 25
+  ) {
+    errors.push(
+      `${type} name must be between 2 and 25 characters and can contain only alphabetic characters, hyphens, or apostrophes.`
+    );
+    nameInput.classList.add("invalid-input");
+  }
 };
+
+const validateEmail = (emailInput) => {
+  emailInput.classList.remove("invalid-input");
+  if (
+    emailInput.value === undefined ||
+    emailInput.value === null ||
+    emailInput.value === ""
+  ) {
+    errors.push(`Email address required.`);
+    emailInput.classList.add("invalid-input");
+    return;
+  }
+
+  if (typeof emailInput.value !== "string") {
+    errors.push(`Email address must be of type string.`);
+    emailInput.classList.add("invalid-input");
+    return;
+  }
+
+  emailInput.value = emailInput.value.trim();
+
+  if (
+    !/^[^\W_]+([._-][^\W_]+)*@[^\W_]{1,}(\.[^\W_]{2,})(\.[^\W_]{2,})?/.test(
+      emailInput.value
+    )
+  ) {
+    errors.push("Email address must be in valid email address format.");
+    emailInput.classList.add("invalid-input");
+  }
+};
+
+const validatePassword = (passwordInput) => {
+  passwordInput.classList.remove("invalid-input");
+  if (
+    passwordInput.value === undefined ||
+    passwordInput.value === null ||
+    passwordInput.value === ""
+  ) {
+    errors.push(`Password required.`);
+    passwordInput.classList.add("invalid-input");
+    return;
+  }
+
+  if (typeof passwordInput.value !== "string") {
+    errors.push(`Password must be of type string.`);
+    passwordInput.classList.add("invalid-input");
+    return;
+  }
+
+  passwordInput.value = passwordInput.value.trim();
+
+  if (/\s/.test(passwordInput.value)) {
+    throw "Password cannot contain spaces.";
+  }
+
+  if (!/(?=.*\d)(?=.*[A-Z])(?=.*[\W_]).{8,}/.test(passwordInput.value)) {
+    errors.push(
+      "Password must be at least 8 characters and contain at least one uppercase character, one number, and one special character."
+    );
+    passwordInput.classList.add("invalid-input");
+  }
+};
+
+const validateAccountType = (accountTypeInput) => {
+  accountTypeInput.classList.remove("invalid-input");
+  if (
+    accountTypeInput.value === undefined ||
+    accountTypeInput.value === null ||
+    accountTypeInput.value === ""
+  ) {
+    errors.push(`AccountType required.`);
+    accountTypeInput.classList.add("invalid-input");
+    return;
+  }
+
+  if (typeof accountTypeInput.value !== "string") {
+    errors.push(`AccountType must be of type string.`);
+    accountTypeInput.classList.add("invalid-input");
+    return;
+  }
+  accountTypeInput.value = accountTypeInput.value.trim();
+  if (
+    !(accountTypeInput.value === "patron" || accountTypeInput.value === "owner")
+  ) {
+    errors.push("AccountType must either be admin or user.");
+    accountTypeInput.classList.add("invalid-input");
+  }
+};
+
+const validatePhone = (str) => {
+  phoneInput.classList.remove("invalid-input");
+  if (
+    phoneInput.value === undefined ||
+    phoneInput.value === null ||
+    phoneInput.value === ""
+  ) {
+    errors.push(`Phone number required.`);
+    phoneInput.classList.add("invalid-input");
+    return;
+  }
+
+  if (typeof phoneInput.value !== "string") {
+    errors.push(`Phone number must be of type string.`);
+    phoneInput.classList.add("invalid-input");
+    return;
+  }
+  phoneInput.value = phoneInput.value.trim();
+
+  if (
+    !/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(phoneInput.value)
+  ) {
+    errors.push("Phone number must be valid.");
+    passwordInput.classList.add("invalid-input");
+  }
+
+  return phoneInput.value.replace(/\D/g, "");
+};
+
+if (registrationForm) {
+  const firstNameInput = document.getElementById("firstNameInput");
+  const lastNameInput = document.getElementById("lastNameInput");
+  const phoneInput = document.getElementById("phoneInput");
+  const emailInput = document.getElementById("emailInput");
+  const passwordInput = document.getElementById("passwordInput");
+  const confirmPasswordInput = document.getElementById("confirmPasswordInput");
+  const accountTypeInput = document.getElementById("accountTypeInput");
+
+  registrationForm.addEventListener("submit", (event) => {
+    errors = [];
+    errorList.innerHTML = "";
+    errorList.classList.add("hide");
+
+    validateName("First", firstNameInput);
+    validateName("Last", lastNameInput);
+    validatePhone(phoneInput);
+    validateEmail(emailInput);
+    validatePassword(passwordInput);
+    validateAccountType(accountTypeInput);
+
+    if (passwordInput.value !== confirmPasswordInput.value) {
+      errors.push("Passwords do not match.");
+    }
+
+    if (errors.length >= 1) {
+      event.preventDefault();
+      errors.forEach((error) => {
+        const li = document.createElement("li");
+        li.innerHTML = error;
+        errorList.appendChild(li);
+      });
+      errorList.classList.remove("hide");
+    }
+  });
+}
+
+if (loginForm) {
+  const emailInput = document.getElementById("emailInput");
+
+  loginForm.addEventListener("submit", (event) => {
+    errors = [];
+    errorList.innerHTML = "";
+    errorList.classList.add("hide");
+
+    validateEmail(emailInput);
+
+    if (errors.length >= 1) {
+      event.preventDefault();
+      errors.forEach((error) => {
+        const li = document.createElement("li");
+        li.innerHTML = error;
+        errorList.appendChild(li);
+      });
+      errorList.classList.remove("hide");
+    }
+  });
+}
+
+if (userForm) {
+  const firstNameInput = document.getElementById("firstNameInput");
+  const lastNameInput = document.getElementById("lastNameInput");
+  const phoneInput = document.getElementById("phoneInput");
+
+  userForm.addEventListener("submit", (event) => {
+    errors = [];
+    userErrorList.innerHTML = "";
+    userErrorList.classList.add("hide");
+
+    validateName("First", firstNameInput);
+    validateName("Last", lastNameInput);
+    validatePhone(phoneInput);
+
+    if (errors.length >= 1) {
+      event.preventDefault();
+      errors.forEach((error) => {
+        const li = document.createElement("li");
+        li.innerHTML = error;
+        userErrorList.appendChild(li);
+      });
+      userErrorList.classList.remove("hide");
+    }
+  });
+}
+
+if (accountForm) {
+  const emailInput = document.getElementById("emailInput");
+  const newPasswordInput = document.getElementById("newPasswordInput");
+  const confirmPasswordInput = document.getElementById("confirmPasswordInput");
+
+  accountForm.addEventListener("submit", (event) => {
+    errors = [];
+    accountErrorList.innerHTML = "";
+    accountErrorList.classList.add("hide");
+
+    validateEmail(emailInput);
+    if (newPasswordInput.value) {
+      validatePassword(newPasswordInput);
+
+      if (newPasswordInput.value !== confirmPasswordInput.value) {
+        errors.push("Passwords do not match.");
+      }
+    }
+
+    if (errors.length >= 1) {
+      event.preventDefault();
+      errors.forEach((error) => {
+        const li = document.createElement("li");
+        li.innerHTML = error;
+        accountErrorList.appendChild(li);
+      });
+      accountErrorList.classList.remove("hide");
+    }
+  });
+}
 
 //WriteReviewForm
 (function () {
