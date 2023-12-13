@@ -7,6 +7,7 @@ import {
 	validatePassword,
 } from "../helpers.js";
 import { accountData, userData, reviewData } from "../data/index.js";
+import filtersHelp from "../filterhelper.js";
 
 const router = Router();
 
@@ -23,11 +24,13 @@ router
 				req.session.user.accountId
 			);
 			const user = await userData.getUser(account.userId);
-			const userReviews = await reviewData.getReviewsByAccountId(account.userId);
+			const userReviews = await reviewData.getReviewsByAccountId(
+				account.userId
+			);
 			return res.render("account", {
 				account: account,
 				user: user,
-				userReviews
+				userReviews,
 			});
 		} catch (e) {
 			return res.status(404).json({ error: e });

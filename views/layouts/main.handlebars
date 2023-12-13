@@ -7,9 +7,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{{title}} | AfterHours</title>
 
-
-
-	<link rel="stylesheet" href="/public/css/styles.css">!!
+	<link rel="stylesheet" href="/public/css/styles.css">
 
 	<!--FONT AWESOME-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -21,17 +19,45 @@
 </head>
 
 <body>
-	
-	<div class="wrapper">
-		<main>
-			{{{body}}}
-		</main>
-		  <div>
-     <div class="wave"></div>
-     <div class="wave"></div>
-     <div class="wave"></div>
-  </div>
-	</div>
+	<header>
+		<nav class="main-nav" id="main-nav">
+			<div class="content-wrapper-sm">
+				<a href="/" class="navbar-brand">After<strong>hours</strong></a>
+
+				<div class="search-bar">
+					<input type="text" placeholder="Search the #happyHour Magic">
+					<button type="submit"><i class="fa fa-search"></i></button>
+				</div>
+
+				<div id="menu-button">
+					<div class="bar1"></div>
+					<div class="bar2"></div>
+					<div class="bar3"></div>
+				</div>
+				<ul class="nav-links">
+					{{#if authenticated}}
+					<li><a href="/account">My Account</a></li>
+					<li><a href="/logout">Logout</a></li>
+					{{else}}
+					<li><a href="/login">Login</a></li>
+					<li><a href="/register">Register</a></li>
+					{{/if}}
+					<li><a href="/about"> About Us</a></li>
+					<li><a href="/reports">Contact</a></li>
+
+				</ul>
+			</div>
+		</nav>
+	</header>
+
+	<main class="wrapper">
+		{{{body}}}
+		<div>
+			<div class="wave"></div>
+			<div class="wave"></div>
+			<div class="wave"></div>
+		</div>
+	</main>
 
 	<script src="https://code.jquery.com/jquery-2.2.4.min.js"
 		integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>

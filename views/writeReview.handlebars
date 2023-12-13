@@ -1,12 +1,19 @@
+<!-- Client Side Error -->
+<div class="form-group" id="error_div">
+        <div class="alert alert-danger">
+        </div>
+</div>
+
 <div>
+    <!-- Server Side Error -->
     <h1>{{barName}}</h1>
     {{#if error}}
         <p> {{error}} </p>
     {{/if}}
 
     <form action="/reviews/createReview" method="post" id="ratingForm">
-        <input type="hidden" name="barId" value="{{barId}}">
-        <input type="hidden" name="barName" value="{{barName}}">
+        <input type="hidden" name="barId" value="{{barId}}" id="barIdInput">
+        <input type="hidden" name="barName" value="{{barName}}" id="barNameInput">
         <fieldset class="rating">
             <label for="ratingInput1"></label>
             <input type="radio" name="rating" id="ratingInput1" value="1">

@@ -1,0 +1,12 @@
+      <h2>My Reports:</h2>
+      <div class="reportsbyuser">
+        <ol class="myreportsol">
+            {{#each reportListData}}
+                    <li class="myreportsli">
+                        <h3>{{this.reason}}:</h3> <p> {{comment}} - Date:{{date}}</p>
+                    </li>
+            {{/each}}
+        </ol>
+      </div>
+      <a href="javascript:javascript:history.go(-1)"> <-- Go back to the previous page <--</a>
+      

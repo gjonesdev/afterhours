@@ -5,7 +5,13 @@ body {
 	margin: auto;
 	font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 	overflow: auto;
-	background: linear-gradient(300deg, rgba(2, 0, 36, 1) 0%, rgba(9, 9, 121, 1) 33%, rgba(5, 106, 185, 1) 65%, rgba(0, 212, 255, 1) 100%);
+	background: linear-gradient(
+		300deg,
+		rgba(2, 0, 36, 1) 0%,
+		rgba(9, 9, 121, 1) 33%,
+		rgba(5, 106, 185, 1) 65%,
+		rgba(0, 212, 255, 1) 100%
+	);
 	animation: gradient 15s ease infinite;
 	background-size: 400% 400%;
 	background-attachment: fixed;
@@ -77,9 +83,8 @@ body {
 	flex: 1;
 }
 
-
 html {
-	font-family: 'Roboto', sans-serif;
+	font-family: "Roboto", sans-serif;
 	margin: 0;
 	padding: 0;
 	height: 100%;
@@ -91,20 +96,17 @@ html {
 .main-nav {
 	display: block;
 	padding: 1rem 2rem;
-	position: fixed;
 	box-sizing: border-box;
 	width: 100%;
 	padding: 1rem 2rem;
 	z-index: 2;
-	-webkit-transition: background 0.3s ease-in-out;
-	transition: background 0.3s ease-in-out;
-	background: #111;
+	background: transparent;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 	-webkit-box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.4);
 	box-shadow: 0 8px 6px -6px rgba(0, 0, 0, 0.4);
 }
 
-.main-nav>.content-wrapper-sm {
+.main-nav > .content-wrapper-sm {
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -118,12 +120,10 @@ html {
 	-webkit-box-align: center;
 	-ms-flex-align: center;
 	align-items: center;
-
 }
 
 @media (min-width: 768px) {
 	.main-nav {
-		background: transparent;
 		border: 0;
 		-webkit-box-shadow: none;
 		box-shadow: none;
@@ -192,7 +192,6 @@ html {
 	padding: 2rem 0;
 }
 
-
 .search-bar {
 	display: flex;
 	align-items: center;
@@ -229,17 +228,6 @@ html {
 	color: white;
 }
 
-
-.fixed-nav {
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity 0.3s ease-in-out;
-}
-
 /* css for main image */
 
 .parallax-container {
@@ -249,11 +237,11 @@ html {
 }
 
 .parallax-image {
-	background-image: url('https://wallpapercave.com/wp/wp3102516.jpg');
+	background-image: url("https://wallpapercave.com/wp/wp3102516.jpg");
 	background-size: cover;
 	background-position: center center;
 	margin: auto;
-	min-height: 100vh
+	min-height: 100vh;
 }
 
 .centered {
@@ -297,20 +285,17 @@ html {
 	text-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f;
 }
 
-
 /* footer css*/
 
 .footer {
-
 	flex-shrink: 0;
 	background-color: transparent;
 	padding: 30px 0;
-	font-family: 'Play', sans-serif;
+	font-family: "Play", sans-serif;
 	text-align: center;
 	color: #fff;
 	z-index: 3;
 }
-
 
 .footer .row {
 	width: 100%;
@@ -347,7 +332,7 @@ html {
 	text-shadow: 0 0 5px #000, 0 0 10px #000;
 }
 
-@media (max-width:720px) {
+@media (max-width: 720px) {
 	.footer {
 		text-align: left;
 		padding: 5%;
@@ -364,10 +349,7 @@ html {
 	}
 }
 
-
-
 /* css for bar of the day */
-
 
 .bar-info h1 {
 	color: rgb(217, 217, 232);
@@ -377,9 +359,7 @@ html {
 	text-align: left;
 	font-weight: 100;
 	text-transform: uppercase;
-
 }
-
 
 .bar-info {
 	position: relative;
@@ -441,15 +421,6 @@ html {
 	}
 }
 
-/*
-@keyframes pushLetter {
-  0% {transform: translateY(-8rem) scale(0.3, 0.5);}
-  50% {transform: translateY(-8rem) scale(0.3, 0.5);}
-  90% {transform: translateY(-8.5rem) scale(0.3, 0.5);}
-  100% {transform: translateY(-8rem) scale(0.3, 0.5);}
-}
-*/
-
 .login-container {
 	display: flex;
 	flex-direction: column;
@@ -488,7 +459,6 @@ html {
 	display: block;
 	margin-top: 5px;
 }
-
 
 .login-box .user-box {
 	position: relative;
@@ -557,17 +527,15 @@ html {
 	transition: 0.5s;
 }
 
-.login-box .user-box input:focus~label,
-.login-box .user-box input:valid~label,
-.login-box .user-box input:placeholder-shown~label {
+.login-box .user-box input:focus ~ label,
+.login-box .user-box input:valid ~ label,
+.login-box .user-box input:placeholder-shown ~ label {
 	top: -20px !important;
 	margin-left: 0 !important;
 	color: #03e9f4 !important;
 	font-size: 10px !important;
 	transition: 0.5s;
-
 }
-
 
 .login-box form button {
 	position: relative;
@@ -590,7 +558,8 @@ html {
 	background: #03e9f4;
 	color: #fff;
 	border-radius: 5px;
-	box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+	box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
+		0 0 100px #03e9f4;
 }
 
 .login-box form button span {
@@ -611,7 +580,6 @@ html {
 	0% {
 		left: -100%;
 	}
-
 	50%,
 	100% {
 		left: 100%;
@@ -632,7 +600,6 @@ html {
 	0% {
 		top: -100%;
 	}
-
 	50%,
 	100% {
 		top: 100%;
@@ -653,7 +620,6 @@ html {
 	0% {
 		right: -100%;
 	}
-
 	50%,
 	100% {
 		right: 100%;
@@ -674,7 +640,6 @@ html {
 	0% {
 		bottom: -100%;
 	}
-
 	50%,
 	100% {
 		bottom: 100%;
@@ -682,71 +647,69 @@ html {
 }
 
 a.link {
-
 	color: white;
 }
 
 /* css for aboutUs */
 .card-wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	padding-bottom: 0px;
 }
 
-
 .cards-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; 
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 	flex-direction: column;
 	margin-top: 50px;
 }
 
 .card {
-    background: #191c29;
-    width: 600px;
-    height: 300px;
-    margin-bottom: 50px; 
-    padding: 1px;
-    position: relative;
-    border-radius: 6px;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    font-size: 1 em;
-    color: white;
-    cursor: pointer;
+	background: #191c29;
+	width: 600px;
+	height: 300px;
+	margin-bottom: 50px;
+	padding: 1px;
+	position: relative;
+	border-radius: 6px;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	font-size: 1 em;
+	color: white;
+	cursor: pointer;
 }
 
 .profile-image {
-    width: auto;
-    height: 50%;
-    border-radius: 50%;
+	width: auto;
+	height: 50%;
+	border-radius: 50%;
 }
 
 .text-container {
-    flex: 1;
-    padding: 10px;
-    text-align: center;
+	flex: 1;
+	padding: 10px;
+	text-align: center;
 }
 
 .profile-container {
-    width: 200px;
-    height: 100%; 
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	width: 200px;
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
-.card-wrapper .title{
+.card-wrapper .title {
 	margin-top: 100px;
 	color: white;
 	text-align: center;
 }
 
-.card-wrapper h2{
+.card-wrapper h2 {
 	font-size: 3em;
 	color: rgb(217, 217, 232);
 	text-shadow: 0 0 10px #00f, 0 0 20px #00f, 0 0 30px #00f;
@@ -763,7 +726,6 @@ a.link {
 	--card-width: calc(var(--card-height) / 1.5);
 }
 
-
 .card:hover {
 	color: rgb(121, 125, 204);
 	transition: color 1s;
@@ -775,13 +737,17 @@ a.link {
 	opacity: 0;
 }
 
-
 .card::before {
 	content: "";
 	width: 104%;
 	height: 102%;
 	border-radius: 8px;
-	background-image: linear-gradient(var(--rotate), #5ddcff, #9b3ce3 43%, #bc00c2);
+	background-image: linear-gradient(
+		var(--rotate),
+		#5ddcff,
+		#9b3ce3 43%,
+		#bc00c2
+	);
 	position: absolute;
 	z-index: -1;
 	top: -1%;
@@ -801,9 +767,14 @@ a.link {
 	margin: 0 auto;
 	transform: scale(0.8);
 	filter: blur(calc(var(--card-height) / 6));
-	background-image: linear-gradient(var(--rotate), #5ddcff, #3c67e3 43%, #4e00c2);
+	background-image: linear-gradient(
+		var(--rotate),
+		#5ddcff,
+		#3c67e3 43%,
+		#4e00c2
+	);
 	opacity: 1;
-	transition: opacity .5s;
+	transition: opacity 0.5s;
 	animation: spin 2.5s linear infinite;
 }
 
@@ -823,4 +794,51 @@ a {
 	font-family: sans-serif;
 	font-weight: bold;
 	margin-top: 2rem;
+}
+
+.reportsbyuser {
+	align-items: center;
+	align-content: center;
+}
+
+/* List */
+ol.myreportsol {
+	counter-reset: index;
+	padding: 0;
+	max-width: 1000px;
+	text-align: center;
+}
+
+/* List element */
+li.myreportsli {
+	counter-increment: index;
+	display: flex;
+	align-items: center;
+	padding: 14px 0;
+	box-sizing: border-box;
+}
+
+/* Element counter */
+li.myreportsli::before {
+	content: counters(index, ".", decimal-leading-zero);
+	font-size: 1.5rem;
+	text-align: right;
+	font-weight: bold;
+	min-width: 50px;
+	padding-right: 12px;
+	font-variant-numeric: tabular-nums;
+	align-self: flex-start;
+	background-image: linear-gradient(to bottom, aquamarine, orangered);
+	background-attachment: fixed;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+/* Element separation */
+li.myreportsli + li.myreportsli {
+	border-top: 1px solid black;
+}
+/*Error*/
+p.error {
+	background: red;
 }
