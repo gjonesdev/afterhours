@@ -58,26 +58,30 @@ export const updateFavorites = async (userId, barId) => {
 
 	const exists = await userCollection.findOne({
 		_id: new ObjectId(userId),
-		favorites: new ObjectId(barId),
+		"favorites.barId": barId,
 	});
 
 	if (exists) {
 		barResult = await barCollection.findOneAndUpdate(
 			{ _id: new ObjectId(barId) },
-			{ $inc: { favoritesCount: -1 } }
+			{ $inc: { favoritesCount: -1 } },
+			{ returnDocument: "after" }
 		);
+		const barName = barResult.name;
 		userResult = await userCollection.findOneAndUpdate(
 			{ _id: new ObjectId(userId) },
-			{ $pull: { favorites: new ObjectId(barId) } }
+			{ $pull: { favorites: { barId, barName } } }
 		);
 	} else {
 		barResult = await barCollection.findOneAndUpdate(
 			{ _id: new ObjectId(barId) },
-			{ $inc: { favoritesCount: 1 } }
+			{ $inc: { favoritesCount: 1 } },
+			{ returnDocument: "after" }
 		);
+		const barName = barResult.name;
 		userResult = await userCollection.findOneAndUpdate(
 			{ _id: new ObjectId(userId) },
-			{ $push: { favorites: new ObjectId(barId) } }
+			{ $push: { favorites: { barId, barName } } }
 		);
 	}
 
