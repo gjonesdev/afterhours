@@ -1,23 +1,18 @@
-<div class="login-container">
-	<div class="login-box">
+<div class="form-container">
+	<div class="form-box">
 		<h2>#Login 🍸</h2>
 		<form class="login-form" id="login-form" action="/login" method="POST">
-			<div class="user-box">
+			<div class="input-box">
+				<label class="input-label" for="emailInput">Email</label>
 				<input class="input" type="email" id="emailInput" name="emailInput" required=""
 					value="{{form.emailInput}}">
-				<label class="input-label" for="emailInput">Email</label>
 			</div>
-			<div class="user-box">
-				<input class="input" type="password" id="passwordInput" name="passwordInput" required="">
+			<div class="input-box">
 				<label class="input-label" for="passwordInput">Password</label>
-
+				<input class="input" type="password" id="passwordInput" name="passwordInput" required="">
 			</div>
 
 			<button type="submit" class="submit-button">
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
 				Cha-Cha Log-In
 			</button>
 		</form>

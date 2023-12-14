@@ -1,0 +1,23 @@
+<ul>
+	<li><a href="/account" id="account-tab">Account Info</a></li>
+	<li><a href="/account/favorites" id="favorites-tab">Favorites</a></li>
+	<li><a href="/account/reviews" id="reviews-tab">My Reviews</a></li>
+	{{#if account.bars}}
+	<li><a href="/account/bars" id="bars-tab">My Bars</a></li>
+	{{/if}}
+</ul>
+
+<div id="bar-section">
+	<h1>Your Bars:</h1>
+	{{#if bars}}
+	{{#each bars}}
+	<div>
+		<p>Bar Name: {{this.name}}</p>
+		<p>Rating: {{this.ratingAverage}}</p>
+		<a href="/bars/{{this._id}}">Edit</a>
+	</div>
+	{{/each}}
+	{{else}}
+	<p>You have not created any bars yet.</p>
+	{{/if}}
+</div>
