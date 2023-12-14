@@ -822,7 +822,7 @@ a {
 ol.myreportsol {
 	counter-reset: index;
 	padding: 0;
-	max-width: 1000px;
+	max-width: 680px;
 	text-align: center;
 }
 
@@ -831,7 +831,7 @@ li.myreportsli {
 	counter-increment: index;
 	display: flex;
 	align-items: center;
-	padding: 14px 0;
+	padding: auto;
 	box-sizing: border-box;
 }
 
@@ -854,6 +854,8 @@ li.myreportsli::before {
 /* Element separation */
 li.myreportsli+li.myreportsli {
 	border-top: 1px solid black;
+p.myreportsp + li.myreportsli  {
+	border-top: 3px solid black;
 }
 
 /*Error*/

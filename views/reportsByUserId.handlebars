@@ -3,10 +3,14 @@
         <ol class="myreportsol">
             {{#each reportListData}}
                     <li class="myreportsli">
-                        <h3>{{this.reason}}:</h3> <p> {{comment}} - Date:{{date}}</p>
+                        <h3>{{this.reason}}:</h3> 
                     </li>
+                    <p class="myreportsp"> {{comment}}</p>
+                    <p class="myreportsp">Date:{{date}}</p> 
             {{/each}}
         </ol>
       </div>
-      <a href="javascript:javascript:history.go(-1)"> <-- Go back to the previous page <--</a>
+      <div class="message-container">
+        <a class="link" href="javascript:javascript:history.go(-1)"> 🔙 #GoBack to the previous page </a>
+      </div>
       

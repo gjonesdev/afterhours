@@ -21,7 +21,7 @@ router
   .post(async (req, res) => {
     const userLocation = {
       latitude: xss(req.body.latitude),
-      longitude: xss(req.body.longitude),
+      longitude: xss(req.body.longitude)
     };
 
     if (

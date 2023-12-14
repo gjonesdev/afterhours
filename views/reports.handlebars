@@ -5,18 +5,16 @@
 			<div class="side">
 				<h2>#ContactUs 🍻</h1>
 
-					<div class="user-box">
-						<input class="input" type="text" id="firstNameInput" name="firstNameInput" required=""
-							value="{{form.firstNameInput}}">
-						<label class="input-label" for="firstNameInput">#YourName</label>
-					</div>
+          <div class="user-box">
+            <input class="input" type="text" id="firstNameInput" name="firstNameInput" required=""
+              value="{{firstNameInput}} {{lastNameInput}}">
+            <label class="input-label" for="firstNameInput">#YourName</label>
+          </div>
 
-
-					<div class="user-box">
-						<input class="input" type="email" id="emailInput" name="emailInput" required=""
-							value="{{form.emailInput}}">
-						<label class="input-label" for="emailInput">#YourEmail</label>
-					</div>
+          <div class="user-box">
+            <input class="input" type="email" id="emailInput" name="emailInput" required="" value="{{emailInput}}">
+            <label class="input-label" for="emailInput">#YourEmail</label>
+          </div>
 
 					<div class="user-box">
 						<p>Reason:</p>
@@ -35,13 +33,13 @@
 							placeholder="Raise the Bar: Let us know what's on your mind. Bonus points if your message is served on the rocks 🥂💭"></textarea><br>
 					</div>
 
-					<button type="submit" class="submit-button">
-						<span></span>
-						<span></span>
-						<span></span>
-						<span></span>
-						#BoozeBuzz
-					</button>
+          <button type="submit" id="submit" class="submit-button">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            #BoozeBuzz
+          </button>
 
 			</div>
 		</form>

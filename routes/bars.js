@@ -217,27 +217,27 @@ router.route("/:barId").get(async (req, res) => {
   try {
     const theBar = await barData.barById(req.params.barId);
 
-    console.log(theBar);
-    const isOwner = theBar.ownerId === req.session.accountId;
-    res.render("barById", {
-      id: theBar._id,
-      barName: theBar.name,
-      description: theBar.description,
-      location: theBar.location,
-      email: theBar.email,
-      website: theBar.website,
-      phone: theBar.phone,
-      schedule: theBar.schedule,
-      tags: theBar.tags,
-      reviews: theBar.reviews,
-      reviewsCount: theBar.reviewsCount,
-      ratingAverage: theBar.ratingAverage,
-      favoritesCount: theBar.favoritesCount,
-      isOwner,
-    });
-  } catch (e) {
-    res.status(404).json({ error: "Bar not found!" });
-  }
+		//console.log(theBar);
+		const isOwner = theBar.ownerId === req.session.accountId;
+		res.render("barById", {
+			id: theBar._id,
+			barName: theBar.name,
+			description: theBar.description,
+			location: theBar.location,
+			email: theBar.email,
+			website: theBar.website,
+			phone: theBar.phone,
+			schedule: theBar.schedule,
+			tags: theBar.tags,
+			reviews: theBar.reviews,
+			reviewsCount: theBar.reviewsCount,
+			ratingAverage: theBar.ratingAverage,
+			favoritesCount: theBar.favoritesCount,
+			isOwner,
+		});
+	} catch (e) {
+		res.status(404).json({ error: "Bar not found!" });
+	}
 });
 
 export default router;
