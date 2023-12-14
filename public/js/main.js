@@ -1,3 +1,5 @@
+import { response } from "express";
+
 let blockedLocation = false;
 
 function capitalize(string) {
@@ -746,3 +748,6 @@ if (accountForm) {
     });
   }
 })();
+
+//carousel
+
