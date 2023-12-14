@@ -1,3 +1,4 @@
+import { reports } from "../config/mongoCollections.js";
 import { dbConnection, closeConnection } from "../config/mongoConnection.js";
 const db = await dbConnection();
 await db.dropDatabase();
@@ -5,6 +6,7 @@ await db.dropDatabase();
 import bars from "../data/bars.js";
 import { accountData } from "../data/index.js";
 import * as reviews from "../data/reviews.js";
+import * as reports from "../data/reports.js";
 
 let toUpdate = "";
 //create bar
@@ -157,6 +159,51 @@ try {
 		}
 	);
 	console.log(test);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	let test = await accountData.createAccount(
+		{
+			email: "mmartinez@gmail.com",
+			password: "Hola123@",
+			accountType: "patron",
+		},
+		{
+			firstName: "Miguel",
+			lastName: "Martinez",
+			phone: "646-511-5654",
+		}
+	);
+	console.log(test);
+} catch (e) {
+	console.log(e);
+}
+
+//Add Reports
+try {
+	const testReport = await reports.registerReport(
+		"654438c26ec81bf9429dc36e",
+		"Miguel Martinez",
+		"mmartinez@gmail.com",
+		"Inaccurate information",
+		"Price are different from promotion."
+	);
+	console.log(testReport);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const testReport = await reports.registerReport(
+		"6578d6263fbeda92944de4b1",
+		"Miguel Martinez",
+		"mmartinez@gmail.com",
+		"Inaccurate information",
+		"Price are different from promotion."
+	);
+	console.log(testReport);
 } catch (e) {
 	console.log(e);
 }
