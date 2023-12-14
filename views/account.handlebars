@@ -1,88 +1,240 @@
-<p class="body-text">Welcome {{user.firstName}} {{user.lastName}}, your email is: {{account.email}}.</p>
+<h3 class="body-text"> Welcome, {{user.firstName}} {{user.lastName}}<br>Let the Good Times Roll!!🤘🎸<br></h3>
 
-<div>
-	<ul id="account-error-list" class="error-list hide"></ul>
-	<form class="account-form" id="account-form" action="/account" method="POST">
 
-		<label class="input-label" for="emailInput">Email</label>
-		<input class="input" type="email" id="emailInput" name="emailInput" placeholder="Email"
-			value="{{account.email}}">
+<div class="account-container">
+	<div class="login-box">
+		<h2>#ChangePassword 🔒</h2>
+		<form class="account-form" id="account-form" action="/account" method="POST">
 
-		<label class="input-label" for="newPasswordInput">New Password</label>
-		<input class="input" type="password" id="newPasswordInput" name="newPasswordInput" placeholder="New Password">
+			<div class="user-box">
+				<input class="input" type="email" id="emailInput" name="emailInput" value="{{account.email}}"
+					required="">
+				<label class="input-label" for="emailInput">Email</label>
+			</div>
 
-		<label class="input-label" for="confirmPasswordInput">Password</label>
-		<input class="input" type="password" id="confirmPasswordInput" name="confirmPasswordInput"
-			placeholder="Confirm New Password">
+			<div class="user-box">
+				<input class="input" type="password" id="newPasswordInput" name="newPasswordInput" required="">
+				<label class="input-label" for="newPasswordInput">New Password</label>
+			</div>
 
-		<label class="input-label" for="currentPasswordInput">Current Password</label>
-		<input class="input" type="password" id="currentPasswordInput" name="currentPasswordInput"
-			placeholder="Current Password">
+			<div class="user-box">
+				<input class="input" type="password" id="confirmPasswordInput" name="confirmPasswordInput" required="">
+				<label class="input-label" for="confirmPasswordInput">Confirm Password</label>
+			</div>
 
-		<input type="hidden" name="_method" value="PUT">
-		<button type="submit" class="submit-button">Save</button>
-	</form>
-</div>
+			<div class="user-box">
+				<input class="input" type="password" id="currentPasswordInput" name="currentPasswordInput" required="">
+				<label class="input-label" for="currentPasswordInput">Current Password</label>
+			</div>
 
-<div>
-	<ul id="user-error-list" class="error-list hide"></ul>
-	<form class="user-form" id="user-form" action="/user" method="POST">
-		<label class="input-label" for="firstNameInput">First Name</label>
-		<input class="input" type="text" id="firstNameInput" name="firstNameInput" placeholder="First Name"
-			value="{{user.firstName}}">
-
-		<label class="input-label" for="lastNameInput">Last Name</label>
-		<input class="input" type="text" id="lastNameInput" name="lastNameInput" placeholder="Last Name"
-			value="{{user.lastName}}">
-
-		<label class="input-label" for="phoneInput">Phone Number</label>
-		<input class="input" type="phone" id="phoneInput" name="phoneInput" placeholder="Phone Number"
-			value="{{user.phone}}">
-
-		<input type="hidden" name="_method" value="PUT">
-		<button type="submit" class="submit-button">Save</button>
-	</form>
-</div>
-
-<button id="delete-button">
-	Delete Account
-</button>
-
-<div>
-	Enter your password and confirm.
-	<form class="delete-form hidden" id="delete-form" action="/account" method="POST">
-		<label class="input-label" for="passwordInput">Password</label>
-		<input class="input" type="password" id="passwordInput" name="passwordInput" placeholder="Password">
-
-		<input type="hidden" name="_method" value="DELETE">
-		<button type="submit" class="submit-button">Confirm Delete Account</button>
-	</form>
-</div>
-
-<h1>Reviews From You:</h1>
-{{#if userReviews}}
-<div>
-	{{#each userReviews}}
-	<div>
-		<p>Bar Name: {{this.barName}}</p>
-		<p>Rating: {{this.rating}}</p>
-		<p>Comment: {{this.comment}}</p>
-		<a href="/reviews/edit/{{this._id}}">Edit</a>
-		<a href="/reviews/delete/{{this._id}}">Delete</a>
+			<input type="hidden" name="_method" value="PUT">
+			<button type="submit" class="submit-button">
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				#Save
+			</button>
+		</form>
 	</div>
-	{{/each}}
+
+	<div class="login-box">
+		<h2>#UpdateInformation 🛠️</h2>
+
+		<form class="user-form" id="user-form" action="/user" method="POST">
+
+			<div class="user-box">
+				<input class="input" type="text" id="firstNameInput" name="firstNameInput" value="{{user.firstName}}"
+					required="">
+				<label class="input-label" for="firstNameInput">First Name</label>
+			</div>
+
+			<div class="user-box">
+				<input class="input" type="text" id="lastNameInput" name="lastNameInput" required=""
+					value="{{user.lastName}}">
+				<label class="input-label" for="lastNameInput">Last Name</label>
+			</div>
+
+			<div class="user-box">
+				<input class="input" type="phone" id="phoneInput" name="phoneInput" required="" value="{{user.phone}}">
+				<label class="input-label" for="phoneInput">Phone Number</label>
+			</div>
+
+
+			<input type="hidden" name="_method" value="PUT">
+			<button type="submit" class="submit-button">
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				#Save
+			</button>
+		</form>
+	</div>
+
+
+	<div class="login-box">
+		<h2>#DeleteAccount 😭</h2>
+		<form class="delete-form hidden" id="delete-form" action="/account" method="POST">
+
+			<div class="user-box">
+				<input class="input" type="password" id="passwordInput" name="passwordInput" required="">
+				<label class="input-label" for="passwordInput">Password</label>
+			</div>
+			<input type="hidden" name="_method" value="DELETE">
+
+			<button id="delete-button" type="submit" class="submit-button">
+				<span></span>
+				<span></span>
+				<span></span>
+				<span></span>
+				#ConfirmAndDeleteAccount
+			</button>
+		</form>
+	</div>
+	{{#if error}}
+	<p class="response-error">Error {{error.status}}: {{error.message}}</p>
+	{{/if}}
+	<ul id="error-list" class="error-list hide"></ul>
+
 </div>
-{{else}}
-<p>No reviews yet.</p>
-{{/if}}
 
-{{#each user.favorites}}
-<p>{{this.barName}}</p>
-<form action="/user/favorites" method="POST" id="favorite-button">
-	<input type="hidden" id="barId" name="barId" value="{{this.barId}}">
-	<input type="hidden" name="_method" value="PUT">
-	<button type="submit" class="submit-button">Remove Favorite</button>
-</form>
-{{/each}}
+<div class="carousel-container" data-review-length="{{userReviews.length}}">
+	<h1 class="reviews-title">#ReviewsFromYou:</h1>
+	{{#if userReviews}}
+	<button class="carousel-arrow prev">&#9665;</button>
+	<div class="carousel">
 
-<a class="link" href="/logout">Logout</a>
+		<div class="carousel-inner">
+			{{#each userReviews}}
+			<div class="item-review">
+				<div class="star-rating" data-rating="{{this.rating}}">
+				</div>
+				<p class="review-barName">Bar Name: {{this.barName}}</p>
+				<p class="review-barRating">Rating: {{this.rating}}</p>
+				<p class="review-barComment">Comment: {{this.comment}}</p>
+				<a href="/reviews/edit/{{this._id}}">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="/reviews/delete/{{this._id}}">Delete</a>
+			</div>
+			{{/each}}
+		</div>
+
+	</div>
+	<button class="carousel-arrow next">&#9655;</button>
+	{{else}}
+	<p>No reviews yet.</p>
+	{{/if}}
+</div>
+
+<div class="carousel-container">
+	<h1 class="reviews-title">#YourFavorites:</h1>
+	{{#if user.favorites}}
+	<button class="carousel-arrow prev">&#9665;</button>
+	<div class="carousel">
+
+		<div class="carousel-inner">
+			{{#each user.favorites}}
+			<div class="item-review">
+				<p class="review-barName">Bar Name: {{this.barName}}</p>
+				<a href="/bars/{{this._id}}">#takeMeThere</a>
+				<form action="/user/favorites" method="POST" id="favorite-button">
+					<input type="hidden" id="barId" name="barId" value="{{this.barId}}">
+					<input type="hidden" name="_method" value="PUT">
+					<button type="submit" class="remove">
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>#Remove</button>
+				</form>
+			</div>
+			{{/each}}
+		</div>
+
+	</div>
+	<button class="carousel-arrow next">&#9655;</button>
+	{{else}}
+	<p>No Favorites Yes .</p>
+	{{/if}}
+</div>
+
+{{!-- <div class="carousel-container">
+	{{#each user.favorites}}
+	<h1 class="reviews-title">#YourTopFavorites</h1>
+	<button class="carousel-arrow prev">&#9665;</button>
+	<div class="carousel">
+		<div class="carousel-inner"></div>
+
+		<p>{{this.barName}}</p>
+		<form action="/user/favorites" method="POST" id="favorite-button">
+			<input type="hidden" id="barId" name="barId" value="{{this.barId}}">
+			<input type="hidden" name="_method" value="PUT">
+			<button type="submit" class="submit-button">Remove Favorite</button>
+		</form>
+		{{/each}}
+	</div> --}}
+
+	<button class="logout" href="/logout">
+		<span></span>
+		<span></span>
+		<span></span>
+		<span></span>
+		Logout</button>
+
+	<!--carousel script -->
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const carouselContainer = document.querySelector('.carousel-container');
+			const carousel = document.querySelector('.carousel');
+			const prevArrow = document.querySelector('.carousel-arrow.prev');
+			const nextArrow = document.querySelector('.carousel-arrow.next');
+			const carouselInner = document.querySelector('.carousel-inner');
+			let currentIndex = 0;
+
+			const userReviewsLength = parseInt(carouselContainer.getAttribute('data-review-length'), 10);
+
+			if (isNaN(userReviewsLength) || userReviewsLength <= 0) {
+				return;
+			}
+
+			function showReview(index) {
+				const translateValue = -index * 33.33 + '%';
+				carouselInner.style.transform = 'translateX(' + translateValue + ')';
+			}
+
+			function navigate(direction) {
+				currentIndex = (currentIndex + direction + userReviewsLength) % userReviewsLength;
+				showReview(currentIndex);
+			}
+
+			setInterval(function () {
+				navigate(1);
+			}, 5000);
+
+			prevArrow.addEventListener('click', function () {
+				navigate(-1);
+			});
+
+			nextArrow.addEventListener('click', function () {
+				navigate(1);
+			});
+
+			showReview(currentIndex);
+		});
+
+		document.addEventListener("DOMContentLoaded", function () {
+			const starContainers = document.querySelectorAll('.star-rating');
+
+			starContainers.forEach(container => {
+				const rating = container.getAttribute('data-rating');
+				const starCount = Math.round(parseFloat(rating));
+
+				for (let i = 0; i < starCount; i++) {
+					const star = document.createElement('i');
+					star.textContent = '⭐️';
+					container.appendChild(star);
+				}
+			});
+		});
+
+	</script>
