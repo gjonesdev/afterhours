@@ -31,13 +31,12 @@
 
           <div class="user-box">
             <input class="input" type="text" id="firstNameInput" name="firstNameInput" required=""
-              value="{{form.firstNameInput}}">
+              value="{{firstNameInput}} {{lastNameInput}}">
             <label class="input-label" for="firstNameInput">#YourName</label>
           </div>
 
-
           <div class="user-box">
-            <input class="input" type="email" id="emailInput" name="emailInput" required="" value="{{form.emailInput}}">
+            <input class="input" type="email" id="emailInput" name="emailInput" required="" value="{{emailInput}}">
             <label class="input-label" for="emailInput">#YourEmail</label>
           </div>
 
@@ -58,7 +57,7 @@
               placeholder="Raise the Bar: Let us know what's on your mind. Bonus points if your message is served on the rocks 🥂💭"></textarea><br>
           </div>
 
-          <button type="submit" class="submit-button">
+          <button type="submit" id="submit" class="submit-button">
             <span></span>
             <span></span>
             <span></span>
