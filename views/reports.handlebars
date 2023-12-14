@@ -1,22 +1,23 @@
-<div class="login-container">
-	<div class="login-box">
+<div class="form-container">
+	<div class="form-box">
 		<p id="error" class="error" hidden></p>
 		<form action="/reports" method="POST" class="reports-form" id="reports-form">
 			<div class="side">
 				<h2>#ContactUs 🍻</h1>
 
-          <div class="user-box">
-            <input class="input" type="text" id="firstNameInput" name="firstNameInput" required=""
-              value="{{firstNameInput}} {{lastNameInput}}">
-            <label class="input-label" for="firstNameInput">#YourName</label>
-          </div>
-
-          <div class="user-box">
-            <input class="input" type="email" id="emailInput" name="emailInput" required="" value="{{emailInput}}">
-            <label class="input-label" for="emailInput">#YourEmail</label>
-          </div>
+					<div class="user-box">
+						<label class="input-label" for="firstNameInput">#YourName</label>
+						<input class="input" type="text" id="firstNameInput" name="firstNameInput" required=""
+							value="{{firstNameInput}} {{lastNameInput}}">
+					</div>
 
 					<div class="user-box">
+						<label class="input-label" for="emailInput">#YourEmail</label>
+						<input class="input" type="email" id="emailInput" name="emailInput" required=""
+							value="{{emailInput}}">
+					</div>
+
+					<div class="input-box">
 						<p>Reason:</p>
 						<select name="reasonInput" id="reasonInput" required>
 							<option value="" disabled selected hidden>Choose a reason</option>
@@ -28,18 +29,18 @@
 						</select>
 					</div>
 
-					<div class="user-box">
+					<div class="input-box">
 						<textarea name="commentInput" id="commentInput"
 							placeholder="Raise the Bar: Let us know what's on your mind. Bonus points if your message is served on the rocks 🥂💭"></textarea><br>
 					</div>
 
-          <button type="submit" id="submit" class="submit-button">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-            #BoozeBuzz
-          </button>
+					<button type="submit" id="submit" class="submit-button">
+						<span></span>
+						<span></span>
+						<span></span>
+						<span></span>
+						#BoozeBuzz
+					</button>
 
 			</div>
 		</form>
