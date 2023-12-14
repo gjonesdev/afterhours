@@ -45,7 +45,6 @@ let exportedMethods = {
 			tags: validTags,
 			reviews: [],
 			reviewsCount: 0,
-			ratings: [],
 			ratingAverage: 0,
 			favoritesCount: 0,
 			creationDate: new Date(),

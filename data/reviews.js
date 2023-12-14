@@ -17,18 +17,14 @@ export const createReview = async (accountId, firstName, barName, barId, rating,
   const barCollection = await bars();
 
   const theBar = await barsFunctions.barById(barId);
-  const ratingsArray = theBar.ratings;
-  ratingsArray.push(rating);
-  let totalRatings = 0;
-  if (ratingsArray.length === 0) {
-    totalRatings = rating;
-  } else {
-    ratingsArray.forEach((element) => {
-      totalRatings += element;
-    });
-  }
+  let totalRatings = rating;
+  theBar.reviews.forEach((review) => {
+    totalRatings += review.rating;
+  });
 
-  const ratingAverage = totalRatings / ratingsArray.length;
+  let ratingAverage = totalRatings / (theBar.reviews.length + 1);
+
+  ratingAverage = parseFloat(ratingAverage.toFixed(2))
 
   const review = {
     accountId,
@@ -76,7 +72,7 @@ export const createReview = async (accountId, firstName, barName, barId, rating,
       $set: { reviewsCount: reviewsArray.length },
     }
   );
-  if (addReviewCount.modifiedCount === 0) throw " Review could not be added!";
+  if (addReviewCount.reviewsCount === 0) throw " Review could not be added!";
 
   return newReview;
 };
@@ -110,17 +106,19 @@ export const deleteReview = async (reviewId, barId) => {
 
   const reviewCollection = await reviews();
 
-  // Get the review before deleting it
+  // Finding the review to delete
   const reviewToDelete = await reviewCollection.findOne({
     _id: new ObjectId(reviewId),
   });
+
+  if (!reviewToDelete) throw "Could not find review";
 
   // Delete the review from the reviews collection
   const deleteResult = await reviewCollection.deleteOne({
     _id: new ObjectId(reviewId),
   });
 
-  if (deleteResult.deletedCount === 0) {
+  if (!deleteResult) {
     throw "Review not found or already deleted";
   }
 
@@ -132,16 +130,7 @@ export const deleteReview = async (reviewId, barId) => {
 
   if (!bar) throw "Could not find bar";
 
-  const updateBarInfo = await barCollection.findOneAndUpdate(
-    { _id: bar._id },
-    {
-      $inc: { reviewsCount: -1 },
-      $pull: { ratings: reviewToDelete.rating },
-    },
-    { returnDocument: "after" }
-  );
-
-  const updateBar = await barCollection.findOneAndUpdate(
+  const removeReviewFromBar = await barCollection.findOneAndUpdate(
     { _id: bar._id },
     {
       $pull: { reviews: { _id: reviewId } },
@@ -149,11 +138,33 @@ export const deleteReview = async (reviewId, barId) => {
     { returnDocument: "after" }
   );
 
-  console.log(updateBar)
-
-  if (updateBar === null) {
-    throw "Bar update unsuccessful";
+  if (removeReviewFromBar === null) {
+    throw "Bar review update unsuccessful";
   }
+
+  const theBar = await barsFunctions.barById(barId);
+
+  let totalRatings = 0;
+  let ratingAverage = 0;
+  if (theBar.reviews.length >= 1) {
+  
+    theBar.reviews.forEach((review) => {
+      totalRatings += review.rating;
+    });
+
+    ratingAverage = totalRatings / theBar.reviews.length;
+
+    ratingAverage = parseFloat(ratingAverage.toFixed(2))
+  }
+
+  const updateBarInfo = await barCollection.findOneAndUpdate(
+    { _id: bar._id },
+    {
+      $inc: { reviewsCount: -1 },
+      $set: { ratingAverage: ratingAverage },
+    },
+    { returnDocument: "after" }
+  );
 
   return reviewToDelete;
 };
@@ -187,6 +198,17 @@ export const updateReview = async (
   };
 
   const reviewCollection = await reviews();
+
+  //moved above
+  const reviewToDelete = await reviewCollection.findOne({
+    _id: new ObjectId(reviewId),
+  });
+
+  if (!reviewToDelete) {
+    throw 'review not found'
+  }
+
+  //here we are updating the review, the old review no longer will exist in the review DB
   const updateInfo = await reviewCollection.findOneAndReplace(
     { _id: new ObjectId(reviewId) },
     review,
@@ -207,27 +229,39 @@ export const updateReview = async (
 
   if (!bar) throw "Could not find bar";
 
-  const removeBar = await barCollection.findOneAndUpdate(
-    { _id: bar._id },
-    {
-      $pull: { reviews: { _id: reviewId } },
-    },
-    { returnDocument: "after" }
-  );
-
-  if (removeBar === null) {
-    throw "Bar update (pull) unsuccessful";
-  }
-
   const updateBar = await barCollection.findOneAndUpdate(
-    { _id: bar._id },
-    {
-      $push: { reviews: updateInfo },
+    { _id: bar._id,
+      "reviews._id" : reviewId
     },
-    { returnDocument: "after" }
+        {$set: {"reviews.$": updateInfo}
+    },
+    {returnDocument:"after"}
   );
 
   if (updateBar === null) {
+    throw "Bar update unsuccessful";
+  }
+
+  const theBar = await barsFunctions.barById(barId);
+  
+  let totalRatings = 0;
+  theBar.reviews.forEach((review) => {
+    totalRatings += review.rating;
+  });
+  
+  let ratingAverage = totalRatings / (theBar.reviews.length);
+
+  ratingAverage = parseFloat(ratingAverage.toFixed(2))
+
+  const finalReviewArrayInBar = await barCollection.findOneAndUpdate(
+    { _id: bar._id },
+    {
+      $set: { ratingAverage: ratingAverage },
+    },
+    { returnDocument: "after" }
+  );
+
+  if (finalReviewArrayInBar === null) {
     throw "Bar update unsuccessful";
   }
 
