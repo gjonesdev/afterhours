@@ -8,6 +8,7 @@
 
 <ul>
 	{{#each bars}}
+	{{#if haslocation}}
 
 	<li>
 		<div class="row"></div>
@@ -24,6 +25,21 @@
 		</a>
 		</div>
 	</li>
+	{{else}}
+	<li>
+		<div class="row"></div>
+		<a href="/bars/{{bar._id}}">
+			<div class="card">
+				{{name}} <br>
+				{{location.city}} <br>
+				{{ratingAverage}} <br>
+				{{reviewsCount}} reviews <br>
+				{{favoritesCount}} favorites <br>
+			</div>
+		</a>
+		</div>
 
-	{{/each}}
+		{{/if}}
+
+		{{/each}}
 </ul>

@@ -32,45 +32,50 @@ router
       oldUserLoc.latitude = userLocation.latitude;
       oldUserLoc.longitude = userLocation.longitude;
     }
-    const allBars = await barData.allBars();
-    if (oldUserLoc.isNeeded) {
-      const barsDistance = await filtersFun.barsDistance(userLocation, allBars);
-      oldUserLoc.isNeeded = false;
+    try {
+      if (oldUserLoc.isNeeded) {
+        const barsDistance = await filtersFun.barsDistance(userLocation);
+        oldUserLoc.isNeeded = false;
+        // oldBarsList = barsDistance;
+      }
+      const barOfTheDay = await filtersFun.barOfTheDay();
+      res.json({ BOD: barOfTheDay });
+    } catch (e) {
+      res.status(500).json({ BOD: e });
     }
-    const barOfTheDay = await filtersFun.barOfTheDay(allBars);
-    res.json({ BOD: barOfTheDay });
   });
 
 router.route("/about").get(async (req, res) => {
   try {
     return res.render("aboutUs", { title: "About" });
   } catch (e) {
+    const test = 0;
     return res.status(500).json({ error: e });
   }
 });
 
 router.route("/terms").get(async (req, res) => {
-	try {
-		return res.render("terms", { title: "Terms" });
-	} catch (e) {
-		return res.status(500).json({ error: e });
-	}
+  try {
+    return res.render("terms", { title: "Terms" });
+  } catch (e) {
+    return res.status(500).json({ error: e });
+  }
 });
 
 router.route("/privacy").get(async (req, res) => {
-	try {
-		return res.render("privacy", { title: "Privacy" });
-	} catch (e) {
-		return res.status(500).json({ error: e });
-	}
+  try {
+    return res.render("privacy", { title: "Privacy" });
+  } catch (e) {
+    return res.status(500).json({ error: e });
+  }
 });
 
 router.route("/services").get(async (req, res) => {
-	try {
-		return res.render("services", { title: "Our Services" });
-	} catch (e) {
-		return res.status(500).json({ error: e });
-	}
+  try {
+    return res.render("services", { title: "Our Services" });
+  } catch (e) {
+    return res.status(500).json({ error: e });
+  }
 });
 
 router.route("/register").get(async (req, res) => {

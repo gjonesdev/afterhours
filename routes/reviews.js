@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { validateId, validateReview } from "../helpers.js";
 import { reviewData, accountData, barData, userData } from "../data/index.js";
+import filtersHelp from "../filterhelper.js";
 
 const router = Router();
 
@@ -11,14 +12,13 @@ router.route("/").post(async (req, res) => {
 });
 
 router.route("/createReview").post(async (req, res) => {
-    if (!req.body || Object.keys(req.body).length === 0) {
-      return res
-			.status(400)
-			.json({ error: "There are no fields in the request body" });
-    }
-  
-  try {
+  if (!req.body || Object.keys(req.body).length === 0) {
+    return res
+      .status(400)
+      .json({ error: "There are no fields in the request body" });
+  }
 
+  try {
     const rating = Number(req.body.rating);
 
     const account = await accountData.getAccount(req.session.user.accountId);
@@ -29,7 +29,7 @@ router.route("/createReview").post(async (req, res) => {
 
     const reviewInfo = {
       accountId: accountId,
-      firstName: firstName, 
+      firstName: firstName,
       barName: req.body.barName,
       barId: req.body.barId,
       rating: rating,
@@ -54,19 +54,21 @@ router.route("/createReview").post(async (req, res) => {
       validatedReviewInfo.rating,
       validatedReviewInfo.comment
     );
-    
+    filtersHelp.barDistanceHelper(true);
+
     res.redirect("/bars/" + req.body.barId);
   } catch (error) {
     // If there are errors, render the form with errors
     const barId = req.body.barId;
-    const bar = await barData.barById(barId)
+    const bar = await barData.barById(barId);
     const barName = bar.name;
 
     res.render("writeReview", { barId: barId, barName: barName, error });
   }
 });
 
-router.route("/delete/:reviewId")
+router
+  .route("/delete/:reviewId")
   .get(async (req, res) => {
     try {
       req.params.reviewId = validateId(req.params.reviewId);
@@ -75,12 +77,11 @@ router.route("/delete/:reviewId")
 
       res.render("deleteReview", { review });
     } catch (e) {
-			return res.status(404).json({ error: e });
-		}
+      return res.status(404).json({ error: e });
+    }
   })
   .post(async (req, res) => {
     try {
-
       req.params.reviewId = validateId(req.params.reviewId);
       const reviewId = req.params.reviewId;
 
@@ -90,11 +91,12 @@ router.route("/delete/:reviewId")
 
       res.redirect("/account");
     } catch (e) {
-			return res.status(404).json({ error: e });
-		}
+      return res.status(404).json({ error: e });
+    }
   });
 
-  router.route("/edit/:reviewId")
+router
+  .route("/edit/:reviewId")
   .get(async (req, res) => {
     try {
       req.params.reviewId = validateId(req.params.reviewId);
@@ -103,8 +105,8 @@ router.route("/delete/:reviewId")
 
       res.render("editReviews", { review });
     } catch (e) {
-			return res.status(404).json({ error: e });
-		}
+      return res.status(404).json({ error: e });
+    }
   })
   .post(async (req, res) => {
     try {
@@ -116,21 +118,21 @@ router.route("/delete/:reviewId")
       const rating = Number(req.body.rating);
 
       let result = await reviewData.updateReview(
-        reviewId, 
+        reviewId,
         review.firstName,
-        review.accountId, 
-        review.barName, 
+        review.accountId,
+        review.barName,
         review.barId,
         rating,
-        req.body.comment,
+        req.body.comment
       );
 
       res.redirect("/account");
     } catch (error) {
       const reviewId = req.params.reviewId;
       const review = await reviewData.get(reviewId);
-			res.render("editReviews", { review, error });
-		}
+      res.render("editReviews", { review, error });
+    }
   });
 
 export default router;
