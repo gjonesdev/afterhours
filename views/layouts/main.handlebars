@@ -20,6 +20,7 @@
 
 <body>
 	<header>
+		
 		<nav class="main-nav" id="main-nav">
 			<div class="content-wrapper-sm">
 				<a href="/" class="navbar-brand">After<strong>hours</strong></a>
@@ -29,10 +30,10 @@
 					<button type="submit"><i class="fa fa-search"></i></button>
 				</div>
 
-				<div id="menu-button">
-					<div class="bar1"></div>
-					<div class="bar2"></div>
-					<div class="bar3"></div>
+				<div  class="menu-button">
+					<div class="barMenu1"></div>
+					<div class="barMenu2"></div>
+					<div class="barMenu3"></div>
 				</div>
 				<ul class="nav-links">
 					<li><a href="/bars"> Bar's List</a></li>
@@ -91,6 +92,17 @@
 		</div>
 	</footer>
 
+	<script>document.addEventListener("DOMContentLoaded", function() {
+    var menuButton = document.querySelector(".menu-button");
+    var navLinks = document.querySelector(".nav-links");
+
+    menuButton.addEventListener("click", function() {
+        this.classList.toggle("active");
+        navLinks.classList.toggle("active");
+    });
+});
+
+document.addEventListener("DOMContentLoaded", initializeMenu);</script>
 </body>
 
 

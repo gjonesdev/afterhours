@@ -13,40 +13,38 @@
 </form>
 <a class="" id="resetFilters" href="/bars">Reset Filters</a>
 
-<ul id="barList">
-	{{#each bars}}
-	{{#if haslocation}}
+<div class"bars-section">
+	<ul id="barList">
+		{{#each bars}}
+		{{#if haslocation}}
 
-	<li>
-		<div class="row"></div>
-		<a href="/bars/{{bar._id}}">
-			<div class="card">
-				{{bar.name}} <br>
-				{{distance}} mi from you!<br>
-				@ {{duration}} driving <br>
-				{{bar.location.city}} <br>
-				{{bar.ratingAverage}} <br>
-				{{bar.reviewsCount}} reviews <br>
-				{{bar.favoritesCount}} favorites <br>
-			</div>
-		</a>
-		</div>
-	</li>
-	{{else}}
-	<li>
-		<div class="row"></div>
-		<a href="/bars/{{bar._id}}">
-			<div class="item-review">
-				{{name}} <br>
-				{{location.city}} <br>
-				{{ratingAverage}} <br>
-				{{reviewsCount}} reviews <br>
-				{{favoritesCount}} favorites <br>
-			</div>
-		</a>
-		</div>
-
+		<li>
+			<a href="/bars/{{bar._id}}">
+				<div class="card-bar">
+					{{bar.name}} <br>
+					{{distance}} mi from you!<br>
+					@ {{duration}} driving <br>
+					{{bar.location.city}} <br>
+					{{bar.ratingAverage}} <br>
+					{{bar.reviewsCount}} reviews <br>
+					{{bar.favoritesCount}} favorites <br>
+				</div>
+			</a>
+		</li>
+		{{else}}
+		<li>
+			<a href="/bars/{{bar._id}}">
+				<div class="item-review">
+					Name: {{name}} <br><br>
+					Location: {{location.city}} <br><br>
+					Rating Average: {{ratingAverage}} <br><br>
+					{{reviewsCount}} reviews <br><br>
+					{{favoritesCount}} favorites <br><br>
+				</div>
+			</a>
+		</li>
 		{{/if}}
 
 		{{/each}}
-</ul>
+	</ul>
+</div>

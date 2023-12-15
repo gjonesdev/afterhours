@@ -1,5 +1,4 @@
-<ul>
-	<li><a href="/account" id="account-tab">Account Info</a></li>
+<ul class="favoriteLinks">
 	<li><a href="/account/favorites" id="favorites-tab">Favorites</a></li>
 	<li><a href="/account/reviews" id="reviews-tab">My Reviews</a></li>
 	{{#if account.bars}}
@@ -15,26 +14,23 @@
 
 			<div class="input-box">
 				<label class="input-label" for="emailInput">Updated Email</label>
-				<input class="input" type="email" id="emailInput" name="emailInput" placeholder="Email"
+				<input class="input" type="email" id="emailInput" name="emailInput"
 					value="{{account.email}}">
+			</div>
+			
+			<div class="input-box">
+				<label class="input-label" for="currentPasswordInput">Current Password</label>
+				<input class="input" type="password" id="currentPasswordInput">
 			</div>
 
 			<div class="input-box">
 				<label class="input-label" for="newPasswordInput">New Password</label>
-				<input class="input" type="password" id="newPasswordInput" name="newPasswordInput"
-					placeholder="New Password">
+				<input class="input" type="password" id="newPasswordInput" name="newPasswordInput">
 			</div>
 
 			<div class="input-box">
 				<label class="input-label" for="confirmPasswordInput">Confirm Password</label>
-				<input class="input" type="password" id="confirmPasswordInput" name="confirmPasswordInput"
-					placeholder="Confirm New Password">
-			</div>
-
-			<div class="input-box">
-				<label class="input-label" for="currentPasswordInput">Current Password</label>
-				<input class="input" type="password" id="currentPasswordInput" name="currentPasswordInput"
-					placeholder="Current Password">
+				<input class="input" type="password" id="confirmPasswordInput" >
 			</div>
 
 			<input type="hidden" name="_method" value="PUT">
@@ -48,19 +44,19 @@
 		<form class="user-form" id="user-form" action="/user" method="POST">
 			<div class="input-box">
 				<label class="input-label" for="firstNameInput">First Name</label>
-				<input class="input" type="text" id="firstNameInput" name="firstNameInput" placeholder="First Name"
+				<input class="input" type="text" id="firstNameInput" name="firstNameInput" 
 					value="{{user.firstName}}">
 			</div>
 
 			<div class="input-box">
 				<label class="input-label" for="lastNameInput">Last Name</label>
-				<input class="input" type="text" id="lastNameInput" name="lastNameInput" placeholder="Last Name"
+				<input class="input" type="text" id="lastNameInput" name="lastNameInput" 
 					value="{{user.lastName}}">
 			</div>
 
 			<div class="input-box">
 				<label class="input-label" for="phoneInput">Phone Number</label>
-				<input class="input" type="phone" id="phoneInput" name="phoneInput" placeholder="Phone Number"
+				<input class="input" type="phone" id="phoneInput" name="phoneInput" 
 					value="{{user.phone}}">
 			</div>
 
@@ -83,7 +79,7 @@
 
 		<form class="delete-form hidden" id="delete-form" action="/account" method="POST">
 			<div class="input-box">
-				<input class="input" type="password" id="passwordInput" name="passwordInput" placeholder="Password">
+				<input class="input" type="password" id="passwordInput" name="passwordInput" >
 				<label class="input-label" for="passwordInput">Password</label>
 			</div>
 

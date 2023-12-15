@@ -1,25 +1,45 @@
-<ul>
+<ul class="favoriteLinks">
 	<li><a href="/account" id="account-tab">Account Info</a></li>
 	<li><a href="/account/favorites" id="favorites-tab">Favorites</a></li>
-	<li><a href="/account/reviews" id="reviews-tab">My Reviews</a></li>
 	{{#if account.bars}}
 	<li><a href="/account/bars" id="bars-tab">My Bars</a></li>
 	{{/if}}
 </ul>
 
-<div id="review-section">
-	<h1>Reviews From You:</h1>
-	{{#if reviews}}
-	{{#each reviews}}
-	<div>
-		<p>Bar Name: {{this.barName}}</p>
-		<p>Rating: {{this.rating}}</p>
-		<p>Comment: {{this.comment}}</p>
-		<a href="/reviews/edit/{{this._id}}">Edit</a>
-		<a href="/reviews/delete/{{this._id}}">Delete</a>
-	</div>
-	{{/each}}
-	{{else}}
-	<p>No reviews yet.</p>
-	{{/if}}
-</div>
+<div class="carousel-container" data-review-length="{{review.length}}">
+    <h1 class="reviews-title">#ReviewsFromYou:</h1>
+    <button class="carousel-arrow prev">&#9665;</button>
+    <div class="carousel">
+        <div class="carousel-inner">
+            {{#each review}}
+            <div class="item-review">
+                <div class="star-rating" data-rating="{{this.rating}}">
+                </div>
+                <p class="review-barName">Bar Name: {{this.barName}}</p>
+                <p class="review-barRating">Rating: {{this.rating}}</p>
+                <p class="review-barComment">Comment: {{this.comment}}</p>
+                <a href="/reviews/edit/{{this._id}}">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="/reviews/delete/{{this._id}}">Delete</a>
+            </div>
+            {{/each}}
+        </div>
+    </div>
+    <button class="carousel-arrow next">&#9655;</button>
+    <p>No reviews yet.</p>
+
+<script>
+	document.addEventListener("DOMContentLoaded", function() {
+    const starContainers = document.querySelectorAll('.star-rating');
+
+    starContainers.forEach(container => {
+        const rating = container.getAttribute('data-rating');
+        const starCount = Math.round(parseFloat(rating));
+
+        for (let i = 0; i < starCount; i++) {
+            const star = document.createElement('span');
+            star.textContent = '⭐️'; 
+            container.appendChild(star);
+        }
+    });
+});
+</script>
