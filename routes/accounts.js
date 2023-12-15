@@ -6,8 +6,7 @@ import {
 	validateEmail,
 	validatePassword,
 } from "../helpers.js";
-import { accountData, userData, reviewData } from "../data/index.js";
-import filtersHelp from "../filterhelper.js";
+import { accountData, userData, reviewData, barData } from "../data/index.js";
 
 const router = Router();
 
@@ -28,8 +27,8 @@ router
 				account.userId
 			);
 			return res.render("account", {
-				account: account,
-				user: user,
+				account,
+				user,
 				userReviews,
 			});
 		} catch (e) {
@@ -178,5 +177,64 @@ router
 			return res.status(404).json({ error: e });
 		}
 	});
+
+router.route("/favorites").get(async (req, res) => {
+	try {
+		req.session.user.accountId = validateId(req.session.user.accountId);
+	} catch (e) {
+		return res.status(400).json({ error: e });
+	}
+	try {
+		const account = await accountData.getAccount(
+			req.session.user.accountId
+		);
+		const user = await userData.getUser(account.userId);
+		return res.render("favorites", {
+			user,
+		});
+	} catch (e) {
+		return res.status(404).json({ error: e });
+	}
+});
+
+router.route("/reviews").get(async (req, res) => {
+	try {
+		req.session.user.accountId = validateId(req.session.user.accountId);
+	} catch (e) {
+		return res.status(400).json({ error: e });
+	}
+	try {
+		const account = await accountData.getAccount(
+			req.session.user.accountId
+		);
+		const user = await userData.getUser(account.userId);
+		const reviews = await reviewData.getReviewsByAccountId(
+			account.userId
+		);
+		return res.render("reviews", {
+			reviews,
+			user,
+			account,
+		});
+	} catch (e) {
+		return res.status(404).json({ error: e });
+	}
+});
+
+router.route("/bars").get(async (req, res) => {
+	try {
+		req.session.user.accountId = validateId(req.session.user.accountId);
+	} catch (e) {
+		return res.status(400).json({ error: e });
+	}
+	try {
+		bars = await barData.barByOwner(req.session.user.accountId);
+		return res.render("ownerBars", {
+			bars,
+		});
+	} catch (e) {
+		return res.status(404).json({ error: e });
+	}
+});
 
 export default router;

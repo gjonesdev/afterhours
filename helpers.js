@@ -294,15 +294,17 @@ export const validateUser = (userInfo) => {
 
 //Report error check:
 /**Validate empty space for userId, reason, comment for reports*/
-export const validateReport = (userId, reason, comment) => {
+export const validateReport = (name, email, reason, comment) => {
   //Error check:
-  if (!userId || !reason || !comment)
+  if (!name || !email || !reason || !comment)
     throw "All fields need to have valid values.";
 
   //Change userID = string by userID = ObjectID
   if (
-    typeof userId !== "string" ||
-    userId.trim().length === 0 ||
+    typeof name !== "string" ||
+    name.trim().length === 0 ||
+    typeof email !== "string" ||
+    email.trim().length === 0 ||
     typeof reason !== "string" ||
     reason.trim().length === 0 ||
     typeof comment !== "string" ||
@@ -339,6 +341,41 @@ export const validateUserId = (userId) => {
 		throw "invalid object ID";
 	}
 	return userId;*/
+};
+
+/**Validate name for reports*/
+export const validateReportName = (name) => {
+  //Name:
+  if (name.trim().length === 0)
+    throw "Empty string or just spaces not allowed for name.";
+  name = name.trim();
+  //Name should not contain only numbers
+  if (!isNaN(name)) throw "Name should not contain only numbers";
+  //Name  should not contain numbers
+  let notNumbersRegex = /^[a-zA-Z ]*$/;
+  if (notNumbersRegex.exec(name) === null)
+    throw "Name should not contain numbers";
+  if (name.trim().length < 2 || name.trim().length > 30)
+    throw "Name should be at least 2 characters long and a max of 30 characters.";
+  return name;
+};
+
+/**Validate email for reports*/
+export const validateReportEmail = (email) => {
+  //email:
+  if (email.trim().length === 0)
+    throw "Empty string or just spaces not allowed for email.";
+  email = email.trim();
+  //email should not contain numbers
+  if (!isNaN(email)) throw "Email should not contain only numbers";
+  if (email.trim().length < 2 || email.trim().length > 80)
+    throw "Email should be at least 2 characters long and a max of 80 characters.";
+  //Email format, look for regex syntax
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  email = email.toString().toLowerCase();
+  if (emailRegex.exec(email) === null)
+    throw "Email is not in a valid email address format.";
+  return email;
 };
 
 /**Validate reason for reports*/

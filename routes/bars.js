@@ -236,24 +236,9 @@ router.route("/:barId").get(async (req, res) => {
   }
   try {
     const theBar = await barData.barById(req.params.barId);
-    const tempArr = theBar.schedule;
-    let activeEvents = [];
-    const now = new Date();
-    activeEvents.forEach((element) => {
-      const dateObj = date.parse(
-        element.date + " " + element.endTime,
-        "MM/DD/YYYY hh:mm A"
-      );
-      if (dateObj > now) {
-        activeEvents.push(element);
-      }
-    });
 
-    let isOwner = false;
     console.log(theBar);
-    if (req.session.user) {
-      isOwner = theBar.ownerId === req.session.user.accountId;
-    }
+    const isOwner = theBar.ownerId === req.session.accountId;
     res.render("barById", {
       id: theBar._id,
       barName: theBar.name,
@@ -262,7 +247,7 @@ router.route("/:barId").get(async (req, res) => {
       email: theBar.email,
       website: theBar.website,
       phone: theBar.phone,
-      schedule: activeEvents,
+      schedule: theBar.schedule,
       tags: theBar.tags,
       reviews: theBar.reviews,
       reviewsCount: theBar.reviewsCount,
@@ -272,6 +257,21 @@ router.route("/:barId").get(async (req, res) => {
     });
   } catch (e) {
     res.status(404).json({ error: "Bar not found!" });
+  }
+});
+
+router.route("/barsByFilters").post(async (req, res) => {
+  const filters = [];
+
+  Object.values(req.body).forEach((filter) => {
+    filters.push(filter); //.toLowerCase();
+  });
+
+  try {
+    const bars = await barData.barsByFilters(filters);
+    res.json(bars);
+  } catch (e) {
+    res.status(404).json({ error: e });
   }
 });
 

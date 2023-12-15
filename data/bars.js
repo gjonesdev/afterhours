@@ -107,6 +107,27 @@ let exportedMethods = {
     });
     return allbars;
   },
+  async barsByFilters(filters) {
+    // validation.validateId(barId);
+
+    const barsCollection = await bars();
+
+    if (!filters || filters.length === 0) {
+      return this.allBars();
+    }
+
+    const matchingBars = await barsCollection
+      .find({
+        tags: { $all: filters },
+      })
+      .toArray();
+
+    if (!matchingBars || matchingBars.length === 0) {
+      throw "No bars found.";
+    }
+
+    return matchingBars;
+  },
   async removeBar(barId) {
     validation.validateId(barId);
     const barCol = await bars();
