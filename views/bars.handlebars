@@ -13,10 +13,11 @@
 </form>
 <a class="" id="resetFilters" href="/bars">Reset Filters</a>
 
-<ul id="barList">
-	{{#each bars}}
-	{{#if haslocation}}
 
+<ul>
+
+	{{#if location}}
+	{{#each bars}}
 	<li>
 		<div class="row"></div>
 		<a href="/bars/{{bar._id}}">
@@ -32,11 +33,13 @@
 		</a>
 		</div>
 	</li>
+	{{/each}}
 	{{else}}
+	{{#each bars}}
 	<li>
 		<div class="row"></div>
-		<a href="/bars/{{bar._id}}">
-			<div class="item-review">
+		<a href="/bars/{{_id}}">
+			<div class="card">
 				{{name}} <br>
 				{{location.city}} <br>
 				{{ratingAverage}} <br>
@@ -45,8 +48,11 @@
 			</div>
 		</a>
 		</div>
+	</li>
+	{{/each}}
+	{{/if}}
 
-		{{/if}}
 
-		{{/each}}
+
+
 </ul>

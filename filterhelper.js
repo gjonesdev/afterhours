@@ -184,7 +184,7 @@ let exportedMethods = {
   async sortedByRating(bars) {
     let sortedBars = bars.sort(function (a, b) {
       return (
-        a.ratingAverage - b.ratingAverage || a.favoritesCount - b.favoritesCount
+        b.ratingAverage - a.ratingAverage || b.favoritesCount - a.favoritesCount
       );
     });
 
