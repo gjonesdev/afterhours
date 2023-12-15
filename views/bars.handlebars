@@ -7,9 +7,9 @@
 
 
 <ul>
-	{{#each bars}}
-	{{#if haslocation}}
 
+	{{#if location}}
+	{{#each bars}}
 	<li>
 		<div class="row"></div>
 		<a href="/bars/{{bar._id}}">
@@ -25,10 +25,12 @@
 		</a>
 		</div>
 	</li>
+	{{/each}}
 	{{else}}
+	{{#each bars}}
 	<li>
 		<div class="row"></div>
-		<a href="/bars/{{bar._id}}">
+		<a href="/bars/{{_id}}">
 			<div class="card">
 				{{name}} <br>
 				{{location.city}} <br>
@@ -38,8 +40,11 @@
 			</div>
 		</a>
 		</div>
+	</li>
+	{{/each}}
+	{{/if}}
 
-		{{/if}}
 
-		{{/each}}
+
+
 </ul>

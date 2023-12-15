@@ -24,6 +24,18 @@
 <div class="login-container">
     <div class="login-box">
         <h2>#Create a Bar 🍺</h2>
+        {{#if isError}}
+        <ul>
+            {{#each errors}}
+            <li>
+                <p>{{this}}</p>
+            </li>
+
+            {{/each}}
+        </ul>
+
+
+        {{/if}}
         <form action="/bars/createBar" method="post" id="bar-create">
 
             <label for="barId"></label>
@@ -127,6 +139,18 @@
                 <input type="text" value="{{website}}" name="createWebsite" id="createWebsite" required="">
                 <label for="createWebsite">Website</label>
             </div>
+            <div>
+                <label for="tags">Choose some tags:</label>
+                <select name="tags" id="tags" multiple>
+                    <option value="Sport">#Sport</option>
+                    <option value="Grill">#Grill</option>
+                    <option value="Margaritas">#Margaritas</option>
+                    <option value="Tacos">#Tacos</option>
+                    <option value="Dance">#Dance</option>
+
+                </select>
+
+            </div>
 
             <div class="user-box">
                 <input type="file" accept="image/jpeg, image/png, image/jpg" id="imageUpload" multiple>
@@ -134,26 +158,26 @@
             </div>
 
             <button type="submit" class="submit-button">
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-				#CraftMeaBar
-			</button>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                #CraftMeaBar
+            </button>
 
         </form>
     </div>
 
-<div class="message-container">
+    <div class="message-container">
 
-		{{#if error}}
-		<p class="response-error">Error {{error.status}}: {{error.message}}</p>
-		{{/if}}
-		<ul id="error-list" class="error-list hide"></ul>
-		<p>Already have an account?</p></br>
-		<a class="link" href="/login">Click here to login!</a>
+        {{#if error}}
+        <p class="response-error">Error {{error.status}}: {{error.message}}</p>
+        {{/if}}
+        <ul id="error-list" class="error-list hide"></ul>
+        <p>Already have an account?</p></br>
+        <a class="link" href="/login">Click here to login!</a>
 
 
-	</div>
+    </div>
 
 </div>

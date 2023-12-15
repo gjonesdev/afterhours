@@ -8,9 +8,12 @@
         {{/each}}
     </ul>
     {{/if}}
-    <form action="/events/createEvent" method="post" name="EventForm" id="EventForm">
-        <label for=""></label>
+
+    <form action="/events/updateEvent" method="post" name="EventForm" id="EventForm">
+        <label for="barIdInput"></label>
         <input type="hidden" name="barIdInput" id="barIdInput" value="{{barId}}">
+        <label for="eventIdInput"></label>
+        <input type="hidden" name="eventIdInput" id="eventIdInput" value="{{eventInfo.eventIdInput}}">
         <label for="enventDateInput">Event Date</label>
         <input type="date" name="eventDateInput" id="eventDateInput" value="{{eventInfo.eventDateInput}}">
         <label for="eventNameInput">Event Name</label>
@@ -24,7 +27,7 @@
         <input type="time" name="startTimeInput" id="startTimeInput" value="{{eventInfo.startTimeInput}}">
         <label for="endTimeInput">End Time</label>
         <input type="time" name="endTimeInput" id="endTimeInput" value="{{eventInfo.endTimeInput}}">
-        <button type="submit"></button>
+        <button type="submit">Submit Changes</button>
 
     </form>
 
