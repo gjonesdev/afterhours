@@ -1,4 +1,4 @@
-import { reports } from "../config/mongoCollections.js";
+//import { reports } from "../config/mongoCollections.js";
 import { dbConnection, closeConnection } from "../config/mongoConnection.js";
 const db = await dbConnection();
 await db.dropDatabase();
