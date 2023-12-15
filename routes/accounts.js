@@ -204,11 +204,17 @@ router.route("/reviews").get(async (req, res) => {
 		return res.status(400).json({ error: e });
 	}
 	try {
-		const reviews = await reviewData.getReviewsByAccountId(
+		const account = await accountData.getAccount(
 			req.session.user.accountId
+		);
+		const user = await userData.getUser(account.userId);
+		const reviews = await reviewData.getReviewsByAccountId(
+			account.userId
 		);
 		return res.render("reviews", {
 			reviews,
+			user,
+			account,
 		});
 	} catch (e) {
 		return res.status(404).json({ error: e });

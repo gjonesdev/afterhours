@@ -1,6 +1,6 @@
-import { response } from "express";
+// import { response } from "express";
 
-let blockedLocation = false;
+// let blockedLocation = false;
 
 function capitalize(string) {
 	return string.charAt(0).toUpperCase() + string.slice(1);
