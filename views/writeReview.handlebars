@@ -11,7 +11,7 @@
         <p> {{error}} </p>
     {{/if}}
 
-    <form action="/reviews" method="post" id="ratingForm">
+    <form action="/reviews/createReview" method="post" id="ratingForm">
         <input type="hidden" name="barId" value="{{barId}}" id="barIdInput">
         <input type="hidden" name="barName" value="{{barName}}" id="barNameInput">
         <fieldset class="rating">
