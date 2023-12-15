@@ -821,3 +821,11 @@ $("#filterForm").on("submit", (e) => {
 		});
 	});
 });
+
+$("#delete-button").on("click", (e) => {
+	$("#delete-confirm").removeClass("hide");
+});
+
+$("#cancel-delete-button").on("click", (e) => {
+	$("#delete-confirm").addClass("hide");
+});

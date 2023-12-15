@@ -76,19 +76,17 @@
 	</button>
 </div>
 
-<div class="form-box hide">
+<div class="form-box delete-confirm hide" id="delete-confirm">
 	<h2>#Delete</h2>
 	<h2>Enter your password to confirm.</h2>
-	<div class="delete-modal" id="delete-modal">
+	<form class="delete-form hidden" id="delete-form" action="/account" method="POST">
+		<div class="input-box">
+			<input class="input" type="password" id="passwordInput" name="passwordInput" placeholder="Password">
+			<label class="input-label" for="passwordInput">Password</label>
+		</div>
 
-		<form class="delete-form hidden" id="delete-form" action="/account" method="POST">
-			<div class="input-box">
-				<input class="input" type="password" id="passwordInput" name="passwordInput" placeholder="Password">
-				<label class="input-label" for="passwordInput">Password</label>
-			</div>
-
-			<input type="hidden" name="_method" value="DELETE">
-			<button type="submit" class="submit-button">Confirm Delete Account</button>
-		</form>
-	</div>
+		<input type="hidden" name="_method" value="DELETE">
+		<button type="submit" class="submit-button">Confirm Delete Account</button>
+	</form>
+	<button class="cancel-button" id="cancel-delete-button">Cancel</button>
 </div>

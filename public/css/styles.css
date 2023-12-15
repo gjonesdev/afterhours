@@ -496,6 +496,7 @@ html {
 }
 
 .delete-button,
+.cancel-button,
 .form-box form button {
 	padding: 10px 20px;
 	color: #03e9f4;
@@ -517,6 +518,7 @@ html {
 }
 
 .delete-button:hover,
+.cancel-button:hover,
 .form-box form button:hover {
 	background: #03e9f4;
 	color: #fff;
