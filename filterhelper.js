@@ -1,6 +1,7 @@
 import axios from "axios";
 import barData from "./data/bars.js";
 import date from "date-and-time";
+import "dotenv/config";
 
 //Global Variables
 let userCity = "";
@@ -8,7 +9,7 @@ let barsDistanceList = [];
 let distances = [];
 const oldUserLoc = { latitude: "", longitude: "", isNeeded: false };
 let setUserLoc = {};
-let hasUpdates = false;
+let searchLoc = {};
 
 let exportedMethods = {
   async barsDistance(userLocation) {
@@ -17,15 +18,13 @@ let exportedMethods = {
     const bars = await barData.allBars();
     if (!bars.length) throw "No bars in the data base yet. Try to create one!";
 
-    //Google key
-    const myKey = "AIzaSyCNmw9imxqmAtqkfDn194OzvwuTwjMOZXw";
     if (typeof userLocation !== "string") {
       userLoc = userLocation.latitude + "," + userLocation.longitude;
       setUserLoc = userLocation;
     } else {
       const city = userLocation.split(",")[0];
       const state = userLocation.split(",")[1];
-      setUserLoc = { city: city, state: state };
+      searchLoc = { city: city, state: state };
       userLoc = `${city}%20${state}`;
     }
 
@@ -44,7 +43,15 @@ let exportedMethods = {
       "&origins=" +
       userLoc +
       "&units=imperial&key=" +
-      myKey;
+      process.env.GOOGLE_APY_KEY;
+    /*
+    const url =
+      "https://maps.googleapis.com/maps/api/distancematrix/json?destinations=" +
+      destinations +
+      "&origins=" +
+      userLoc +
+      "&units=imperial&key=" +
+      myKey;*/
 
     //Creating a bar distance time object
     const { data } = await axios.get(url);
@@ -189,6 +196,25 @@ let exportedMethods = {
     });
 
     return sortedBars;
+  },
+  async cityBars(trmLocation) {
+    const locationArray = trmLocation.split(",");
+    const city = locationArray[0];
+    const state = locationArray[1].trim();
+    const neededLocation = `${city.toLowerCase()},${state.toLowerCase()}`;
+
+    const allBars = await this.barsDistance(neededLocation);
+    let barsInCity = [];
+    allBars.forEach((bar) => {
+      const barCity = bar.bar.location.city;
+      const barstate = bar.bar.location.state;
+
+      if (barCity.toLowerCase() === city || barstate.toLowerCase() === state) {
+        barsInCity.push(bar);
+      }
+    });
+
+    return this.sortedByRating(barsInCity);
   },
 };
 

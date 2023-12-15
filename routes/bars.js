@@ -3,51 +3,95 @@ import { Router } from "express";
 const router = Router();
 import * as validation from "../helpers.js";
 import filtersHelp from "../filterhelper.js";
-import xss from "xss";
-import session from "express-session";
-import date from "date-and-time";
+import "dotenv/config";
 
-router.route("/").get(async (req, res) => {
-  let location = true;
-  let allTheBars = {};
-  //TODO: condition to work when loc if off.
-  let barsDistance = await filtersHelp.sortedBarsbyDistance();
-  if (barsDistance.length === 0) {
-    const allBars = await barData.allBars();
-    location = false;
-    allTheBars = await filtersHelp.sortedByRating(allBars);
-  } else {
-    allTheBars = barsDistance;
-  }
-  res.render("bars", {
-    bars: allTheBars,
-    location: location,
-    tags: [
-      "Sport",
-      "Cocktails",
-      "Mixology",
-      "CraftBeer",
-      "WineWednesday",
-      "BarEvents",
-      "DrinkSpecials",
-      "ThirstyThursday",
-      "LiveMusic",
-      "BeerTasting",
-      "MixandMingle",
-      "LadiesNight",
-      "BarCrafting",
-      "Tapas",
-      "ChampagneNight",
-      "AfterWorkDrinks",
-      "SignatureCocktails",
-      "WhiskeyTasting",
-      "HappyHourDeals",
-      "CraftCocktails",
-      "Shots",
-      "BarHopping",
-    ],
+router
+  .route("/")
+  .get(async (req, res) => {
+    let location = true;
+    let allTheBars = {};
+    //TODO: condition to work when loc if off.
+    let barsDistance = await filtersHelp.sortedBarsbyDistance();
+    if (barsDistance.length === 0) {
+      const allBars = await barData.allBars();
+      location = false;
+      allTheBars = await filtersHelp.sortedByRating(allBars);
+    } else {
+      allTheBars = barsDistance;
+    }
+    res.render("bars", {
+      bars: allTheBars,
+      location: location,
+      tags: [
+        "Sport",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
+      ],
+    });
+  })
+  .post(async (req, res) => {
+    if (!req.body) {
+      return res.status(400).json({ reqResponse: "All fields are required" });
+    }
+    let location = req.body.location;
+    let locType = req.body.locType;
+    let trmLocation = location.trim();
+    let trmLocType = locType.trim();
+    if (trmLocType.length === 0 || trmLocation.length === 0) {
+      return res.status(400).json({ reqResponse: "All fields are required" });
+    }
+
+    if (trmLocType === "ziCode") {
+      let i = 0;
+      trmLocation.forEach((a) => {
+        if (isNaN(a)) {
+          return res.status(400).json({ reqResponse: "Invalid Zip Code" });
+        }
+        ++i;
+      });
+      if (i !== 5) {
+        return res.status(400).json({ reqResponse: "Invalid Zip Code" });
+      }
+      const reqZicode = trmLocation;
+      const cityBars = await filtersHelp.barsDistance(reqZicode);
+      res.json({ reqResponse: cityBars });
+    } else if (trmLocType === "cityState") {
+      if (trmLocation.length === 0) {
+        return res.status(400).json({ reqResponse: "Invalid City/State" });
+      }
+
+      try {
+        const cityBars = await filtersHelp.cityBars(trmLocation);
+        res.json({ reqResponse: cityBars });
+      } catch (e) {
+        return res.status(500).json({ reqResponse: e });
+      }
+    } else {
+      return res.status(403).render("error", {
+        error: { status: 403, message: "Prohibited area" },
+        message: `${req.body.locType} is a prohibited option!`,
+      });
+    }
   });
-});
 
 router
   .route("/createBar")
@@ -61,7 +105,7 @@ router
     const account = await accountData.getAccount(req.session.user.accountId);
     const accountType = account.accountType;
     if (accountType !== "owner") {
-      return res.render("error", {
+      return res.status(403).render("error", {
         error: { status: 403, message: "Prohibirted area" },
         message: "This function is not allowed for your account type",
       });
@@ -74,7 +118,7 @@ router
     const accountId = req.session.user.accountId;
     const accountType = account.accountType;
     if (accountType !== "owner") {
-      res.render("error", {
+      return res.status(403).render("error", {
         error: { status: 403, message: "Prohibited area" },
         message: "This function is not allowed for your account type",
       });

@@ -1,7 +1,16 @@
-<form action="/barbycity" method="post" id="findByLocation">
+<ul d="respError">
+</ul>
+<form action="/bars" method="post" id="findByLocation">
 	<label for="findCityInput"></label>
-	<input type="text" id="findCityInput" name="findCityInput">
-	<button type="submit"></button>
+	<input type="text" id="findCityInput" name="findCityInput" placeholder="Enter a location">
+	<select name="loc-type-selector" id="loc-type-selector">
+		<option value=""></option>
+		<option disabled selected value>--</option>
+		<option value="cityState">City, State</option>
+		<option value="ziCode">Zip Code</option>
+	</select>
+
+	<button type="submit">Search</button>
 </form>
 
 <form id="filterForm">
@@ -14,8 +23,7 @@
 <a class="" id="resetFilters" href="/bars">Reset Filters</a>
 
 
-<ul>
-
+<ul id="barList">
 	{{#if location}}
 	{{#each bars}}
 	<li>
@@ -31,7 +39,6 @@
 				{{bar.favoritesCount}} favorites <br>
 			</div>
 		</a>
-		</div>
 	</li>
 	{{/each}}
 	{{else}}
@@ -47,12 +54,7 @@
 				{{favoritesCount}} favorites <br>
 			</div>
 		</a>
-		</div>
 	</li>
 	{{/each}}
 	{{/if}}
-
-
-
-
 </ul>
