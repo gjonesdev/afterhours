@@ -1,5 +1,5 @@
 import { ObjectId, Timestamp } from "mongodb";
-import { bars } from "../config/mongoCollections.js";
+import { bars, reviews } from "../config/mongoCollections.js";
 import * as validation from "../helpers.js";
 import date from "date-and-time";
 
@@ -139,6 +139,18 @@ let exportedMethods = {
       barName: barToDelete.name,
       deleted: true,
     };
+
+    //delete review associated with bar
+
+    // if (barToDelete.reviews.length !== 0) {
+    //   const reviewCollection = await reviews();
+    //   const deleteReviews = await reviewCollection.deleteMany({
+    //     barId: barId
+    //   })
+    //   if (!deleteReviews) {
+    //     throw 'Could not delete reviews associated with bar'
+    //   }
+    // }
 
     return deletedbar;
   },

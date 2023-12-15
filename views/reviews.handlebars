@@ -14,7 +14,10 @@
 	<div>
 		<p>Bar Name: {{this.barName}}</p>
 		<p>Rating: {{this.rating}}</p>
-		<p>Comment: {{this.comment}}</p>
+		{{#if this.comment}}
+			<p>Comment: {{this.comment}}</p>
+		{{/if}}
+		<p>Date: {{this.date}}</p>
 		<a href="/reviews/edit/{{this._id}}">Edit</a>
 		<a href="/reviews/delete/{{this._id}}">Delete</a>
 	</div>
