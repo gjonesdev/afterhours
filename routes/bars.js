@@ -22,6 +22,30 @@ router.route("/").get(async (req, res) => {
   res.render("bars", {
     bars: allTheBars,
     location: location,
+    tags: [
+      "Sport",
+      "Cocktails",
+      "Mixology",
+      "CraftBeer",
+      "WineWednesday",
+      "BarEvents",
+      "DrinkSpecials",
+      "ThirstyThursday",
+      "LiveMusic",
+      "BeerTasting",
+      "MixandMingle",
+      "LadiesNight",
+      "BarCrafting",
+      "Tapas",
+      "ChampagneNight",
+      "AfterWorkDrinks",
+      "SignatureCocktails",
+      "WhiskeyTasting",
+      "HappyHourDeals",
+      "CraftCocktails",
+      "Shots",
+      "BarHopping",
+    ],
   });
 });
 
