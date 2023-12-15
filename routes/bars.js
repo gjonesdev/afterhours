@@ -5,6 +5,7 @@ import * as validation from "../helpers.js";
 import filtersHelp from "../filterhelper.js";
 import xss from "xss";
 import session from "express-session";
+import date from "date-and-time";
 
 router.route("/").get(async (req, res) => {
   let location = true;
@@ -235,6 +236,19 @@ router.route("/:barId").get(async (req, res) => {
   }
   try {
     const theBar = await barData.barById(req.params.barId);
+    const tempArr = theBar.schedule;
+    let activeEvents = [];
+    const now = new Date();
+    activeEvents.forEach((element) => {
+      const dateObj = date.parse(
+        element.date + " " + element.endTime,
+        "MM/DD/YYYY hh:mm A"
+      );
+      if (dateObj > now) {
+        activeEvents.push(element);
+      }
+    });
+
     let isOwner = false;
     console.log(theBar);
     if (req.session.user) {
@@ -248,7 +262,7 @@ router.route("/:barId").get(async (req, res) => {
       email: theBar.email,
       website: theBar.website,
       phone: theBar.phone,
-      schedule: theBar.schedule,
+      schedule: activeEvents,
       tags: theBar.tags,
       reviews: theBar.reviews,
       reviewsCount: theBar.reviewsCount,
