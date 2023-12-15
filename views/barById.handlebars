@@ -92,10 +92,12 @@
 			{{#each reviews}}
 			<div>
 				<li>
-					<p>{{firstName}}</p>
-					<p>{{rating}}</p>
-					<p>{{date}}</p>
-					<p>{{comment}}</p>
+					<p>User's Name: {{firstName}}</p>
+					<p>Rating: {{rating}}</p>
+					{{#if this.comment}}
+						<p>Comment: {{comment}}</p>
+					{{/if}}
+					<p>Date: {{date}}</p>
 				</li>
 			</div>
 			{{/each}}
