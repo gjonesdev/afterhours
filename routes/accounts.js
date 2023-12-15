@@ -103,6 +103,7 @@ router
 				req.body.passwordInput.trim()
 			);
 			if (result.deleted) {
+				req.session.destroy();
 				return res.render("success", {
 					title: "success",
 					message: "Your account has been deleted successfully.",
@@ -208,9 +209,7 @@ router.route("/reviews").get(async (req, res) => {
 			req.session.user.accountId
 		);
 		const user = await userData.getUser(account.userId);
-		const reviews = await reviewData.getReviewsByAccountId(
-			account.userId
-		);
+		const reviews = await reviewData.getReviewsByAccountId(account.userId);
 		return res.render("reviews", {
 			reviews,
 			user,
