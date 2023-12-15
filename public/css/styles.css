@@ -405,6 +405,11 @@ html {
 	justify-content: center;
 }
 
+.bars-container {
+	display: flex;
+	flex-direction: row;
+}
+
 .edit-container {
 	display: flex;
 	flex-direction: row;
@@ -1035,4 +1040,12 @@ p.error {
 	display: none;
 }
 
-} }
+.filters {
+	width: fit-content;
+	display: flex;
+	flex-direction: column;
+}
+
+.checkbox {
+	display: flex;
+}
