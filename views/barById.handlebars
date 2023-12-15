@@ -77,7 +77,7 @@
 		<form action="/user/favorites" method="POST" id="favorite-button">
 			<input type="hidden" id="barId" name="barId" value="{{id}}">
 			<input type="hidden" name="_method" value="PUT">
-			<button type="submit" class="submit-button">Favorite</button>
+			<button type="submit" class="submit-button" >{{favoriteToggle}}</button>
 		</form>
 		{{else}}
 		<a href="/login">You need to be a user to write reviews. Click here to log in!</a>

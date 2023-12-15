@@ -1,25 +1,30 @@
-<ul>
-	<li><a href="/account" id="account-tab">Account Info</a></li>
-	<li><a href="/account/favorites" id="favorites-tab">Favorites</a></li>
-	<li><a href="/account/reviews" id="reviews-tab">My Reviews</a></li>
-	{{#if account.bars}}
-	<li><a href="/account/bars" id="bars-tab">My Bars</a></li>
-	{{/if}}
-</ul>
+<div class="account-nav">
+    <a class="account-link" href="/account" id="account-tab">Account Info</a>
+    <a
+        class="account-link"
+        href="/account/favorites"
+        id="favorites-tab"
+    >Favorites</a>
+    <a class="account-link active" href="/account/reviews" id="reviews-tab">My
+        Reviews</a>
+    {{#if isOwneauthenticatedOwner}}
+        <a class="account-link" href="/account/bars" id="bars-tab">My Bars</a>
+    {{/if}}
+</div>
 
-<div id="review-section">
-	<h1>Reviews From You:</h1>
-	{{#if reviews}}
-	{{#each reviews}}
-	<div>
-		<p>Bar Name: {{this.barName}}</p>
-		<p>Rating: {{this.rating}}</p>
-		<p>Comment: {{this.comment}}</p>
-		<a href="/reviews/edit/{{this._id}}">Edit</a>
-		<a href="/reviews/delete/{{this._id}}">Delete</a>
-	</div>
-	{{/each}}
-	{{else}}
-	<p>No reviews yet.</p>
-	{{/if}}
+<div class="reviews-section" id="review-section">
+    <h1>Reviews From You:</h1>
+    {{#if reviews}}
+        {{#each reviews}}
+            <div>
+                <p>Bar Name: {{this.barName}}</p>
+                <p>Rating: {{this.rating}}</p>
+                <p>Comment: {{this.comment}}</p>
+                <a href="/reviews/edit/{{this._id}}">Edit</a>
+                <a href="/reviews/delete/{{this._id}}">Delete</a>
+            </div>
+        {{/each}}
+    {{else}}
+        <p>No reviews yet.</p>
+    {{/if}}
 </div>
