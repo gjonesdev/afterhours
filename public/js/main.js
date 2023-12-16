@@ -797,11 +797,12 @@ $("#filterForm").on("submit", (e) => {
 		method: "POST",
 		url: "/bars/barsByFilters",
 		data: inputs.serialize(),
-	}).then((res) => {
-		res.forEach((bar) => {
-			$("#barList").append(
-				$(
-					`<li>
+	}).then(
+		(res) => {
+			res.forEach((bar) => {
+				$("#barList").append(
+					$(
+						`<li>
 					<div class="row"></div>
 					<a href="/bars/${bar._id}">
 						<div class="card">
@@ -816,10 +817,20 @@ $("#filterForm").on("submit", (e) => {
 					</a>
 					</div>
 				</li>`
-				)
-			);
-		});
-	});
+					)
+				);
+			});
+		},
+		(res) => $("#barList").append("<li>No bars found.</li>")
+	);
+});
+
+$("#delete-button").on("click", (e) => {
+	$("#delete-confirm").removeClass("hide");
+});
+
+$("#cancel-delete-button").on("click", (e) => {
+	$("#delete-confirm").addClass("hide");
 });
 
 
