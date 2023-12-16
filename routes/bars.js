@@ -5,6 +5,8 @@ import * as validation from "../helpers.js";
 import filtersHelp from "../filterhelper.js";
 import "dotenv/config";
 
+let renderedList = [];
+
 router
   .route("/")
   .get(async (req, res) => {
@@ -12,13 +14,15 @@ router
     let allTheBars = {};
     //TODO: condition to work when loc if off.
     let barsDistance = await filtersHelp.sortedBarsbyDistance();
+    const test = 0;
     if (barsDistance.length === 0) {
-      const allBars = await barData.allBars();
+      const allBars = await filtersHelp.allBarsPlus();
       location = false;
       allTheBars = await filtersHelp.sortedByRating(allBars);
     } else {
       allTheBars = barsDistance;
     }
+    renderedList = allTheBars;
     res.render("bars", {
       bars: allTheBars,
       location: location,
@@ -50,46 +54,48 @@ router
   })
   .post(async (req, res) => {
     if (!req.body) {
-      return res.status(400).json({ reqResponse: "All fields are required" });
+      return res
+        .status(400)
+        .json({ reqResponse: "Search location field is required!" });
     }
+
+    let isAllowed = req.body.isAllowed;
     let location = req.body.location;
-    let locType = req.body.locType;
     let trmLocation = location.trim();
-    let trmLocType = locType.trim();
-    if (trmLocType.length === 0 || trmLocation.length === 0) {
-      return res.status(400).json({ reqResponse: "All fields are required" });
+
+    if (trmLocation.length === 0) {
+      return res
+        .status(400)
+        .json({ reqResponse: "Search location field is required!" });
     }
 
-    if (trmLocType === "ziCode") {
-      let i = 0;
-      trmLocation.forEach((a) => {
-        if (isNaN(a)) {
-          return res.status(400).json({ reqResponse: "Invalid Zip Code" });
+    //Finding bars by user location search
+    try {
+      if (!isNaN(+trmLocation)) {
+        if (trmLocation.length === 5) {
+          const cityBars = await filtersHelp.zipCodeBars(trmLocation);
+          renderedList = cityBars;
+          return res.json({ reqResponse: cityBars });
         }
-        ++i;
-      });
-      if (i !== 5) {
-        return res.status(400).json({ reqResponse: "Invalid Zip Code" });
       }
-      const reqZicode = trmLocation;
-      const cityBars = await filtersHelp.barsDistance(reqZicode);
-      res.json({ reqResponse: cityBars });
-    } else if (trmLocType === "cityState") {
-      if (trmLocation.length === 0) {
-        return res.status(400).json({ reqResponse: "Invalid City/State" });
-      }
+    } catch (e) {
+      return res.status(400).json({ reqResponse: "Invalid Zip Code" });
+    }
 
-      try {
-        const cityBars = await filtersHelp.cityBars(trmLocation);
-        res.json({ reqResponse: cityBars });
-      } catch (e) {
-        return res.status(500).json({ reqResponse: e });
-      }
-    } else {
-      return res.status(403).render("error", {
-        error: { status: 403, message: "Prohibited area" },
-        message: `${req.body.locType} is a prohibited option!`,
+    const cityStateArr = trmLocation.split(",");
+    if (cityStateArr[0].length < 3) {
+      return res.status(400).json({
+        reqResponse:
+          "City most be 3 characters or longer! Example input: City, ST",
       });
+    }
+
+    try {
+      const cityBars = await filtersHelp.cityBars(trmLocation);
+      renderedList = cityBars;
+      return res.json({ reqResponse: cityBars });
+    } catch (e) {
+      return res.status(500).json({ reqResponse: e });
     }
   });
 
@@ -203,7 +209,7 @@ router
 router.route("/searchBar").post(async (req, res) => {
   let searcCriteria = req.body.searchInput;
   if (!req.body) {
-    return res.status(400).render("search", {
+    return res.status(400).render("bars", {
       error: "Type something and I will find you a bar!",
       isError: true,
     });
@@ -212,18 +218,19 @@ router.route("/searchBar").post(async (req, res) => {
   try {
     searcCriteria = validation.validateRequiredStr(searcCriteria);
   } catch (e) {
-    return res.status(400).render("search", { error: e, isError: true });
+    return res.status(400).render("bars", { error: e, isError: true });
   }
   try {
     const searchBar = await barData.barSearch(searcCriteria);
+    renderedList = searchBar;
     res.render("bars", { bars: searchBar, isSearch: true });
   } catch (e) {
     if (e.code === 1) {
-      res.status(404).render("search", { error: e.msg, isError: true });
+      res.status(404).render("bars", { error: e.msg, isError: true });
     } else if (e.code === 2) {
-      res.status(400).render("search", { error: e.msg, isError: true });
+      res.status(400).render("bars", { error: e.msg, isError: true });
     } else {
-      res.status(500).render("search", { error: e.msg, isError: true });
+      res.status(500).render("bars", { error: e.msg, isError: true });
     }
   }
 });
@@ -368,6 +375,28 @@ router.route("/barsByFilters").post(async (req, res) => {
   } catch (e) {
     res.status(404).json({ error: e });
   }
+});
+router.route("/noLocReset").post(async (req, res) => {
+  if (req.body.userLoc === "off") {
+    const allBars = await filtersHelp.allBarsPlus();
+    const allTheBars = await filtersHelp.sortedByRating(allBars);
+    renderedList = allTheBars;
+    res.json({ allBars: allTheBars });
+  }
+});
+router.route("/sortBy").post(async (req, res) => {
+  // TODO: validate info
+  const sortOption = req.body.option;
+  let sorted = [];
+  if (sortOption === "highestrating") {
+    sorted = await filtersHelp.sortedByRating(renderedList);
+  } else if (sortOption === "mostFavorites") {
+    sorted = await filtersHelp.sortedByLikes(renderedList);
+  } else if (sortOption === "mostReviews") {
+    sorted = await filtersHelp.sortedReviews(renderedList);
+  } else {
+  }
+  res.json({ reqResponse: sorted });
 });
 
 export default router;

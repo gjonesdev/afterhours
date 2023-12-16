@@ -3,16 +3,24 @@
 <form action="/bars" method="post" id="findByLocation">
 	<label for="findCityInput"></label>
 	<input type="text" id="findCityInput" name="findCityInput" placeholder="Enter a location">
-	<select name="loc-type-selector" id="loc-type-selector">
+	<!--	<select name="loc-type-selector" id="loc-type-selector">
 		<option value=""></option>
 		<option disabled selected value>--</option>
 		<option value="cityState">City, State</option>
 		<option value="ziCode">Zip Code</option>
 	</select>
-
+-->
 	<button type="submit">Search</button>
 </form>
-
+<form action="/sortBy" method="post" id="sortByForm">
+	<label for="sortByInput">Sort by</label>
+	<select name="sortBySelector" id="sortBySelector">
+		<option disabled selected value> -- select an option -- </option>
+		<option value="highestrating">Highest Rated</option>
+		<option value="mostFavorites">Most Favorites/Likes</option>
+		<option value="mostReviews">Most Reviewed</option>
+	</select>
+</form>
 <form id="filterForm">
 	{{#each tags}}
 	<label for="{{this}}Input">{{This}}</label>
@@ -24,6 +32,7 @@
 
 
 <ul id="barList">
+
 	{{#if location}}
 	{{#each bars}}
 	<li>

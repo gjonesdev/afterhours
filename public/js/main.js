@@ -306,106 +306,6 @@ function reportForm() {
   }
 }
 
-//-----------------------Geolocation function--------------------------------------------------
-
-// Check for Geolocation API permissions
-let allowed;
-navigator.permissions
-  .query({ name: "geolocation" })
-  .then(function (permissionStatus) {
-    console.log("geolocation permission state is ", permissionStatus.state);
-
-    permissionStatus.onchange = function () {
-      if (this.state === "denied") {
-        alert(
-          "Allow Afterhours to use your device location to find bars and events near you!"
-        );
-
-        //-----------------------------------------------------------
-
-        //-----------------------------------------------------------
-      }
-      console.log("geolocation permission state has changed to ", this.state);
-    };
-  });
-
-const successCallback = (position) => {
-  console.log(position);
-
-  const latitude = position.coords.latitude;
-  const longitude = position.coords.longitude;
-
-  (function ($) {
-    let BODArea = $("#BOD-area");
-    let userLocationReq = {
-      method: "POST",
-      url: "/",
-      contentType: "application/json",
-      data: JSON.stringify({
-        latitude: latitude,
-        longitude: longitude,
-      }),
-    };
-    $.ajax(userLocationReq).then(function (responseMessage) {
-      if (responseMessage.BOD.name) {
-        let element = $(
-          `<a href="/bars/${responseMessage.BOD._id}">
-          <div class="card">
-              ${responseMessage.BOD.name} <br>
-              ${responseMessage.BOD.description} <br>
-              ${responseMessage.BOD.location.city} <br>
-              ${responseMessage.BOD.ratingAverage} <br>
-              ${responseMessage.BOD.reviewsCount} reviews <br>
-              ${responseMessage.BOD.favoritesCount} favorites <br>
-          </div>
-        </a>`
-        );
-        BODArea.append(element);
-      } else if (responseMessage.BOD.noBarsFound) {
-        let element = $(`<a href="/register">
-			<div class="card">
-				${responseMessage.BOD.noBarsFound} <br>
-				<p>If you want to add the first one, click here to create your bussines account!</p><br>
-			</div>
-		</a>`);
-
-        BODArea.append(element);
-      } else {
-        let element = $(`
-			<div class="card">
-				
-				<p>Server Error</p><br>
-			</div>
-		</a>`);
-      }
-    });
-  })(window.jQuery); //End jQuery
-}; //End success
-const errorCallback = (error) => {
-  if (allowed) {
-    alert(
-      "Allow Afterhours to use your device location to find bars and events near you!"
-    );
-  }
-};
-
-//Request to send user location
-/*
-navigator.geolocation.watchPosition(
-  function (position) {
-    allowed = true;
-  },
-  function (error) {
-    if (error.code == error.PERMISSION_DENIED) {
-      allowed = false;
-    }
-    console.log("you denied me :-(");
-  }
-);*/
-
-navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-
-//-----------------------------------------end location check-----------------------------------
 // Registration/Login Form
 const registrationForm = document.getElementById("registration-form");
 const loginForm = document.getElementById("login-form");
@@ -797,6 +697,222 @@ if (accountForm) {
   }
 })();
 
+//-----------------------------------------------------------Geolocation function--------------------------------------------------
+
+// Check for Geolocation API permissions
+navigator.permissions
+  .query({ name: "geolocation" })
+  .then(function (permissionStatus) {
+    //console.log("geolocation permission state is ", permissionStatus.state);
+
+    permissionStatus.onchange = function () {
+      if (this.state === "denied") {
+        alert(
+          "Allow Afterhours to use your device location to find bars and events near you!"
+        );
+      }
+      // console.log("geolocation permission state has changed to ", this.state);
+    };
+  });
+//-------------------------------Location Allowed-----------------------------------
+const successCallback = (position) => {
+  console.log(position);
+  if (document.URL.includes("/")) {
+    const latitude = position.coords.latitude;
+    const longitude = position.coords.longitude;
+    //Bar of the day AJAX function
+    (function ($) {
+      let BODArea = $("#BOD-area");
+      let userLocationReq = {
+        method: "POST",
+        url: "/",
+        contentType: "application/json",
+        data: JSON.stringify({
+          latitude: latitude,
+          longitude: longitude,
+        }),
+      };
+      $.ajax(userLocationReq).then(function (responseMessage) {
+        if (responseMessage.BOD.name) {
+          let element = $(
+            `<a href="/bars/${responseMessage.BOD._id}">
+          <div class="card">
+              ${responseMessage.BOD.name} <br>
+              ${responseMessage.BOD.description} <br>
+              ${responseMessage.BOD.location.city} <br>
+              ${responseMessage.BOD.ratingAverage} <br>
+              ${responseMessage.BOD.reviewsCount} reviews <br>
+              ${responseMessage.BOD.favoritesCount} favorites <br>
+          </div>
+        </a>`
+          );
+          BODArea.append(element);
+        } else if (responseMessage.BOD.noBarsFound) {
+          let element = $(`<a href="/register">
+			<div class="card">
+				${responseMessage.BOD.noBarsFound} <br>
+				<p>If you want to add the first one, click here to create your bussines account!</p><br>
+			</div>
+		</a>`);
+
+          BODArea.append(element);
+        } else {
+          let element = $(`
+			<div class="card">
+				
+				<p>Server Error</p><br>
+			</div>
+		</a>`);
+        }
+      });
+    })(window.jQuery); //End jQuery
+  } //End of Homapage AJAX
+  //-------------------------------------------Bar's Page-----------------------------------------------------------
+
+  //Location allowed default list
+  if (document.URL.includes("/bars")) {
+    // Bars by user pricked (City-State or Zip Code) location using Ajax form
+
+    $("#findByLocation").on("submit", (e) => {
+      e.preventDefault();
+      $("#respError").empty();
+
+      const location = $("#findCityInput").val();
+      const locType = $("#loc-type-selector").val();
+
+      $.ajax({
+        method: "POST",
+        url: "/bars",
+        contentType: "application/json",
+        data: JSON.stringify({
+          location: location,
+          isAllowed: true,
+        }),
+      }).then(
+        (res) => {
+          $("#barList").empty();
+          const barsInCity = res.reqResponse;
+
+          barsInCity.forEach((bar) => {
+            $("#barList").append(
+              $(
+                `<li>
+					  <div class="row"></div>
+					  <a href="/bars/${bar.bar._id}">
+						  <div class="card">
+							  ${bar.bar.name} <br>
+							  ${bar.distance.distance.text}  from downtown ${bar.bar.location.city}!<br>
+							  @ ${bar.distance.duration.text} driving <br>
+							  ${bar.bar.location.city} <br>
+							  ${bar.bar.ratingAverage} <br>
+							  ${bar.bar.reviewsCount} reviews <br>
+							  ${bar.bar.favoritesCount} favorites <br>
+						  </div>
+					  </a>
+					  </div>
+				  </li>`
+              )
+            );
+          });
+        },
+        (res) =>
+          $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
+      );
+    });
+
+    //----------------------------------------SORT AND FILTERS (location allowed)---------------------------------------------------------------
+    // Sorting loc allowed rendered list
+    $("#sortBySelector").change((e) => {
+      e.preventDefault();
+      $("#respError").empty();
+
+      const option = $("#sortBySelector").val();
+
+      $.ajax({
+        method: "POST",
+        url: "/bars/sortBy",
+        contentType: "application/json",
+        data: JSON.stringify({
+          option: option,
+          isAllowed: true,
+        }),
+      }).then(
+        (res) => {
+          $("#barList").empty();
+          const barsList = res.reqResponse;
+
+          barsList.forEach((bar) => {
+            $("#barList").append(
+              $(
+                `<li>
+					  <div class="row"></div>
+					  <a href="/bars/${bar.bar._id}">
+						  <div class="card">
+							  ${bar.bar.name} <br>
+							  ${bar.distance}  from downtown ${bar.bar.location.city}!<br>
+							  @ ${bar.duration} driving <br>
+							  ${bar.bar.location.city} <br>
+							  ${bar.bar.ratingAverage} <br>
+							  ${bar.bar.reviewsCount} reviews <br>
+							  ${bar.bar.favoritesCount} favorites <br>
+						  </div>
+					  </a>
+					  </div>
+				  </li>`
+              )
+            );
+          });
+        },
+        (res) =>
+          $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
+      );
+    });
+  } // End Bar's page AJAX
+}; //End success
+
+//-----------------------------------------------------------Location NOT allowed-------------------------------------------------------------
+const errorCallback = (error) => {
+  if (document.URL.includes("/bars")) {
+    console.log("this is working");
+    console.log(document.URL);
+
+    (function ($) {
+      let allBars = $("#barList");
+      let noLocBars = {
+        method: "POST",
+        url: "/bars/noLocReset",
+        contentType: "application/json",
+        data: JSON.stringify({
+          isAllowed: false,
+        }),
+      };
+      $.ajax(noLocBars).then(function (res) {
+        const allSortedBars = res.allBars;
+        $("#barList").empty();
+
+        allSortedBars.forEach((bar) => {
+          let element = $(
+            `<a href="/bars/${res._id}">
+				<div class="card">
+					${bar.bar.name} <br>					
+					${bar.bar.location.city} <br>
+					${bar.bar.ratingAverage} <br>
+					${bar.bar.reviewsCount} reviews <br>
+					${bar.bar.favoritesCount} favorites <br>
+				</div>
+			  </a>`
+          );
+          allBars.append(element);
+        });
+      });
+    });
+  } //End Bar's page
+}; //End loc Not allowed
+
+navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
+
+//-----------------------------------------end location check-----------------------------------
+
 $("#filterForm").on("submit", (e) => {
   e.preventDefault();
   errors = [];
@@ -839,51 +955,5 @@ $("#filterForm").on("submit", (e) => {
     });
   });
 });
-// Bars by location using Ajax form
 
-$("#findByLocation").on("submit", (e) => {
-  e.preventDefault();
-  $("#respError").empty();
-
-  const location = $("#findCityInput").val();
-  const locType = $("#loc-type-selector").val();
-
-  // $("#barList").empty();
-  $.ajax({
-    method: "POST",
-    url: "/bars",
-    contentType: "application/json",
-    data: JSON.stringify({
-      location: location,
-      locType: locType,
-    }),
-  }).then(
-    (res) => {
-      $("#barList").empty();
-      const barsInCity = res.reqResponse;
-
-      barsInCity.forEach((bar) => {
-        $("#barList").append(
-          $(
-            `<li>
-					  <div class="row"></div>
-					  <a href="/bars/${bar.bar._id}">
-						  <div class="card">
-							  ${bar.bar.name} <br>
-							  ${bar.distance.distance.text}  from downtown ${bar.bar.location.city}!<br>
-							  @ ${bar.distance.duration.text} driving <br>
-							  ${bar.bar.location.city} <br>
-							  ${bar.bar.ratingAverage} <br>
-							  ${bar.bar.reviewsCount} reviews <br>
-							  ${bar.bar.favoritesCount} favorites <br>
-						  </div>
-					  </a>
-					  </div>
-				  </li>`
-          )
-        );
-      });
-    },
-    (res) => $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
-  );
-});
+//-------------------------------------sorting bar list------------------------------------------------------------------

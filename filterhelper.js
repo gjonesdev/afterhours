@@ -8,7 +8,6 @@ let userCity = "";
 let userState = "";
 let barsDistanceList = [];
 let distances = [];
-//const oldUserLoc = { latitude: "", longitude: "", isNeeded: false };
 let setUserLoc = {};
 let searchLoc = {};
 
@@ -27,10 +26,14 @@ let exportedMethods = {
       userLoc = userLocation.latitude + "," + userLocation.longitude;
       setUserLoc = userLocation;
     } else {
-      const city = userLocation.split(",")[0];
-      const state = userLocation.split(",")[1];
-      searchLoc = { city: city, state: state };
-      userLoc = `${city}%20${state}`;
+      if (userLocation.split(",").length === 1) {
+        userLoc = userLocation;
+      } else {
+        const city = userLocation.split(",")[0];
+        const state = userLocation.split(",")[1];
+        searchLoc = { city: city, state: state };
+        userLoc = `${city}%20${state}`;
+      }
     }
 
     let destinations = "";
@@ -83,6 +86,7 @@ let exportedMethods = {
         bar: bars[i],
         distance: distances.elements[i],
       };
+
       barsDistanceList.push(barsDistance);
     }
     if (barsDistanceList.length === 0) throw { code: 1, msg: "0 Results!" };
@@ -183,8 +187,8 @@ let exportedMethods = {
 
     barsDistanceList.forEach((bar) => {
       const { distance } = bar;
-      const barDist = distance.distance.text;
-      const barTime = distance.duration.text;
+      const barDist = distance.distance;
+      const barTime = distance.duration;
       let tempArray = barDist.split(" ");
       let numDistance = Number(tempArray[0]);
       if (tempArray[1].toLowerCase() === "ft") {
@@ -209,30 +213,97 @@ let exportedMethods = {
   async sortedByRating(bars) {
     let sortedBars = bars.sort(function (a, b) {
       return (
-        b.ratingAverage - a.ratingAverage || b.favoritesCount - a.favoritesCount
+        b.bar.ratingAverage - a.bar.ratingAverage ||
+        b.bar.favoritesCount - a.bar.favoritesCount
       );
     });
 
     return sortedBars;
   },
+
+  async sortedByLikes(bars) {
+    let sortedBars = bars.sort(function (a, b) {
+      return (
+        b.bar.favoritesCount - a.bar.favoritesCount ||
+        b.bar.ratingAverage - a.bar.ratingAverage
+      );
+    });
+
+    return sortedBars;
+  },
+  async sortedReviews(bars) {
+    let sortedBars = bars.sort(function (a, b) {
+      return (
+        b.bar.reviewsCount - a.bar.reviewsCount ||
+        b.bar.ratingAverage - a.bar.ratingAverage
+      );
+    });
+
+    return sortedBars;
+  },
+
   async cityBars(trmLocation) {
+    let neededLocation = "";
     const locationArray = trmLocation.split(",");
-    const city = locationArray[0];
-    const state = locationArray[1].trim();
-    const neededLocation = `${city.toLowerCase()},${state.toLowerCase()}`;
+    if (locationArray.length === 1) {
+      neededLocation = trmLocation;
+    } else {
+      const city = locationArray[0];
+      const state = locationArray[1].trim();
+      neededLocation = `${city.toLowerCase()},${state.toLowerCase()}`;
+    }
 
     const allBars = await this.barsDistance(neededLocation);
+
     let barsInCity = [];
     allBars.forEach((bar) => {
       const barCity = bar.bar.location.city;
       const barstate = bar.bar.location.state;
 
-      if (barCity.toLowerCase() === city || barstate.toLowerCase() === state) {
+      if (
+        barCity.toLowerCase() === userCity.toLowerCase() &&
+        barstate.toLowerCase() === userState.toLowerCase()
+      ) {
         barsInCity.push(bar);
       }
     });
 
     return this.sortedByRating(barsInCity);
+  },
+
+  async zipCodeBars(zipCode) {
+    const allBars = await this.barsDistance(zipCode);
+    let barsInCity = [];
+    allBars.forEach((bar) => {
+      const barCity = bar.bar.location.city;
+      const barstate = bar.bar.location.state;
+
+      if (
+        barCity.toLowerCase() === userCity.toLowerCase() &&
+        barstate.toLowerCase() === userState.toLowerCase()
+      ) {
+        barsInCity.push(bar);
+      }
+    });
+
+    return this.sortedByRating(barsInCity);
+  },
+  // This function is only used if the location is not provided. This is to add 0 distance.
+  async allBarsPlus() {
+    const allbars = await barData.allBars();
+    const allBarsPlus = [];
+
+    allbars.forEach((x) => {
+      const bar = {
+        bar: x,
+        distance: -1,
+        duration: -1,
+      };
+
+      allBarsPlus.push(bar);
+    });
+
+    return allBarsPlus;
   },
 };
 
