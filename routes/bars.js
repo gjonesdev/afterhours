@@ -200,6 +200,33 @@ router
       res.redirect("/bars/" + theBar._id);
     }
   });
+router.route("/searchBar").post(async (req, res) => {
+  let searcCriteria = req.body.searchInput;
+  if (!req.body) {
+    return res.status(400).render("search", {
+      error: "Type something and I will find you a bar!",
+      isError: true,
+    });
+  }
+
+  try {
+    searcCriteria = validation.validateRequiredStr(searcCriteria);
+  } catch (e) {
+    return res.status(400).render("search", { error: e, isError: true });
+  }
+  try {
+    const searchBar = await barData.barSearch(searcCriteria);
+    res.render("bars", { bars: searchBar, isSearch: true });
+  } catch (e) {
+    if (e.code === 1) {
+      res.status(404).render("search", { error: e.msg, isError: true });
+    } else if (e.code === 2) {
+      res.status(400).render("search", { error: e.msg, isError: true });
+    } else {
+      res.status(500).render("search", { error: e.msg, isError: true });
+    }
+  }
+});
 
 router.route("/editBar").post(async (req, res) => {
   const barId = req.body.barIdToEdit;

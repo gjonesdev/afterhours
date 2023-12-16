@@ -128,6 +128,49 @@ let exportedMethods = {
 
     return matchingBars;
   },
+
+  async barSearch(searchName) {
+    if (!searchName) throw { code: 2, msg: "Input must be provided!" };
+    if (typeof searchName !== "string")
+      throw { code: 2, msg: "Input must be a valid string!" };
+    searchName = searchName.trim();
+    if (searchName.length === 0)
+      throw { code: 2, msg: "Input is an empty string!" };
+
+    searchName = searchName.toLowerCase();
+    let multiWorlds = searchName.split(" ");
+    const allBars = await this.allBars();
+    let barsFound = new Set();
+
+    let tempTags = [];
+
+    multiWorlds.forEach((word) => {
+      allBars.forEach((bar) => {
+        const tags = bar.tags;
+        tags.forEach((tag) => {
+          tempTags.push(tag.toLowerCase());
+        });
+        const barName = bar.name.toLowerCase();
+        const barDescription = bar.description.toLowerCase();
+
+        if (
+          barName.startsWith(word) ||
+          barDescription.includes(word) ||
+          tempTags.includes(word)
+        ) {
+          barsFound.add(bar);
+        }
+      });
+    });
+
+    if (barsFound.size === 0)
+      throw {
+        code: 1,
+        msg: `0 bars found with the name "${searchName}" or a description containing "${searchName}"`,
+      };
+
+    return barsFound;
+  },
   async removeBar(barId) {
     validation.validateId(barId);
     const barCol = await bars();

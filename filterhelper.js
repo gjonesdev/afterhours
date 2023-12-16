@@ -5,9 +5,10 @@ import "dotenv/config";
 
 //Global Variables
 let userCity = "";
+let userState = "";
 let barsDistanceList = [];
 let distances = [];
-const oldUserLoc = { latitude: "", longitude: "", isNeeded: false };
+//const oldUserLoc = { latitude: "", longitude: "", isNeeded: false };
 let setUserLoc = {};
 let searchLoc = {};
 
@@ -16,7 +17,11 @@ let exportedMethods = {
     let userLoc = "";
     //Call all bars
     const bars = await barData.allBars();
-    if (!bars.length) throw "No bars in the data base yet. Try to create one!";
+    if (!bars.length)
+      throw {
+        code: 1,
+        msg: "No bars in the data base yet. Try to create one!",
+      };
 
     if (typeof userLocation !== "string") {
       userLoc = userLocation.latitude + "," + userLocation.longitude;
@@ -44,24 +49,34 @@ let exportedMethods = {
       userLoc +
       "&units=imperial&key=" +
       process.env.GOOGLE_APY_KEY;
-    /*
-    const url =
-      "https://maps.googleapis.com/maps/api/distancematrix/json?destinations=" +
-      destinations +
-      "&origins=" +
-      userLoc +
-      "&units=imperial&key=" +
-      myKey;*/
 
     //Creating a bar distance time object
     const { data } = await axios.get(url);
     const { rows } = data;
     distances = rows[0];
-    oldUserLoc.isNeeded = false;
+    // oldUserLoc.isNeeded = false;
 
     let userAddress = data.origin_addresses[0];
+    if (userAddress[0] === "")
+      throw { code: 2, msg: "Invalid City and State!" };
+    let splitUserAddress = userAddress.split(", ");
+    if (splitUserAddress.length === 4) {
+      userCity = splitUserAddress[1];
+      const userStateZip = splitUserAddress[2];
+      userState = userStateZip.split(" ")[0];
+    } else if (splitUserAddress.length === 3) {
+      userCity = splitUserAddress[0];
+      const userStateZip = splitUserAddress[1];
+      userState = userStateZip.split(" ")[0];
+    } else if (splitUserAddress.length === 2) {
+      userCity = "Unknown";
+      const userStateZip = splitUserAddress[0];
+      userState = userStateZip.split(" ")[0];
+    } /*
     userCity = userAddress.split(", ")[1];
-
+    const userStateZip = userAddress.split(", ")[2];
+    userState = userStateZip.split(" ")[0];
+*/
     barsDistanceList = [];
     for (let i = 0; i < bars.length; i++) {
       const barsDistance = {
@@ -70,6 +85,7 @@ let exportedMethods = {
       };
       barsDistanceList.push(barsDistance);
     }
+    if (barsDistanceList.length === 0) throw { code: 1, msg: "0 Results!" };
 
     return barsDistanceList;
   },
@@ -97,7 +113,8 @@ let exportedMethods = {
     //Cehcking if there is a BOD in the user's city
     allBars.forEach((bar) => {
       const barCity = bar.location.city;
-      if (barCity === userCity) {
+      const barState = bar.location.state;
+      if (barCity === userCity && barState === userState) {
         if (bar.BODDate === today) {
           aBOD.push(bar);
         }
@@ -108,7 +125,8 @@ let exportedMethods = {
         const events = bar.schedule;
         //const numEvents = bar.schedule.length;
         const barCity = bar.location.city;
-        if (barCity === userCity) {
+        const barState = bar.location.state;
+        if (barCity === userCity && barState === userState) {
           cityBar = true;
           cityBars.push(bar);
           if (events.length === 0) {

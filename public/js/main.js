@@ -306,15 +306,34 @@ function reportForm() {
   }
 }
 
-//Geolocation function
+//-----------------------Geolocation function--------------------------------------------------
+
+// Check for Geolocation API permissions
+let allowed;
+navigator.permissions
+  .query({ name: "geolocation" })
+  .then(function (permissionStatus) {
+    console.log("geolocation permission state is ", permissionStatus.state);
+
+    permissionStatus.onchange = function () {
+      if (this.state === "denied") {
+        alert(
+          "Allow Afterhours to use your device location to find bars and events near you!"
+        );
+
+        //-----------------------------------------------------------
+
+        //-----------------------------------------------------------
+      }
+      console.log("geolocation permission state has changed to ", this.state);
+    };
+  });
 
 const successCallback = (position) => {
   console.log(position);
 
   const latitude = position.coords.latitude;
   const longitude = position.coords.longitude;
-
-  //Request to send user location
 
   (function ($) {
     let BODArea = $("#BOD-area");
@@ -363,12 +382,30 @@ const successCallback = (position) => {
   })(window.jQuery); //End jQuery
 }; //End success
 const errorCallback = (error) => {
-  alert(
-    "Allow Afterhours to use your device location to find bars and events near you!"
-  );
+  if (allowed) {
+    alert(
+      "Allow Afterhours to use your device location to find bars and events near you!"
+    );
+  }
 };
+
+//Request to send user location
+/*
+navigator.geolocation.watchPosition(
+  function (position) {
+    allowed = true;
+  },
+  function (error) {
+    if (error.code == error.PERMISSION_DENIED) {
+      allowed = false;
+    }
+    console.log("you denied me :-(");
+  }
+);*/
+
 navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 
+//-----------------------------------------end location check-----------------------------------
 // Registration/Login Form
 const registrationForm = document.getElementById("registration-form");
 const loginForm = document.getElementById("login-form");
@@ -806,15 +843,12 @@ $("#filterForm").on("submit", (e) => {
 
 $("#findByLocation").on("submit", (e) => {
   e.preventDefault();
-  errors = [];
+  $("#respError").empty();
 
   const location = $("#findCityInput").val();
   const locType = $("#loc-type-selector").val();
-  if (location.trim().length === 0) {
-    $("#respError").append(`<li> Need to provide a location</li>`);
-  }
 
-  $("#barList").empty();
+  // $("#barList").empty();
   $.ajax({
     method: "POST",
     url: "/bars",
@@ -823,8 +857,9 @@ $("#findByLocation").on("submit", (e) => {
       location: location,
       locType: locType,
     }),
-  })
-    .then((res) => {
+  }).then(
+    (res) => {
+      $("#barList").empty();
       const barsInCity = res.reqResponse;
 
       barsInCity.forEach((bar) => {
@@ -848,24 +883,7 @@ $("#findByLocation").on("submit", (e) => {
           )
         );
       });
-    })
-    .fail(function (jqXHR) {
-      $("#respError").append(
-        $(
-          `<li>
-		  <div class="row"></div>
-		
-			<div class="card">
-				${jqXHR.responseJSON.reqResponse} 
-				</div>
-		</a>
-	</li
-					  
-			</li>`
-        )
-      );
-
-      // Request failed. Show error message to user.
-      // errorThrown has error message.
-    });
+    },
+    (res) => $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
+  );
 });
