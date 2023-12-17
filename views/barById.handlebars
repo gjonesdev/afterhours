@@ -13,7 +13,7 @@
 			</h1>
 			<p>{{ratingAverage}}</p>
 			<p> ({{reviewsCount}} reviews)</p>
-			<p> ({{favoritesCount}} favorites)</p>
+			<p> (<span id="favoritesCount">{{favoritesCount}}</span> favorites)</p>
 			{{#each tags}}
 			<li>
 				{{this}}
@@ -74,10 +74,9 @@
 			<input type="hidden" id="barNameToreview" name="barNameToreview" value="{{barName}}">
 			<button>Write a review</button>
 		</form>
-		<form action="/user/favorites" method="POST" id="favorite-button">
+		<form id="favoriteButton">
 			<input type="hidden" id="barId" name="barId" value="{{id}}">
-			<input type="hidden" name="_method" value="PUT">
-			<button type="submit" class="submit-button" >{{favoriteToggle}}</button>
+			<button type="submit" class="submit-button" id="favorite-submit-button">{{favoriteToggle}}</button>
 		</form>
 		{{else}}
 		<a href="/login">You need to be a user to write reviews. Click here to log in!</a>
