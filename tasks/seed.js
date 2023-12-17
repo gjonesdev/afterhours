@@ -311,7 +311,7 @@ try {
 		"Crafted concoctions, vibrant vibes—our bar is a liquid symphony, where spirits dance and stories unfold in every sip.",
 		{
 			streetAddress: "120 Sinatra Dr",
-			city: " Hoboken",
+			city: "Hoboken",
 			state: "NJ",
 			zipCode: "07030",
 		},
@@ -332,7 +332,7 @@ try {
 		"Elevate your spirits in our eclectic sanctuary, where each drink is a brushstroke on the canvas of a memorable night.",
 		{
 			streetAddress: "616 Washington St",
-			city: " Hoboken",
+			city: "Hoboken",
 			state: "NJ",
 			zipCode: "07030",
 		},
@@ -347,31 +347,92 @@ try {
 	console.log(e);
 }
 
-//3 reviews santa ana
+//1 reviews santa ana
 try {
-	testBars[12] = await barData.createBar(
-		"Mikie Squared Bar & Grill",
-		"Elevate your spirits in our eclectic sanctuary, where each drink is a brushstroke on the canvas of a memorable night.",
+	testBars[13] = await barData.createBar(
+		"Mission Bar",
+		"Savor the extraordinary: Mixology mastery, sultry beats, and the epitome of libation luxury",
 		{
-			streetAddress: "616 Washington St",
-			city: " Hoboken",
-			state: "NJ",
-			zipCode: "07030",
+			streetAddress: "302 N Main St",
+			city: "Santa Ana",
+			state: "CA",
+			zipCode: "92701",
 		},
-		"201-792-0001",
-		"mikiesquared@gmail.com",
-		"mikiesquared.com",
+		"657-266-0699",
+		"missionbarsa@gmail.com",
+		"missionbarsa.com",
 		"654438c26ec81bf9429dc36e",
-		["AfterWorkDrinks", "Tacos", "Grill", "Cocktails"]
+		["Margaritas", "Mixology", "BarCrafting", "SignatureCocktails"]
 	);
-	console.log(testBars[12]);
+	console.log(testBars[13]);
 } catch (e) {
 	console.log(e);
 }
 
-//3 reviews orange county
+//1 reviews orange county
+try {
+	testBars[14] = await barData.createBar(
+		"Crabbae West",
+		"Unleash flavor frenzy: Mixtape of bold blends, vibe beats, and liquid euphoria.",
+		{
+			streetAddress: "643 Eagle Rock Ave",
+			city: "West Orange",
+			state: "NJ",
+			zipCode: "07052",
+		},
+		"973-731-5309",
+		"bondstavern.com@gmail.com",
+		"bondstavern.com",
+		"654438c26ec81bf9429dc36e",
+		["DrinkSpecials", "LiveMusic", "BarCrafting", "HappyHourDeals"]
+	);
+	console.log(testBars[14]);
+} catch (e) {
+	console.log(e);
+}
 
-//2 reviews for New York
+//2 reviews for Queens, NY
+try {
+	testBars[15] = await barData.createBar(
+		"43 Bar & Grill",
+		"Intoxicating allure: Intriguing mixes, electric atmosphere, and a symphony of flavors.",
+		{
+			streetAddress: "4306 43rd St",
+			city: "Queens",
+			state: "NY",
+			zipCode: "11104",
+		},
+		"718-361-3090",
+		"bar43.com@gmail.com",
+		"bar43.com",
+		"654438c26ec81bf9429dc36e",
+		["BarCrafting", "AfterWorkDrinks", "WhiskeyTasting", "CraftCocktails"]
+	);
+	console.log(testBars[15]);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	testBars[16] = await barData.createBar(
+		"The Beast Next Door",
+		"Pour perfection: Ambiance meets elixirs, where every sip tells a tale.",
+		{
+			streetAddress: "4251 27th St",
+			city: "Queens",
+			state: "NY",
+			zipCode: "11101",
+		},
+		"718-255-1612",
+		"thebeastnextdoor.com@gmail.com",
+		"thebeastnextdoor.com",
+		"654438c26ec81bf9429dc36e",
+		["LadiesNight", "Mixology", "Tacos", "ChampagneNight"]
+	);
+	console.log(testBars[16]);
+} catch (e) {
+	console.log(e);
+}
 
 
 //  _____  ________      _______ ________          _______ 
@@ -745,6 +806,118 @@ try {
 	console.log(e);
 }
 
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36e",
+		"Ryan",
+		testBars[13].name,
+		testBars[13]._id.toString(),
+		3,
+		"Definition of mid, not too bad tho... lol!"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36f",
+		"Stew",
+		testBars[13].name,
+		testBars[13]._id.toString(),
+		4,
+		"I'd say this place is slightly above average"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36e",
+		"Cat",
+		testBars[14].name,
+		testBars[14]._id.toString(),
+		5,
+		"Love this bar!"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36f",
+		"Neil",
+		testBars[14].name,
+		testBars[14]._id.toString(),
+		4,
+		"Decent bar, really good happy hour!"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36e",
+		"Bob",
+		testBars[15].name,
+		testBars[15]._id.toString(),
+		5,
+		"This bar is fantastic, I brought my grandma and she ate up the dance floor!"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36f",
+		"Mike",
+		testBars[15].name,
+		testBars[15]._id.toString(),
+		4,
+		"I enjoyed the bar! Some guy brought his grandma and it was a bit odd watching her boogie down."
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36e",
+		"Giselle",
+		testBars[16].name,
+		testBars[16]._id.toString(),
+		2,
+		"Dirty and smells bad"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36f",
+		"Miguel",
+		testBars[16].name,
+		testBars[16]._id.toString(),
+		1,
+		"Never ever again..."
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
 //  ________      ________ _   _ _______ _____ 
 // |  ____\ \    / /  ____| \ | |__   __/ ____|
 // | |__   \ \  / /| |__  |  \| |  | | | (___  
@@ -816,6 +989,62 @@ try {
 		"Beers are half off in celebration of the new year! All day special!",
 		"08:00 AM",
 		"11:00 PM"
+	);
+	console.log(testEvent);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const testEvent = await barData.addEvent(
+		testBars[13]._id.toString(),
+		"12/25/2023",
+		"Christmas Celly",
+		"Celebrating Christmas with alcohol and unhealthy food",
+		"10:00 AM",
+		"02:00 PM"
+	);
+	console.log(testEvent);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const testEvent = await barData.addEvent(
+		testBars[14]._id.toString(),
+		"02/14/2024",
+		"VALENTINES AND VODKA",
+		"Pretty self explanatory, be there or be square",
+		"08:00 PM",
+		"11:59 PM"
+	);
+	console.log(testEvent);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const testEvent = await barData.addEvent(
+		testBars[15]._id.toString(),
+		"02/10/2024",
+		"Spring Fling",
+		"Jump for joy this Spring and celebrate with a drink!",
+		"10:00 PM",
+		"11:59 PM"
+	);
+	console.log(testEvent);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const testEvent = await barData.addEvent(
+		testBars[16]._id.toString(),
+		"01/20/2024",
+		"Drake Visit",
+		"Drake is coming to sign autographs! The Canadian rapper is coming to town!",
+		"08:00 AM",
+		"10:00 AM"
 	);
 	console.log(testEvent);
 } catch (e) {
