@@ -25,6 +25,9 @@ let exportedMethods = {
 
     let validTags = [];
     if (tags.length > 0) {
+      if (!Array.isArray(tags)) {
+        tags = tags.split(',')
+      }
       tags.forEach((element) => {
         element = validation.validateOptionalStr(element);
         if (element.length > 0) {
