@@ -287,14 +287,11 @@ router.route("/:barId").get(async (req, res) => {
         let isOwner = false;
         let favoriteToggle = "Favorite";
         if (req.session.user) {
-            console.log(req.session.user);
-            console.log(req.session.user.accountId);
             isOwner = theBar.ownerId === req.session.user.accountId;
             const account = await accountData.getAccount(
                 req.session.user.accountId
             );
             const user = await userData.getUser(account.userId);
-            console.log(user);
             user.favorites.forEach((favorite) => {
                 if (favorite.barId === theBar._id.toString()) {
                     favoriteToggle = "Unfavorite";
@@ -346,7 +343,9 @@ router.route("/barsByFilters").post(async (req, res) => {
     const filters = [];
 
     Object.values(req.body).forEach((filter) => {
-        filters.push(filter);
+        if (filter.trim() !== "" && typeof filter === "string") {
+            filters.push(filter);
+        }
     });
 
     try {

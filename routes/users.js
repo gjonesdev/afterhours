@@ -62,13 +62,9 @@ router.route("/favorites").put(async (req, res) => {
 			req.body.barId
 		);
 		filtersHelp.barDistanceHelper(true);
-		if (bar.updated) {
-			return res.redirect(303, "back");
-		} else {
-			return res.redirect(303, "back");
-		}
+		res.json(bar);
 	} catch (e) {
-		return res.redirect(303, "back");
+		return res.status(500).json({ error: e });
 	}
 });
 
