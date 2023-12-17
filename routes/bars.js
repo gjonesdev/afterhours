@@ -24,6 +24,10 @@ router.route("/").get(async (req, res) => {
     location: location,
     tags: [
       "Sport",
+      "Grill",
+      "Margaritas",
+      "Tacos",
+      "Dance",
       "Cocktails",
       "Mixology",
       "CraftBeer",
