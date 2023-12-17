@@ -22,7 +22,6 @@ let exportedMethods = {
     ownerId = validation.validateId(ownerId);
     website = validation.validateWebsite(website);
     phoneNumber = validation.validatePhone(phoneNumber);
-
     let validTags = [];
     if (tags.length > 0) {
       if (!Array.isArray(tags)) {
@@ -109,26 +108,50 @@ let exportedMethods = {
     });
     return allbars;
   },
-  async barsByFilters(filters) {
-    // validation.validateId(barId);
 
-    const barsCollection = await bars();
+  async barSearch(searchName) {
+    if (!searchName) throw { code: 2, msg: "Input must be provided!" };
+    if (typeof searchName !== "string")
+      throw { code: 2, msg: "Input must be a valid string!" };
+    searchName = searchName.trim();
+    if (searchName.length === 0)
+      throw { code: 2, msg: "Input is an empty string!" };
 
-    if (!filters || filters.length === 0) {
-      return this.allBars();
-    }
+    searchName = searchName.toLowerCase();
+    let multiWorlds = searchName.split(" ");
+    const allBars = await this.allBars();
+    let barsFound = new Set();
 
-    const matchingBars = await barsCollection
-      .find({
-        tags: { $all: filters },
-      })
-      .toArray();
+    let tempTags = [];
 
-    if (!matchingBars || matchingBars.length === 0) {
-      throw "No bars matching the selected tags.";
-    }
+    multiWorlds.forEach((word) => {
+      allBars.forEach((bar) => {
+        const tags = bar.tags;
+        tags.forEach((tag) => {
+          tempTags.push(tag.toLowerCase());
+        });
+        const barName = bar.name.toLowerCase();
+        const barDescription = bar.description.toLowerCase();
 
-    return matchingBars;
+        if (
+          barName.startsWith(word) ||
+          barDescription.includes(word) ||
+          tempTags.includes(word)
+        ) {
+          barsFound.add(bar);
+        }
+      });
+    });
+
+    if (barsFound.size === 0)
+      throw {
+        code: 1,
+        msg: `0 bars found with the name "${searchName}" or a description containing "${searchName}"`,
+      };
+
+    const array = Array.from(barsFound);
+
+    return array;
   },
   async removeBar(barId) {
     validation.validateId(barId);

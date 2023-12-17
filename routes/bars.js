@@ -3,9 +3,8 @@ import { Router } from "express";
 const router = Router();
 import * as validation from "../helpers.js";
 import filtersHelp from "../filterhelper.js";
-import xss from "xss";
-import session from "express-session";
-import date from "date-and-time";
+import "dotenv/config";
+//import { filter } from "bluebird";
 
 router.route("/").get(async (req, res) => {
   let location = true;
@@ -51,7 +50,6 @@ router.route("/").get(async (req, res) => {
       "BarHopping",
     ],
   });
-});
 
 router
     .route("/createBar")
@@ -354,6 +352,41 @@ router.route("/barsByFilters").post(async (req, res) => {
     } catch (e) {
         res.status(404).json({ error: e });
     }
+});
+router.route("/noLocReset").post(async (req, res) => {
+  if (req.body.userLoc === "off") {
+    const allBars = await filtersHelp.allBarsPlus();
+    const allTheBars = await filtersHelp.sortedByRating(allBars);
+    renderedList = allTheBars;
+    res.json({ allBars: allTheBars });
+  }
+});
+router.route("/sortBy").post(async (req, res) => {
+  // TODO: validate info
+  const sortOption = req.body.option;
+  let sorted = [];
+  if (sortOption === "highestrating") {
+    sorted = await filtersHelp.sortedByRating(renderedList);
+  } else if (sortOption === "mostFavorites") {
+    sorted = await filtersHelp.sortedByLikes(renderedList);
+  } else if (sortOption === "mostReviews") {
+    sorted = await filtersHelp.sortedReviews(renderedList);
+  } else if (sortOption === "closest") {
+    sorted = await filtersHelp.sortedBarsbyDistance(renderedList);
+  }
+  res.json({ reqResponse: sorted });
+});
+
+router.route("/tags").get(async (req, res) => {
+  const tagsToRender = new Set();
+
+  renderedList.forEach((bar) => {
+    const tags = bar.bar.tags;
+    tags.forEach((t) => {
+      tagsToRender.add(t);
+    });
+  });
+  res.json({ reqResponse: sorted });
 });
 
 export default router;

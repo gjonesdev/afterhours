@@ -30,14 +30,13 @@
                         >hours</strong></a>
 
                     <div class="search-bar">
-                        <input
-                            type="text"
-                            placeholder="Search the #happyHour Magic"
-                        />
-                        <button type="submit"><i
-                                class="fa fa-search"
-                            ></i></button>
-                    </div>
+                        <form action="/bars/searchBar" method="post">
+                            <label for="searchInput"></label>
+                            <input type="text" placeholder="Search the #happyHour Magic" name="searchInput"
+                                id="searchInput">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+				    </div>
 
                     <ul class="nav-links">
                         <li><a href="/bars"> Bar's List</a></li>
@@ -100,7 +99,6 @@
                         <li><a href="/privacy">Privacy Policy</a></li>
                         <li><a href="/terms">Terms & Conditions</a></li>
                         <li><a href="/reviews"> Reviews </a></li>
-
                     </ul>
                 </div>
 
