@@ -14,8 +14,12 @@ export const rewriteUnsupportedBrowserMethods = (req, res, next) => {
 };
 
 export const defaultRedirect = async (req, res, next, app) => {
-  app.locals.authenticated = !!req.session.user;
-
+  if (req.session.user) {
+    app.locals.authenticated = true;
+    app.locals.authenticatedOwner = req.session.user.accountType === "owner";
+  } else {
+    app.locals.authenticated = false;
+  }
   console.log(
     `[${new Date().toUTCString()}]: ${req.method} ${req.originalUrl} (${
       app.locals.authenticated ? "Authenticated User" : "Non-Authenticated User"

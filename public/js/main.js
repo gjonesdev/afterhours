@@ -815,7 +815,7 @@ const successCallback = (position) => {
           $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
       );
     };
-    /*
+
     $("#findByLocation").on("submit", (e) => {
       e.preventDefault();
       $("#respError").empty();
@@ -862,7 +862,7 @@ const successCallback = (position) => {
           $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
       );
     });
-*/
+
     //----------------------------------------SORT AND FILTERS (location allowed)---------------------------------------------------------------
     // Sorting loc allowed rendered list
     $("#sortBySelector").change((e) => {
@@ -913,42 +913,59 @@ const successCallback = (position) => {
 
 //-----------------------------------------------------------Location NOT allowed-------------------------------------------------------------
 const errorCallback = (error) => {
-  if (document.URL.includes("/bars")) {
-    console.log("this is working");
-    console.log(document.URL);
-
+  if (document.URL.includes("/")) {
+    const latitude = "40.730610";
+    const longitude = "-73.935242";
+    //Bar of the day AJAX function
     (function ($) {
-      let allBars = $("#barList");
-      let noLocBars = {
+      let BODArea = $("#BOD-area");
+      let userLocationReq = {
         method: "POST",
-        url: "/bars/noLocReset",
+        url: "/",
         contentType: "application/json",
         data: JSON.stringify({
-          isAllowed: false,
+          latitude: latitude,
+          longitude: longitude,
         }),
       };
-      $.ajax(noLocBars).then(function (res) {
-        const allSortedBars = res.allBars;
-        $("#barList").empty();
-
-        allSortedBars.forEach((bar) => {
+      $.ajax(userLocationReq).then(function (responseMessage) {
+        if (responseMessage.BOD.name) {
           let element = $(
-            `<a href="/bars/${res._id}">
-				<div class="card">
-					${bar.bar.name} <br>					
-					${bar.bar.location.city} <br>
-					${bar.bar.ratingAverage} <br>
-					${bar.bar.reviewsCount} reviews <br>
-					${bar.bar.favoritesCount} favorites <br>
-				</div>
-			  </a>`
+            `<a href="/bars/${responseMessage.BOD._id}">
+          <div class="card">
+              ${responseMessage.BOD.name} <br>
+              ${responseMessage.BOD.description} <br>
+              ${responseMessage.BOD.location.city} <br>
+              ${responseMessage.BOD.ratingAverage} <br>
+              ${responseMessage.BOD.reviewsCount} reviews <br>
+              ${responseMessage.BOD.favoritesCount} favorites <br>
+          </div>
+        </a>`
           );
-          allBars.append(element);
-        });
-      });
-    });
+          BODArea.append(element);
+        } else if (responseMessage.BOD.noBarsFound) {
+          let element = $(`<a href="/register">
+			<div class="card">
+				${responseMessage.BOD.noBarsFound} <br>
+				<p>If you want to add the first one, click here to create your bussines account!</p><br>
+			</div>
+		</a>`);
 
-    //----------------------Sorting without location allowed-------------------------------------
+          BODArea.append(element);
+        } else {
+          let element = $(`
+			<div class="card">
+				
+				<p>Server Error</p><br>
+			</div>
+		</a>`);
+        }
+      });
+    })(window.jQuery); //End jQuery
+  } //
+
+  if (document.URL.includes("/")) {
+    //---------------------- without location allowed-------------------------------------
 
     $("#sortBySelector").change((e) => {
       e.preventDefault();
