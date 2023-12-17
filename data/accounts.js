@@ -140,7 +140,7 @@ export const deleteAccount = async (accountId, password) => {
 
 export const login = async (loginInfo) => {
 	loginInfo.email = validateEmail(loginInfo.email);
-	loginInfo.password = validatePassword(loginInfo.password);
+	loginInfo.password = loginInfo.password.trim();
 
 	const accountCollection = await accounts();
 	const account = await accountCollection.findOne({

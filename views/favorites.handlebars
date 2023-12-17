@@ -1,0 +1,25 @@
+<ul>
+	<li><a href="/account" id="account-tab">Account Info</a></li>
+	<li><a href="/account/favorites" id="favorites-tab">Favorites</a></li>
+	<li><a href="/account/reviews" id="reviews-tab">My Reviews</a></li>
+	{{#if account.bars}}
+	<li><a href="/account/bars" id="bars-tab">My Bars</a></li>
+	{{/if}}
+</ul>
+
+<div id="favorites-section">
+	{{#if user.favorites}}
+
+	{{#each user.favorites}}
+	<p>{{this.barName}}</p>
+	<form action="/user/favorites" method="POST" id="favorite-button">
+		<input type="hidden" id="barId" name="barId" value="{{this.barId}}">
+		<input type="hidden" name="_method" value="PUT">
+		<button type="submit" class="submit-button">Remove Favorite</button>
+	</form>
+	{{/each}}
+
+	{{else}}
+	<p>No favorites yet.</p>
+	{{/if}}
+</div>

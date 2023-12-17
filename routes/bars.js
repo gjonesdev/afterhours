@@ -4,35 +4,82 @@ const router = Router();
 import * as validation from "../helpers.js";
 import filtersHelp from "../filterhelper.js";
 import xss from "xss";
-
-router.route("/test").get(async (req, res) => {
-  res.render("test", {});
-});
+import session from "express-session";
+import date from "date-and-time";
 
 router.route("/").get(async (req, res) => {
-  let bars = await filtersHelp.sortedBarsbyDistance();
-  if (!bars.length) {
+  let location = true;
+  let allTheBars = {};
+  //TODO: condition to work when loc if off.
+  let barsDistance = await filtersHelp.sortedBarsbyDistance();
+  if (barsDistance.length === 0) {
     const allBars = await barData.allBars();
-    const sortedBars = await filtersHelp.sortedByRating(allBars);
-    bars = sortedBars;
-    return res.render("bars", {
-      bars: bars,
-      hasLocation: false,
-    });
+    location = false;
+    allTheBars = await filtersHelp.sortedByRating(allBars);
+  } else {
+    allTheBars = barsDistance;
   }
-
   res.render("bars", {
-    bars: bars,
-    hasLocation: true,
+    bars: allTheBars,
+    location: location,
+    tags: [
+      "Sport",
+      "Cocktails",
+      "Mixology",
+      "CraftBeer",
+      "WineWednesday",
+      "BarEvents",
+      "DrinkSpecials",
+      "ThirstyThursday",
+      "LiveMusic",
+      "BeerTasting",
+      "MixandMingle",
+      "LadiesNight",
+      "BarCrafting",
+      "Tapas",
+      "ChampagneNight",
+      "AfterWorkDrinks",
+      "SignatureCocktails",
+      "WhiskeyTasting",
+      "HappyHourDeals",
+      "CraftCocktails",
+      "Shots",
+      "BarHopping",
+    ],
   });
 });
 
 router
   .route("/createBar")
   .get(async (req, res) => {
+    if (!req.session.user) {
+      return res.render("error", {
+        error: { status: 403, message: "Prohibited area" },
+        message: "You need a owner account to access this area!",
+      });
+    }
+    const account = await accountData.getAccount(req.session.user.accountId);
+    const accountType = account.accountType;
+    if (accountType !== "owner") {
+      return res.render("error", {
+        error: { status: 403, message: "Prohibirted area" },
+        message: "This function is not allowed for your account type",
+      });
+    }
+
     res.render("createBar");
   })
   .post(async (req, res) => {
+    const account = await accountData.getAccount(req.session.user.accountId);
+    const accountId = req.session.user.accountId;
+    const accountType = account.accountType;
+    if (accountType !== "owner") {
+      res.render("error", {
+        error: { status: 403, message: "Prohibited area" },
+        message: "This function is not allowed for your account type",
+      });
+    }
+
     req.body = req.body;
     let theBar = {};
     const errors = [];
@@ -41,6 +88,7 @@ router
     const state = req.body.createState;
     const zipCode = req.body.createZipCode;
     const location = { streetAddress, city, state, zipCode };
+    const tags = req.body.tags;
 
     if (!req.body) {
       errors.push("Information needs to be provided");
@@ -92,8 +140,8 @@ router
         req.body.createPhone,
         req.body.createEmail,
         req.body.createWebsite,
-        "65609846293d2b1722d25c38",
-        ["sport", "grill"]
+        accountId,
+        tags
       );
       filtersHelp.barDistanceHelper(true);
     } catch (e) {
@@ -129,7 +177,7 @@ router.route("/editBar").post(async (req, res) => {
       phone: theBar.phone,
     });
   } catch (e) {
-    res.status(404).json({ error: "Bar not found!" });
+    res.status(500).json({ error: "Server Error" });
   }
 });
 
@@ -204,10 +252,6 @@ router.route("/update").post(async (req, res) => {
   }
 });
 
-router.route("/addEvent").get(async (req, res) => {
-  res.render("newEvent", {});
-});
-
 router.route("/:barId").get(async (req, res) => {
   try {
     req.params.barId = validation.validateId(req.params.barId);
@@ -237,6 +281,21 @@ router.route("/:barId").get(async (req, res) => {
     });
   } catch (e) {
     res.status(404).json({ error: "Bar not found!" });
+  }
+});
+
+router.route("/barsByFilters").post(async (req, res) => {
+  const filters = [];
+
+  Object.values(req.body).forEach((filter) => {
+    filters.push(filter); //.toLowerCase();
+  });
+
+  try {
+    const bars = await barData.barsByFilters(filters);
+    res.json(bars);
+  } catch (e) {
+    res.status(404).json({ error: e });
   }
 });
 

@@ -7,14 +7,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{{title}} | AfterHours</title>
 
+	
 	<link rel="stylesheet" href="/public/css/styles.css">
-
+	{{!
 	<!--FONT AWESOME-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<!--GOOGLE FONTS-->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap" rel="stylesheet">!}}
 
 </head>
 
@@ -37,7 +38,7 @@
 				<ul class="nav-links">
 					<li><a href="/bars"> Bar's List</a></li>
 					{{#if authenticated}}
-					<li><a href="/bars"> Create Bar</a></li>
+					<li><a href="/bars/createbar"> Create Bar</a></li>
 					<li><a href="/account">My Account</a></li>
 					<li><a href="/logout">Logout</a></li>
 					{{else}}
@@ -68,10 +69,10 @@
 	<footer>
 		<div class="footer">
 			<div class="row">
-				<a href="#"><i class="fa fa-facebook"></i></a>
-				<a href="#"><i class="fa fa-instagram"></i></a>
-				<a href="#"><i class="fa fa-youtube"></i></a>
-				<a href="#"><i class="fa fa-twitter"></i></a>
+				<a href="https://www.facebook.com/profile.php?id=61554321882639"><i class="fa fa-facebook"></i></a>
+				<a href="https://www.instagram.com/afterhourshappyhour/"><i class="fa fa-instagram"></i></a>
+				<a href="https://www.youtube.com/watch?v=ztofJZK0t_0"><i class="fa fa-youtube"></i></a>
+				<a href="https://twitter.com/AfterHours21522"><i class="fa fa-twitter"></i></a>
 			</div>
 
 			<div class="row">
@@ -80,7 +81,8 @@
 					<li><a href="/services">Our Services</a></li>
 					<li><a href="/privacy">Privacy Policy</a></li>
 					<li><a href="/terms">Terms & Conditions</a></li>
-					
+					<li><a href="/reviews"> Reviews </a></li>
+
 				</ul>
 			</div>
 

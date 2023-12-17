@@ -89,7 +89,7 @@ router
 
       await reviewData.deleteReview(reviewId, review.barId);
 
-      res.redirect("/account");
+      res.redirect("/account/reviews");
     } catch (e) {
       return res.status(404).json({ error: e });
     }
@@ -127,7 +127,7 @@ router
         req.body.comment
       );
 
-      res.redirect("/account");
+      res.redirect("/account/reviews");
     } catch (error) {
       const reviewId = req.params.reviewId;
       const review = await reviewData.get(reviewId);

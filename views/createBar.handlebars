@@ -24,33 +24,45 @@
 <div class="login-container">
     <div class="login-box">
         <h2>#Create a Bar 🍺</h2>
+        {{#if isError}}
+        <ul>
+            {{#each errors}}
+            <li>
+                <p>{{this}}</p>
+            </li>
+
+            {{/each}}
+        </ul>
+
+
+        {{/if}}
         <form action="/bars/createBar" method="post" id="bar-create" enctype="multipart/form-data">
 
             <label for="barId"></label>
             <input type="hidden" value="{{id}}" name="createBarId" id="createBarId" required="">
 
-            <div class="user-box">
+            <div class="input-box">
                 <input type="text" value="{{barName}}" name="createName" id="createName" required="">
                 <label for="createName">Bar Name</label>
             </div>
 
-            <div class="user-box">
+            <div class="input-box">
                 <input type="text" value="{{description}}" name="createDesc" id="createDesc" required="">
                 <label for="createDesc">Description</label>
             </div>
 
-            <div class="user-box">
+            <div class="input-box">
                 <input type="text" value="{{location.streetAddress}}" name="createAddress" id="createAddress"
                     required="">
                 <label for="createAddress">Address</label>
             </div>
 
-            <div class="user-box">
+            <div class="input-box">
                 <input type="text" value="{{location.city}}" name="createCity" id="createCity" required="">
                 <label for="createCity">City</label>
             </div>
 
-            <div class="user-box">
+            <div class="input-box">
                 <p>State:</p>
                 <label for="createState"></label>
                 <select name="createState" id="createState">
@@ -108,52 +120,65 @@
                 </select>
             </div>
 
-            <div class="user-box">
+            <div class="input-box">
                 <input type="text" value="{{location.zipCode}}" name="createZipCode" id="createZipCode" required="">
                 <label for="createZipCode">Zip</label>
             </div>
 
-            <div class="user-box">
+            <div class="input-box">
                 <input type="text" value="{{email}}" name="createEmail" id="createEmail" required="">
                 <label for="createEmail">Email</label>
             </div>
 
-            <div class="user-box">
+            <div class="input-box">
                 <input type="text" value="{{phone}}" name="createPhone" id="createPhone" required="">
                 <label for="createPhone">Phone</label>
             </div>
 
-            <div class="user-box">
+            <div class="input-box">
                 <input type="text" value="{{website}}" name="createWebsite" id="createWebsite" required="">
                 <label for="createWebsite">Website</label>
             </div>
+            <div>
+                <label for="tags">Choose some tags:</label>
+                <select name="tags" id="tags" multiple>
+                    <option value="Sport">#Sport</option>
+                    <option value="Grill">#Grill</option>
+                    <option value="Margaritas">#Margaritas</option>
+                    <option value="Tacos">#Tacos</option>
+                    <option value="Dance">#Dance</option>
 
-            <div class="user-box">
+                </select>
+
+            </div>
+
+            <div class="input-box">
                 <input type="file" accept="image/jpeg, image/png, image/jpg" id="imageUpload" name="file" multiple>
                 <label for="imageUpload"></label>
             </div>
 
             <button type="submit" class="submit-button">
-				<span></span>
-				<span></span>
-				<span></span>
-				<span></span>
-				#CraftMeaBar
-			</button>
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                #CraftMeaBar
+            </button>
 
         </form>
     </div>
 
-<div class="message-container">
+    <div class="message-container">
+        <div class="message-container">
 
-		{{#if error}}
-		<p class="response-error">Error {{error.status}}: {{error.message}}</p>
-		{{/if}}
-		<ul id="error-list" class="error-list hide"></ul>
-		<p>Already have an account?</p></br>
-		<a class="link" href="/login">Click here to login!</a>
+            {{#if error}}
+            <p class="response-error">Error {{error.status}}: {{error.message}}</p>
+            {{/if}}
+            <ul id="error-list" class="error-list hide"></ul>
+            <p>Already have an account?</p></br>
+            <a class="link" href="/login">Click here to login!</a>
 
 
-	</div>
+        </div>
 
-</div>
+    </div>
