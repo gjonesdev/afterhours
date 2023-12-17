@@ -7,9 +7,7 @@
 		<div class="profile-nav-info">
 			<h3 class="user-name">{{barName}}</h3>
 			<div class="address">
-				<p class="state">
 				<p> {{location.streetAddress}}, {{location.city}}, {{location.state}}, {{location.zipCode}} </p>
-				</p>
 			</div>
 		</div>
 		<div class="profile-option">
@@ -30,11 +28,11 @@
 					<p class="bio">{{description}}</p>
 				</div>
 				<div class="profile-btn">
-					<button class="chatbtn" id="chatBtn"><i class="fa fa-comment"></i> Chat</button>
-					<button class="createbtn" id="Create-post"><i class="fa fa-plus"></i> Create</button>
+					<button class="chatbtn" id="chatBtn"><i class="fa fa-comment"></i> Leave a Review</button>
+					<button class="createbtn" id="Create-post"><i class="fa fa-plus"></i>Make it a Favorite</button>
 				</div>
 				<div class="user-rating">
-					<h3 class="rating">{{ratingAverage}}</h3>
+					<h3 class="rating">Average Rating: {{ratingAverage}}</h3>
 					<div class="rate">
 						<div class="star-outer">
 							<div class="star-inner">
@@ -45,7 +43,7 @@
 								<i class="fa fa-star"></i>
 							</div>
 						</div>
-						<span class="no-of-user-rate"><span>123</span>&nbsp;&nbsp;reviews</span>
+						<span class="no-of-user-rate"><span>{{reviews.length}}</span>&nbsp;&nbsp;reviews</span>
 					</div>
 				</div>
 			</div>

@@ -539,6 +539,7 @@ header {
 .delete-button {
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 40px;
 	display: block;
 	background-color: #071a4f;
 }
@@ -1148,6 +1149,7 @@ p.error {
 	min-width: calc(15% - 20px);
 	box-sizing: border-box;
 	text-align: center;
+	margin-top: 25px;
 }
 
 
@@ -1203,15 +1205,114 @@ p.error {
 	box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
 		0 0 100px #03e9f4;
 }
-.filters {
-	width: fit-content;
+
+/*filter*/
+
+@supports (-webkit-appearance: none) or (-moz-appearance: none) {
+	input[type='checkbox'] {
+	  --active: #275EFE;
+	  --active-inner: #fff;
+	  --focus: 2px rgba(39, 94, 254, .3);
+	  --border: #BBC1E1;
+	  --border-hover: #275EFE;
+	  --background: #fff;
+	  --disabled: #F6F8FF;
+	  --disabled-inner: #E1E6F9;
+	  -webkit-appearance: none;
+	  -moz-appearance: none;
+	  height: 21px;
+	  outline: none;
+	  display: inline-block;
+	  vertical-align: top;
+	  position: relative;
+	  margin: 0;
+	  cursor: pointer;
+	  border: 1px solid var(--bc, var(--border));
+	  background: var(--b, var(--background));
+	  transition: background .3s, border-color .3s, box-shadow .2s;
+	  &:after {
+		content: '';
+		display: block;
+		left: 0;
+		top: 0;
+		position: absolute;
+		transition: transform var(--d-t, .3s) var(--d-t-e, ease), opacity var(--d-o, .2s);
+	  }
+	  &:checked {
+		--b: var(--active);
+		--bc: var(--active);
+		--d-o: .3s;
+		--d-t: .6s;
+		--d-t-e: cubic-bezier(.2, .85, .32, 1.2);
+	  }
+	  &:disabled {
+		--b: var(--disabled);
+		cursor: not-allowed;
+		opacity: .9;
+		&:checked {
+		  --b: var(--disabled-inner);
+		  --bc: var(--border);
+		}
+	  }
+	  &:hover {
+		&:not(:checked) {
+		  &:not(:disabled) {
+			--bc: var(--border-hover);
+		  }
+		}
+	  }
+	  &:focus {
+		box-shadow: 0 0 0 var(--focus);
+	  }
+	  &:not(.switch) {
+		width: 21px;
+		&:after {
+		  opacity: var(--o, 0);
+		}
+		&:checked {
+		  --o: 1;
+		}
+	  }
+	  & + label {
+		font-size: 14px;
+		line-height: 21px;
+		display: inline-block;
+		vertical-align: top;
+		cursor: pointer;
+		margin-left: 4px;
+	  }
+	  &:not(.switch) {
+		border-radius: 7px;
+		&:after {
+		  width: 5px;
+		  height: 9px;
+		  border: 2px solid var(--active-inner);
+		  border-top: 0;
+		  border-left: 0;
+		  left: 7px;
+		  top: 4px;
+		  transform: rotate(var(--r, 20deg));
+		}
+		&:checked {
+		  --r: 43deg;
+		}
+	  }
+	}
+  }
+
+ .filters {
+	width: 200px;
 	display: flex;
 	flex-direction: column;
-}
+	margin-bottom: 10px;
+	margin-left: 30px;
+ }
 
-.checkbox {
-	display: flex;
-}
+ .checkbox label {
+	color: #fff; 
+	padding: 3px; 
+  }
+
 .favoriteLinks {
 	list-style: none;
 	padding: 0;
@@ -1237,12 +1338,12 @@ p.error {
 	text-decoration: none;
 	display: block;
 	padding: 1rem;
-}
+} */
 
 /* Profile css */
 
 .barId-wrapper{
-	margin-top: 100px;
+	margin-top: 200px;
 }
 .profile-header {
 	background: rgba(0, 0, 0, 0.5);
@@ -1283,7 +1384,7 @@ p.error {
 .profile-nav-info .address {
 	display: flex;
 	font-weight: bold;
-	color: rgb(0, 0, 0);
+	color: rgb(255, 255, 255);
 }
 
 .profile-nav-info .user-name{
@@ -1295,6 +1396,8 @@ p.error {
 .profile-nav-info .address p {
 	margin-top: -10px;
 }
+
+
 
 .profile-option {
 	width: 40px;
@@ -1361,7 +1464,6 @@ p.error {
 	background: rgba(0, 0, 0, 0.5);
 	box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
 	padding: 90px 30px 20px;
-	font-family: "Bree Serif", serif;
 	margin-left: 10px;
 	z-index: 99;
 }
@@ -1406,7 +1508,11 @@ button.createbtn {
 
 button.chatbtn:hover,
 button.createbtn:hover {
-	background: rgba(288, 0, 70, 0.9);
+	background: #03e9f4;
+	color: #fff;
+	border-radius: 5px;
+	box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4,
+		0 0 100px #03e9f4;
 }
 
 button.chatbtn i,
@@ -1414,20 +1520,32 @@ button.createbtn i {
 	margin-right: 5px;
 }
 
+.user-bio h3{
+	color: white;
+	font-size: 1.5em;
+}
+
+.no-of-user-rate{
+	color: white;
+	
+}
+
 .user-rating {
-	display: flex;
+	
+	width: 100%;
 }
 
 .user-rating h3 {
-	font-size: 2.5rem;
+	font-size: 1rem;
 	font-weight: 200;
 	margin-right: 5px;
 	letter-spacing: 1px;
-	color: #666;
+	color: #fffcfc;
 }
 
 .user-rating .no-of-user-rate {
-	font-size: 0.9rem;
+	font-size: 1rem;
+	width: 100%;
 }
 
 .rate {
@@ -1436,11 +1554,12 @@ button.createbtn i {
 
 .rate i {
 	font-size: 0.9rem;
-	color: rgba(228, 0, 70, 1);
+	color: rgb(238, 238, 238);
 }
 
 .nav {
 	width: 100%;
+	min-width: 979px;
 	z-index: -1;
 	margin-top: 0;
 }
@@ -1470,7 +1589,7 @@ button.createbtn i {
 }
 
 .profile-body {
-	width: 100%;
+	width: 97%;
 	z-index: -1;
 }
 
