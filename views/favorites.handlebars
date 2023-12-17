@@ -1,25 +1,40 @@
-<ul>
-	<li><a href="/account" id="account-tab">Account Info</a></li>
-	<li><a href="/account/favorites" id="favorites-tab">Favorites</a></li>
-	<li><a href="/account/reviews" id="reviews-tab">My Reviews</a></li>
-	{{#if account.bars}}
-	<li><a href="/account/bars" id="bars-tab">My Bars</a></li>
-	{{/if}}
-</ul>
+<div class="account-nav">
+    <a class="account-link" href="/account" id="account-tab">Account Info</a>
+    <a
+        class="account-link active"
+        href="/account/favorites"
+        id="favorites-tab"
+    >Favorites</a>
+    <a class="account-link" href="/account/reviews" id="reviews-tab">My Reviews</a>
+    {{#if authenticatedOwner}}
+        <a class="account-link" href="/account/bars" id="bars-tab">My Bars</a>
+    {{/if}}
+</div>
 
-<div id="favorites-section">
-	{{#if user.favorites}}
+<div class="favorites-section" id="favorites-section">
+    {{#if user.favorites}}
 
-	{{#each user.favorites}}
-	<p>{{this.barName}}</p>
-	<form action="/user/favorites" method="POST" id="favorite-button">
-		<input type="hidden" id="barId" name="barId" value="{{this.barId}}">
-		<input type="hidden" name="_method" value="PUT">
-		<button type="submit" class="submit-button">Remove Favorite</button>
-	</form>
-	{{/each}}
+        {{#each user.favorites}}
+            <div class="favorite-listing">
+                <h2 class="favorites-h2">{{this.barName}}</h2>
+                <form
+                    action="/user/favorites"
+                    method="POST"
+                    id="favorite-button"
+                >
+                    <input
+                        type="hidden"
+                        id="barId"
+                        name="barId"
+                        value="{{this.barId}}"
+                    />
+                    <input type="hidden" name="_method" value="PUT" />
+                    <button type="submit" class="submit-button">Remove Favorite</button>
+                </form>
+            </div>
+        {{/each}}
 
-	{{else}}
-	<p>No favorites yet.</p>
-	{{/if}}
+    {{else}}
+        <p>No favorites yet.</p>
+    {{/if}}
 </div>

@@ -67,17 +67,21 @@
 	<div>
 
 		{{#if authenticated}}
-		<form action="/reviews" method="post" id="review-button">
-			<label for="barIdToreview"></label>
-			<input type="hidden" id="barIdToreview" name="barIdToreview" value="{{id}}">
-			<label for="barNameToreview"></label>
-			<input type="hidden" id="barNameToreview" name="barNameToreview" value="{{barName}}">
-			<button>Write a review</button>
-		</form>
+			{{#if reviewEmpty}}
+			<form action="/reviews" method="post" id="review-button">
+				<label for="barIdToreview"></label>
+				<input type="hidden" id="barIdToreview" name="barIdToreview" value="{{id}}">
+				<label for="barNameToreview"></label>
+				<input type="hidden" id="barNameToreview" name="barNameToreview" value="{{barName}}">
+				<button>Write a review</button>
+			</form>
+			{{/if}}
+		{{/if}}
+		{{#if authenticated}}
 		<form action="/user/favorites" method="POST" id="favorite-button">
 			<input type="hidden" id="barId" name="barId" value="{{id}}">
 			<input type="hidden" name="_method" value="PUT">
-			<button type="submit" class="submit-button">Favorite</button>
+			<button type="submit" class="submit-button" >{{favoriteToggle}}</button>
 		</form>
 		{{else}}
 		<a href="/login">You need to be a user to write reviews. Click here to log in!</a>

@@ -125,7 +125,7 @@ let exportedMethods = {
       .toArray();
 
     if (!matchingBars || matchingBars.length === 0) {
-      throw "No bars found.";
+      throw "No bars matching the selected tags.";
     }
 
     return matchingBars;
@@ -203,7 +203,7 @@ let exportedMethods = {
     startTime = validation.validateTime(startTime, "Start Time");
     endTime = validation.validateTime(endTime, "End Time");
 
-    //Making sure end time is greater thand start time
+    //Making sure end time is greater than start time
     let sTimeObj = date.parse(startTime, "hh:mm A");
     let eTimeObj = date.parse(endTime.toUpperCase(), "hh:mm A");
     const minEndTime = date.addMinutes(sTimeObj, 30);

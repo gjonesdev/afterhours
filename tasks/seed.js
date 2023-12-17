@@ -18,6 +18,7 @@ await db.dropDatabase();
 //Summary: Everything works properly once running application in browser but is unable to be exactly recreated in the seed.js, we did not want to be able to pull account ids from anywhere
 //but the session.
 
+//console.log("LOADING ACCOUNTS.... please wait")
 // try {
 // 	let testAccount1 = await accountData.createAccount(
 // 		{
@@ -64,7 +65,7 @@ await db.dropDatabase();
 
 let testBars = [];
 
-//creating 40 bars to reference
+//creating 20 bars to reference
 for (let i = 1; i <= 20; i++) {
   testBars.push(`bar${i}`);
 }
@@ -306,25 +307,71 @@ try {
 //2 bars in Hoboken, NJ
 try {
 	testBars[11] = await barData.createBar(
-		"Airport Pub",
-		"Find a hidden gem where good times flow. Our bar invites you to indulge in lively spirits and great company.",
+		"Wicked Wolf Tavern",
+		"Crafted concoctions, vibrant vibes—our bar is a liquid symphony, where spirits dance and stories unfold in every sip.",
 		{
-			streetAddress: "65 County Rd 639",
-			city: "Sussex",
+			streetAddress: "120 Sinatra Dr",
+			city: " Hoboken",
 			state: "NJ",
-			zipCode: "07461",
+			zipCode: "07030",
 		},
-		"973-702-1215",
-		"airportpub@gmail.com",
-		"m.facebook.com/airportpub/",
+		"201-659-7500",
+		"info@wickedwolfhoboken.com",
+		"wickedwolfhoboken.com",
 		"654438c26ec81bf9429dc36e",
-		["BarHopping", "Shots"]
+		["WineWednesday", "LiveMusic", "Shots","LadiesNight"]
 	);
 	console.log(testBars[11]);
 } catch (e) {
 	console.log(e);
 }
 
+try {
+	testBars[12] = await barData.createBar(
+		"Mikie Squared Bar & Grill",
+		"Elevate your spirits in our eclectic sanctuary, where each drink is a brushstroke on the canvas of a memorable night.",
+		{
+			streetAddress: "616 Washington St",
+			city: " Hoboken",
+			state: "NJ",
+			zipCode: "07030",
+		},
+		"201-792-0001",
+		"mikiesquared@gmail.com",
+		"mikiesquared.com",
+		"654438c26ec81bf9429dc36e",
+		["AfterWorkDrinks", "Tacos", "Grill", "Cocktails"]
+	);
+	console.log(testBars[12]);
+} catch (e) {
+	console.log(e);
+}
+
+//3 reviews santa ana
+try {
+	testBars[12] = await barData.createBar(
+		"Mikie Squared Bar & Grill",
+		"Elevate your spirits in our eclectic sanctuary, where each drink is a brushstroke on the canvas of a memorable night.",
+		{
+			streetAddress: "616 Washington St",
+			city: " Hoboken",
+			state: "NJ",
+			zipCode: "07030",
+		},
+		"201-792-0001",
+		"mikiesquared@gmail.com",
+		"mikiesquared.com",
+		"654438c26ec81bf9429dc36e",
+		["AfterWorkDrinks", "Tacos", "Grill", "Cocktails"]
+	);
+	console.log(testBars[12]);
+} catch (e) {
+	console.log(e);
+}
+
+//3 reviews orange county
+
+//2 reviews for New York
 
 
 //  _____  ________      _______ ________          _______ 
@@ -558,6 +605,146 @@ try {
 	console.log(e);
 }
 
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36e",
+		"Patrick",
+		testBars[8].name,
+		testBars[8]._id.toString(),
+		5,
+		"Great bar! Will go back!"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36f",
+		"Matilda",
+		testBars[8].name,
+		testBars[8]._id.toString(),
+		5,
+		"That Patrick guys sure is right, awesome place!"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36e",
+		"Michael",
+		testBars[9].name,
+		testBars[9]._id.toString(),
+		4,
+		"Decent place, the wifi signal was very limited so I could not post on facebook!"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36f",
+		"Gaetano",
+		testBars[9].name,
+		testBars[9]._id.toString(),
+		5,
+		"Good drinks and music."
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36e",
+		"Gianna",
+		testBars[10].name,
+		testBars[10]._id.toString(),
+		4,
+		"The mixed drinks were stellar and I enjoyed the atmosphere!"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36f",
+		"Becky",
+		testBars[10].name,
+		testBars[10]._id.toString(),
+		3,
+		"The kids that go there are loud and obnoxious"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36e",
+		"Amy",
+		testBars[11].name,
+		testBars[11]._id.toString(),
+		1,
+		"They didn't met me in because they thought my ID was fake! If I could give 0 stars I would..."
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36f",
+		"Kole",
+		testBars[11].name,
+		testBars[11]._id.toString(),
+		5,
+		"They had very tight security and it made me feel safe! They didn't even let this girl in who had a fake ID!"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36e",
+		"Amy",
+		testBars[12].name,
+		testBars[12]._id.toString(),
+		1,
+		"They didn't met me in because they thought my ID was fake! If I could give 0 stars I would..."
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const review = await reviewData.createReview(
+		"654438c26ec81bf9429dc36f",
+		"Kole",
+		testBars[12].name,
+		testBars[12]._id.toString(),
+		5,
+		"They had very tight security and it made me feel safe! They didn't even let this girl in who had a fake ID!"
+	);
+	console.log(review);
+} catch (e) {
+	console.log(e);
+}
+
 //  ________      ________ _   _ _______ _____ 
 // |  ____\ \    / /  ____| \ | |__   __/ ____|
 // | |__   \ \  / /| |__  |  \| |  | | | (___  
@@ -601,6 +788,34 @@ try {
 		"Test your knowledge and enjoy great drinks at 8 PM!",
 		"08:00 PM",
 		"10:00 PM"
+	);
+	console.log(testEvent);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const testEvent = await barData.addEvent(
+		testBars[9]._id.toString(),
+		"12/29/2023",
+		"BOGO SHOTS",
+		"Buy a shot get a shot, starting at 6pm",
+		"06:00 PM",
+		"08:00 PM"
+	);
+	console.log(testEvent);
+} catch (e) {
+	console.log(e);
+}
+
+try {
+	const testEvent = await barData.addEvent(
+		testBars[11]._id.toString(),
+		"01/01/2024",
+		"New Years, More Beers",
+		"Beers are half off in celebration of the new year! All day special!",
+		"08:00 AM",
+		"11:00 PM"
 	);
 	console.log(testEvent);
 } catch (e) {

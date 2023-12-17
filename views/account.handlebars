@@ -1,92 +1,153 @@
-<ul>
-	<li><a href="/account" id="account-tab">Account Info</a></li>
-	<li><a href="/account/favorites" id="favorites-tab">Favorites</a></li>
-	<li><a href="/account/reviews" id="reviews-tab">My Reviews</a></li>
-	{{#if account.bars}}
-	<li><a href="/account/bars" id="bars-tab">My Bars</a></li>
-	{{/if}}
-</ul>
+<div class="account-nav">
+    <a class="active account-link" href="/account" id="account-tab">Account Info</a>
+    <a
+        class="account-link"
+        href="/account/favorites"
+        id="favorites-tab"
+    >Favorites</a>
+    <a class="account-link" href="/account/reviews" id="reviews-tab">My Reviews</a>
+    {{#if authenticatedOwner}}
+        <a class="account-link" href="/account/bars" id="bars-tab">My Bars</a>
+    {{/if}}
+</div>
 
-<div class="edit-container">
-	<div class="form-box">
-		<h2>#Update Login Info 🍸</h2>
-		<ul id="account-error-list" class="error-list"></ul>
-		<form class="account-form" id="account-form" action="/account" method="POST">
+<div class="edit-section">
+    <div class="form-box">
+        <h2>#Update Login Info 🍸</h2>
+        <ul id="account-error-list" class="error-list"></ul>
+        <form
+            class="account-form"
+            id="account-form"
+            action="/account"
+            method="POST"
+        >
 
-			<div class="input-box">
-				<label class="input-label" for="emailInput">Updated Email</label>
-				<input class="input" type="email" id="emailInput" name="emailInput" placeholder="Email"
-					value="{{account.email}}">
-			</div>
+            <div class="input-box">
+                <label class="input-label" for="emailInput">Updated Email</label>
+                <input
+                    class="input"
+                    type="email"
+                    id="emailInput"
+                    name="emailInput"
+                    placeholder="Email"
+                    value="{{account.email}}"
+                />
+            </div>
 
-			<div class="input-box">
-				<label class="input-label" for="newPasswordInput">New Password</label>
-				<input class="input" type="password" id="newPasswordInput" name="newPasswordInput"
-					placeholder="New Password">
-			</div>
+            <div class="input-box">
+                <label class="input-label" for="newPasswordInput">New Password</label>
+                <input
+                    class="input"
+                    type="password"
+                    id="newPasswordInput"
+                    name="newPasswordInput"
+                    placeholder="New Password"
+                />
+            </div>
 
-			<div class="input-box">
-				<label class="input-label" for="confirmPasswordInput">Confirm Password</label>
-				<input class="input" type="password" id="confirmPasswordInput" name="confirmPasswordInput"
-					placeholder="Confirm New Password">
-			</div>
+            <div class="input-box">
+                <label class="input-label" for="confirmPasswordInput">Confirm
+                    Password</label>
+                <input
+                    class="input"
+                    type="password"
+                    id="confirmPasswordInput"
+                    name="confirmPasswordInput"
+                    placeholder="Confirm New Password"
+                />
+            </div>
 
-			<div class="input-box">
-				<label class="input-label" for="currentPasswordInput">Current Password</label>
-				<input class="input" type="password" id="currentPasswordInput" name="currentPasswordInput"
-					placeholder="Current Password">
-			</div>
+            <div class="input-box">
+                <label class="input-label" for="currentPasswordInput">Current
+                    Password</label>
+                <input
+                    class="input"
+                    type="password"
+                    id="currentPasswordInput"
+                    name="currentPasswordInput"
+                    placeholder="Current Password"
+                />
+            </div>
 
-			<input type="hidden" name="_method" value="PUT">
-			<button type="submit" class="submit-button">Save</button>
-		</form>
-	</div>
+            <input type="hidden" name="_method" value="PUT" />
+            <button type="submit" class="submit-button">Save</button>
+        </form>
+    </div>
 
-	<div class="form-box">
-		<h2>#Update User Info 🍸</h2>
-		<ul id="user-error-list" class="error-list hide"></ul>
-		<form class="user-form" id="user-form" action="/user" method="POST">
-			<div class="input-box">
-				<label class="input-label" for="firstNameInput">First Name</label>
-				<input class="input" type="text" id="firstNameInput" name="firstNameInput" placeholder="First Name"
-					value="{{user.firstName}}">
-			</div>
+    <div class="form-box">
+        <h2>#Update User Info 🍸</h2>
+        <ul id="user-error-list" class="error-list hide"></ul>
+        <form class="user-form" id="user-form" action="/user" method="POST">
+            <div class="input-box">
+                <label class="input-label" for="firstNameInput">First Name</label>
+                <input
+                    class="input"
+                    type="text"
+                    id="firstNameInput"
+                    name="firstNameInput"
+                    placeholder="First Name"
+                    value="{{user.firstName}}"
+                />
+            </div>
 
-			<div class="input-box">
-				<label class="input-label" for="lastNameInput">Last Name</label>
-				<input class="input" type="text" id="lastNameInput" name="lastNameInput" placeholder="Last Name"
-					value="{{user.lastName}}">
-			</div>
+            <div class="input-box">
+                <label class="input-label" for="lastNameInput">Last Name</label>
+                <input
+                    class="input"
+                    type="text"
+                    id="lastNameInput"
+                    name="lastNameInput"
+                    placeholder="Last Name"
+                    value="{{user.lastName}}"
+                />
+            </div>
 
-			<div class="input-box">
-				<label class="input-label" for="phoneInput">Phone Number</label>
-				<input class="input" type="phone" id="phoneInput" name="phoneInput" placeholder="Phone Number"
-					value="{{user.phone}}">
-			</div>
+            <div class="input-box">
+                <label class="input-label" for="phoneInput">Phone Number</label>
+                <input
+                    class="input"
+                    type="phone"
+                    id="phoneInput"
+                    name="phoneInput"
+                    placeholder="Phone Number"
+                    value="{{user.phone}}"
+                />
+            </div>
 
-			<input type="hidden" name="_method" value="PUT">
-			<button type="submit" class="submit-button">Save</button>
-		</form>
-	</div>
+            <input type="hidden" name="_method" value="PUT" />
+            <button type="submit" class="submit-button">Save</button>
+        </form>
+    </div>
 </div>
 
 <div>
-	<button id="delete-button" class="delete-button">
-		Delete Account
-	</button>
+    <button id="delete-button" class="delete-button">
+        Delete Account
+    </button>
 </div>
 
 <div class="form-box delete-confirm hide" id="delete-confirm">
-	<h2>#Delete</h2>
-	<h2>Enter your password to confirm.</h2>
-	<form class="delete-form hidden" id="delete-form" action="/account" method="POST">
-		<div class="input-box">
-			<input class="input" type="password" id="passwordInput" name="passwordInput" placeholder="Password">
-			<label class="input-label" for="passwordInput">Password</label>
-		</div>
+    <h2>#Delete</h2>
+    <h2>Enter your password to confirm.</h2>
+    <form
+        class="delete-form hidden"
+        id="delete-form"
+        action="/account"
+        method="POST"
+    >
+        <div class="input-box">
+            <input
+                class="input"
+                type="password"
+                id="passwordInput"
+                name="passwordInput"
+                placeholder="Password"
+            />
+            <label class="input-label" for="passwordInput">Password</label>
+        </div>
 
-		<input type="hidden" name="_method" value="DELETE">
-		<button type="submit" class="submit-button">Confirm Delete Account</button>
-	</form>
-	<button class="cancel-button" id="cancel-delete-button">Cancel</button>
+        <input type="hidden" name="_method" value="DELETE" />
+        <button type="submit" class="submit-button">Confirm Delete Account</button>
+    </form>
+    <button class="cancel-button" id="cancel-delete-button">Cancel</button>
 </div>
