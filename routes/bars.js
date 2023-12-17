@@ -4,6 +4,7 @@ const router = Router();
 import * as validation from "../helpers.js";
 import filtersHelp from "../filterhelper.js";
 import "dotenv/config";
+//import { filter } from "bluebird";
 
 let renderedList = [];
 
@@ -16,10 +17,14 @@ router
     let barsDistance = await filtersHelp.sortedBarsbyDistance();
     const test = 0;
     if (barsDistance.length === 0) {
-      const allBars = await filtersHelp.allBarsPlus();
+      return res.redirect("/");
+      /*const allBars = await filtersHelp.allBarsPlus();
       location = false;
-      allTheBars = await filtersHelp.sortedByRating(allBars);
+      allTheBars = await filtersHelp.sortedByRating(allBars);*/
     } else {
+      //const userLocation = filtersHelp.userLocTrack();
+      //await filtersHelp.barsDistance(userLocation);
+      barsDistance = await filtersHelp.sortedBarsbyDistance();
       allTheBars = barsDistance;
     }
     renderedList = allTheBars;
@@ -27,76 +32,55 @@ router
       bars: allTheBars,
       location: location,
       tags: [
-        "Sport",
-        "Cocktails",
-        "Mixology",
-        "CraftBeer",
-        "WineWednesday",
-        "BarEvents",
-        "DrinkSpecials",
-        "ThirstyThursday",
-        "LiveMusic",
-        "BeerTasting",
-        "MixandMingle",
-        "LadiesNight",
-        "BarCrafting",
-        "Tapas",
-        "ChampagneNight",
-        "AfterWorkDrinks",
-        "SignatureCocktails",
-        "WhiskeyTasting",
-        "HappyHourDeals",
-        "CraftCocktails",
-        "Shots",
-        "BarHopping",
+        "#Sport",
+        "#Cocktails",
+        "#Mixology",
+        "#CraftBeer",
+        "#WineWednesday",
+        "#BarEvents",
+        "#DrinkSpecials",
+        "#ThirstyThursday",
+        "#LiveMusic",
+        "#BeerTasting",
+        "#MixandMingle",
+        "#LadiesNight",
+        "#BarCrafting",
+        "#Tapas",
+        "#ChampagneNight",
+        "#AfterWorkDrinks",
+        "#SignatureCocktails",
+        "#WhiskeyTasting",
+        "#HappyHourDeals",
+        "#CraftCocktails",
+        "#Shots",
+        "#BarHopping",
       ],
     });
   })
   .post(async (req, res) => {
-    if (!req.body) {
-      return res
-        .status(400)
-        .json({ reqResponse: "Search location field is required!" });
-    }
-
-    let isAllowed = req.body.isAllowed;
-    let location = req.body.location;
-    let trmLocation = location.trim();
-
-    if (trmLocation.length === 0) {
-      return res
-        .status(400)
-        .json({ reqResponse: "Search location field is required!" });
-    }
-
-    //Finding bars by user location search
-    try {
-      if (!isNaN(+trmLocation)) {
-        if (trmLocation.length === 5) {
-          const cityBars = await filtersHelp.zipCodeBars(trmLocation);
-          renderedList = cityBars;
-          return res.json({ reqResponse: cityBars });
-        }
-      }
-    } catch (e) {
-      return res.status(400).json({ reqResponse: "Invalid Zip Code" });
-    }
-
-    const cityStateArr = trmLocation.split(",");
-    if (cityStateArr[0].length < 3) {
+    if (!req.body.state) {
       return res.status(400).json({
         reqResponse:
-          "City most be 3 characters or longer! Example input: City, ST",
+          "State is needed so we can find you a bar in a specific City!",
       });
     }
 
+    let searchCity = req.body.city;
+    let searchState = req.body.state;
+
     try {
-      const cityBars = await filtersHelp.cityBars(trmLocation);
-      renderedList = cityBars;
-      return res.json({ reqResponse: cityBars });
+      searchState = validation.validateRequiredStr(searchState);
+      searchCity = validation.validateOptionalStr(searchCity);
     } catch (e) {
-      return res.status(500).json({ reqResponse: e });
+      return res.status(400).json({ reqResponse: e });
     }
+
+    try {
+      const cityBars = await filtersHelp.cityBars(searchCity, searchState);
+      const allBars = await filtersHelp.allBarsPlus(cityBars);
+      renderedList = allBars;
+      return res.json({ reqResponse: allBars });
+    } catch (e) {}
   });
 
 router
@@ -207,23 +191,22 @@ router
     }
   });
 router.route("/searchBar").post(async (req, res) => {
-  let searcCriteria = req.body.searchInput;
   if (!req.body) {
     return res.status(400).render("bars", {
       error: "Type something and I will find you a bar!",
       isError: true,
     });
   }
-
+  let searcCriteria = req.body.searchInput;
   try {
     searcCriteria = validation.validateRequiredStr(searcCriteria);
   } catch (e) {
     return res.status(400).render("bars", { error: e, isError: true });
   }
+  let allBars;
   try {
     const searchBar = await barData.barSearch(searcCriteria);
-    renderedList = searchBar;
-    res.render("bars", { bars: searchBar, isSearch: true });
+    allBars = await filtersHelp.allBarsPlus(searchBar);
   } catch (e) {
     if (e.code === 1) {
       res.status(404).render("bars", { error: e.msg, isError: true });
@@ -233,6 +216,10 @@ router.route("/searchBar").post(async (req, res) => {
       res.status(500).render("bars", { error: e.msg, isError: true });
     }
   }
+  renderedList = allBars;
+  res.render("bars", {
+    bars: allBars,
+  });
 });
 
 router.route("/editBar").post(async (req, res) => {
@@ -370,10 +357,15 @@ router.route("/barsByFilters").post(async (req, res) => {
   });
 
   try {
-    const bars = await barData.barsByFilters(filters);
-    res.json(bars);
+    // const bars = await barData.barsByFilters(filters);
+    const bars = filtersHelp.tagsFilter(filters, renderedList);
+    res.json({ reqResponse: bars });
   } catch (e) {
-    res.status(404).json({ error: e });
+    if (e.code === 1) {
+      return res.status(404).json({
+        reqResponse: e.msg,
+      });
+    }
   }
 });
 router.route("/noLocReset").post(async (req, res) => {
@@ -394,8 +386,21 @@ router.route("/sortBy").post(async (req, res) => {
     sorted = await filtersHelp.sortedByLikes(renderedList);
   } else if (sortOption === "mostReviews") {
     sorted = await filtersHelp.sortedReviews(renderedList);
-  } else {
+  } else if (sortOption === "closest") {
+    sorted = await filtersHelp.sortedBarsbyDistance(renderedList);
   }
+  res.json({ reqResponse: sorted });
+});
+
+router.route("/tags").get(async (req, res) => {
+  const tagsToRender = new Set();
+
+  renderedList.forEach((bar) => {
+    const tags = bar.bar.tags;
+    tags.forEach((t) => {
+      tagsToRender.add(t);
+    });
+  });
   res.json({ reqResponse: sorted });
 });
 

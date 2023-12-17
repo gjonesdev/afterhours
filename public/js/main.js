@@ -1,5 +1,3 @@
-// import { response } from "express";
-
 function capitalize(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -773,6 +771,51 @@ const successCallback = (position) => {
   if (document.URL.includes("/bars")) {
     // Bars by user pricked (City-State or Zip Code) location using Ajax form
 
+    (e) => {
+      e.preventDefault();
+      $("#respError").empty();
+
+      const location = $("#findCityInput").val();
+      const locType = $("#loc-type-selector").val();
+
+      $.ajax({
+        method: "POST",
+        url: "/bars",
+        contentType: "application/json",
+        data: JSON.stringify({
+          isAllowed: true,
+          isDefault: true,
+        }),
+      }).then(
+        (res) => {
+          $("#barList").empty();
+          const defaultList = res.reqResponse;
+
+          defaultList.forEach((bar) => {
+            $("#barList").append(
+              $(
+                `<li>
+					  <div class="row"></div>
+					  <a href="/bars/${bar.bar._id}">
+						  <div class="card">
+							  ${bar.bar.name} <br>							 
+							  ${bar.bar.location.city} <br>
+							  ${bar.bar.ratingAverage} <br>
+							  ${bar.bar.reviewsCount} reviews <br>
+							  ${bar.bar.favoritesCount} favorites <br>
+						  </div>
+					  </a>
+					  </div>
+				  </li>`
+              )
+            );
+          });
+        },
+        (res) =>
+          $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
+      );
+    };
+    /*
     $("#findByLocation").on("submit", (e) => {
       e.preventDefault();
       $("#respError").empty();
@@ -801,8 +844,8 @@ const successCallback = (position) => {
 					  <a href="/bars/${bar.bar._id}">
 						  <div class="card">
 							  ${bar.bar.name} <br>
-							  ${bar.distance.distance.text}  from downtown ${bar.bar.location.city}!<br>
-							  @ ${bar.distance.duration.text} driving <br>
+							  ${bar.distance} <br>
+							  @ ${bar.duration} driving <br>
 							  ${bar.bar.location.city} <br>
 							  ${bar.bar.ratingAverage} <br>
 							  ${bar.bar.reviewsCount} reviews <br>
@@ -819,7 +862,7 @@ const successCallback = (position) => {
           $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
       );
     });
-
+*/
     //----------------------------------------SORT AND FILTERS (location allowed)---------------------------------------------------------------
     // Sorting loc allowed rendered list
     $("#sortBySelector").change((e) => {
@@ -849,9 +892,7 @@ const successCallback = (position) => {
 					  <a href="/bars/${bar.bar._id}">
 						  <div class="card">
 							  ${bar.bar.name} <br>
-							  ${bar.distance}  from downtown ${bar.bar.location.city}!<br>
-							  @ ${bar.duration} driving <br>
-							  ${bar.bar.location.city} <br>
+							  ${bar.bar.location.city} <br> 						 
 							  ${bar.bar.ratingAverage} <br>
 							  ${bar.bar.reviewsCount} reviews <br>
 							  ${bar.bar.favoritesCount} favorites <br>
@@ -906,54 +947,143 @@ const errorCallback = (error) => {
         });
       });
     });
+
+    //----------------------Sorting without location allowed-------------------------------------
+
+    $("#sortBySelector").change((e) => {
+      e.preventDefault();
+      $("#respError").empty();
+
+      const option = $("#sortBySelector").val();
+
+      $.ajax({
+        method: "POST",
+        url: "/bars/sortBy",
+        contentType: "application/json",
+        data: JSON.stringify({
+          option: option,
+          isAllowed: false,
+        }),
+      }).then(
+        (res) => {
+          $("#barList").empty();
+          const barsList = res.reqResponse;
+
+          barsList.forEach((bar) => {
+            $("#barList").append(
+              $(
+                `<li>
+					  <div class="row"></div>
+					  <a href="/bars/${bar.bar._id}">
+						  <div class="card">
+							  ${bar.bar.name} <br>							  
+							  ${bar.bar.location.city} <br>
+							  ${bar.bar.ratingAverage} <br>
+							  ${bar.bar.reviewsCount} reviews <br>
+							  ${bar.bar.favoritesCount} favorites <br>
+						  </div>
+					  </a>
+					  </div>
+				  </li>`
+              )
+            );
+          });
+        },
+        (res) =>
+          $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
+      );
+    });
   } //End Bar's page
 }; //End loc Not allowed
 
 navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 
 //-----------------------------------------end location check-----------------------------------
+//Tags filter
+if (document.URL.includes("/bars")) {
+  $("#filterForm").on("submit", (e) => {
+    e.preventDefault();
+    errors = [];
 
-$("#filterForm").on("submit", (e) => {
-  e.preventDefault();
-  errors = [];
-  // $(".input-error").remove();
-  // validateSearch($("#show_search_term"));
+    const inputs = $("#filterForm");
 
-  // if (errors.length >= 1) {
-  // 	errors.forEach((error) => {
-  // 		$("#searchShows").append(`<p class="input-error">${error}</p>`);
-  // 	});
-  // } else {
-  const inputs = $("#filterForm");
-
-  $("#barList").empty();
-  $.ajax({
-    method: "POST",
-    url: "/bars/barsByFilters",
-    data: inputs.serialize(),
-  }).then((res) => {
-    res.forEach((bar) => {
-      $("#barList").append(
-        $(
-          `<li>
+    $("#barList").empty();
+    $.ajax({
+      method: "POST",
+      url: "/bars/barsByFilters",
+      data: inputs.serialize(),
+    }).then((res) => {
+      const foundBars = res.reqResponse;
+      foundBars.forEach((bar) => {
+        $("#barList").append(
+          $(
+            `<li>
 					<div class="row"></div>
-					<a href="/bars/${bar._id}">
+					<a href="/bars/${bar.bar._id}">
 						<div class="card">
-							${bar.name} <br>
-							${"distance"} mi from you!<br>
-							@ ${"duration"} driving <br>
-							${bar.location.city} <br>
-							${bar.ratingAverage} <br>
-							${bar.reviewsCount} reviews <br>
-							${bar.favoritesCount} favorites <br>
+							${bar.bar.name} <br>						
+							${bar.bar.location.city} <br>
+							${bar.bar.ratingAverage} <br>
+							${bar.bar.reviewsCount} reviews <br>
+							${bar.bar.favoritesCount} favorites <br>
 						</div>
 					</a>
 					</div>
 				</li>`
-        )
-      );
+          )
+        );
+      }),
+        (res) =>
+          $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`);
     });
   });
-});
+}
+//---------------------------------------Search/ city by user input-------------------------------------
 
-//-------------------------------------sorting bar list------------------------------------------------------------------
+//City Search
+if (document.URL.includes("/bars")) {
+  $("#findByLocation").on("submit", (e) => {
+    e.preventDefault();
+    $("#respError").empty();
+
+    const city = $("#findCityInput").val();
+    const state = $("#findStateInput").val();
+
+    $.ajax({
+      method: "POST",
+      url: "/bars",
+      contentType: "application/json",
+      data: JSON.stringify({
+        city: city,
+        state: state,
+      }),
+    }).then(
+      (res) => {
+        $("#barList").empty();
+        const barsInCity = res.reqResponse;
+
+        barsInCity.forEach((bar) => {
+          $("#barList").append(
+            $(
+              `<li>
+        <div class="row"></div>
+        <a href="/bars/${bar.bar._id}">
+          <div class="card">
+            ${bar.bar.name} <br>
+            ${bar.bar.location.city} <br>       
+            ${bar.bar.ratingAverage} <br>
+            ${bar.bar.reviewsCount} reviews <br>
+            ${bar.bar.favoritesCount} favorites <br>
+          </div>
+        </a>
+        </div>
+      </li>`
+            )
+          );
+        });
+      },
+      (res) =>
+        $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
+    );
+  });
+}

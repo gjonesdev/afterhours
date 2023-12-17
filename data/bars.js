@@ -22,10 +22,10 @@ let exportedMethods = {
     ownerId = validation.validateId(ownerId);
     website = validation.validateWebsite(website);
     phoneNumber = validation.validatePhone(phoneNumber);
-
+    const tagsArr = tags.split(",");
     let validTags = [];
-    if (tags.length > 0) {
-      tags.forEach((element) => {
+    if (tagsArr.length > 0) {
+      tagsArr.forEach((element) => {
         element = validation.validateOptionalStr(element);
         if (element.length > 0) {
           validTags.push(element);
@@ -107,27 +107,6 @@ let exportedMethods = {
     });
     return allbars;
   },
-  async barsByFilters(filters) {
-    // validation.validateId(barId);
-
-    const barsCollection = await bars();
-
-    if (!filters || filters.length === 0) {
-      return this.allBars();
-    }
-
-    const matchingBars = await barsCollection
-      .find({
-        tags: { $all: filters },
-      })
-      .toArray();
-
-    if (!matchingBars || matchingBars.length === 0) {
-      throw "No bars found.";
-    }
-
-    return matchingBars;
-  },
 
   async barSearch(searchName) {
     if (!searchName) throw { code: 2, msg: "Input must be provided!" };
@@ -169,7 +148,9 @@ let exportedMethods = {
         msg: `0 bars found with the name "${searchName}" or a description containing "${searchName}"`,
       };
 
-    return barsFound;
+    const array = Array.from(barsFound);
+
+    return array;
   },
   async removeBar(barId) {
     validation.validateId(barId);
