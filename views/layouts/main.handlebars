@@ -7,9 +7,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{{title}} | AfterHours</title>
 
-	
+
 	<link rel="stylesheet" href="/public/css/styles.css">
-	
+
 	<!--FONT AWESOME-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
@@ -21,7 +21,7 @@
 
 <body>
 	<header>
-		
+
 		<nav class="main-nav" id="main-nav">
 			<div class="content-wrapper-sm">
 				<a href="/" class="navbar-brand">After<strong>hours</strong></a>
@@ -37,20 +37,20 @@
 
 				<ul class="nav-links">
 					<li><a href="/"> Home</a></li>
-                        <li><a href="/bars"> Bar's List</a></li>
-                        {{#if authenticated}}
-                            {{#if authenticatedOwner}}
-                                <li><a href="/bars/createbar">
-                                        Create Bar</a></li>
-                            {{/if}}
-                            <li><a href="/account">My Account</a></li>
-                            <li><a href="/logout">Logout</a></li>
-                        {{else}}
-                            <li><a href="/login">Login</a></li>
-                            <li><a href="/register">Register</a></li>
-                        {{/if}}
-                        <li><a href="/about"> About Us</a></li>
-                        <li><a href="/reports">Contact</a></li>
+					<li><a href="/bars"> Bar's List</a></li>
+					{{#if authenticated}}
+					{{#if authenticatedOwner}}
+					<li><a href="/bars/createbar">
+							Create Bar</a></li>
+					{{/if}}
+					<li><a href="/account">My Account</a></li>
+					<li><a href="/logout">Logout</a></li>
+					{{else}}
+					<li><a href="/login">Login</a></li>
+					<li><a href="/register">Register</a></li>
+					{{/if}}
+					<li><a href="/about"> About Us</a></li>
+					<li><a href="/reports">Contact</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -84,8 +84,8 @@
 					<li><a href="/services">Our Services</a></li>
 					<li><a href="/privacy">Privacy Policy</a></li>
 					<li><a href="/terms">Terms & Conditions</a></li>
-					
-					
+
+
 				</ul>
 			</div>
 
@@ -94,18 +94,6 @@
 			</div>
 		</div>
 	</footer>
-
-	<script>document.addEventListener("DOMContentLoaded", function() {
-    var menuButton = document.querySelector(".menu-button");
-    var navLinks = document.querySelector(".nav-links");
-
-    menuButton.addEventListener("click", function() {
-        this.classList.toggle("active");
-        navLinks.classList.toggle("active");
-    });
-});
-
- document.addEventListener("DOMContentLoaded", initializeMenu);</script> 
 
 </body>
 
