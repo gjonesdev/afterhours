@@ -1,28 +1,22 @@
-<div class="account-nav">
-    <a class="account-link" href="/account" id="account-tab">Account Info</a>
-    <a
-        class="account-link"
-        href="/account/favorites"
-        id="favorites-tab"
-    >Favorites</a>
-    <a class="account-link" href="/account/reviews" id="reviews-tab">My Reviews</a>
-    {{#if authenticatedOwner}}
-        <a class="active account-link" href="/account/bars" id="bars-tab">My
-            Bars</a>
-    {{/if}}
-</div>
+<ul class="favoriteLinks">
+	<li><a href="/account" id="account-tab">Account Info</a></li>
+	<li><a href="/account/reviews" id="reviews-tab">My Reviews</a></li>
+	<li><a href="/account/favorites" id="favorites-tab">My Favorites</a></li>
 
-<div class="bars-section" id="bar-section">
-    <h1>Your Bars:</h1>
+</ul>
+
+<h1 class="reviews-title">#YourBars:</h1>
+<div id="favorites-section">
     {{#if bars}}
         {{#each bars}}
-            <div>
+            <div class="favorite-card">
+                <p class="bar-name">{{this.name}}</p>
                 <p>Bar Name: {{this.name}}</p>
                 <p>Rating: {{this.ratingAverage}}</p>
                 <a href="/bars/{{this._id}}">Edit</a>
             </div>
         {{/each}}
     {{else}}
-        <p>You have not created any bars yet.</p>
+        <p>No bars yet.</p>
     {{/if}}
 </div>

@@ -1,44 +1,42 @@
+<!DOCTYPE html>
 <html lang="en">
 
-    <head>
+<head>
 
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>{{title}} | AfterHours</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>{{title}} | AfterHours</title>
 
-        <link rel="stylesheet" href="/public/css/styles.css" />
-        <!--FONT AWESOME-->
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-        />
+	
+	<link rel="stylesheet" href="/public/css/styles.css">
+	
+	<!--FONT AWESOME-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-        <!--GOOGLE FONTS-->
-        <link rel="preconnect" href="https://fonts.gstatic.com" />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap"
-            rel="stylesheet"
-        />
+	<!--GOOGLE FONTS-->
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap" rel="stylesheet">
 
-    </head>
+</head>
 
-    <body>
-        <header>
-            <nav class="main-nav" id="main-nav">
-                <div class="content-wrapper-sm">
-                    <a href="/" class="navbar-brand">After<strong
-                        >hours</strong></a>
+<body>
+	<header>
+		
+		<nav class="main-nav" id="main-nav">
+			<div class="content-wrapper-sm">
+				<a href="/" class="navbar-brand">After<strong>hours</strong></a>
 
-                    <div class="search-bar">
-                        <form action="/bars/searchBar" method="post">
-                            <label for="searchInput"></label>
-                            <input type="text" placeholder="Search the #happyHour Magic" name="searchInput"
-                                id="searchInput">
-                            <button type="submit"><i class="fa fa-search"></i></button>
-                        </form>
-				    </div>
+				<div class="search-bar">
+					<form action="/bars/searchBar" method="post">
+						<label for="searchInput"></label>
+						<input type="text" placeholder="Search the #happyHour Magic" name="searchInput"
+							id="searchInput">
+						<button type="submit"><i class="fa fa-search"></i></button>
+					</form>
+				</div>
 
-                    <ul class="nav-links">
+				<ul class="nav-links">
+					<li><a href="/"> Home</a></li>
                         <li><a href="/bars"> Bar's List</a></li>
                         {{#if authenticated}}
                             {{#if authenticatedOwner}}
@@ -53,61 +51,63 @@
                         {{/if}}
                         <li><a href="/about"> About Us</a></li>
                         <li><a href="/reports">Contact</a></li>
+				</ul>
+			</div>
+		</nav>
+	</header>
 
-                    </ul>
-                </div>
-            </nav>
-        </header>
+	<main class="wrapper">
+		{{{body}}}
+		<div>
+			<div class="wave"></div>
+			<div class="wave"></div>
+			<div class="wave"></div>
+		</div>
+	</main>
 
-        <main class="wrapper">
-            {{{body}}}
-            <div>
-                <div class="wave"></div>
-                <div class="wave"></div>
-                <div class="wave"></div>
-            </div>
-        </main>
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"
+		integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<script src='/public/js/main.js'></script>
 
-        <script
-            src="https://code.jquery.com/jquery-2.2.4.min.js"
-            integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
-            crossorigin="anonymous"
-        ></script>
-        <script src="/public/js/main.js"></script>
+	<footer>
+		<div class="footer">
+			<div class="row">
+				<a href="https://www.facebook.com/profile.php?id=61554321882639"><i class="fa fa-facebook"></i></a>
+				<a href="https://www.instagram.com/afterhourshappyhour/"><i class="fa fa-instagram"></i></a>
+				<a href="https://www.youtube.com/watch?v=ztofJZK0t_0"><i class="fa fa-youtube"></i></a>
+				<a href="https://twitter.com/AfterHours21522"><i class="fa fa-twitter"></i></a>
+			</div>
 
-        <footer>
-            <div class="footer">
-                <div class="row">
-                    <a
-                        href="https://www.facebook.com/profile.php?id=61554321882639"
-                    ><i class="fa fa-facebook"></i></a>
-                    <a href="https://www.instagram.com/afterhourshappyhour/"><i
-                            class="fa fa-instagram"
-                        ></i></a>
-                    <a href="https://www.youtube.com/watch?v=ztofJZK0t_0"><i
-                            class="fa fa-youtube"
-                        ></i></a>
-                    <a href="https://twitter.com/AfterHours21522"><i
-                            class="fa fa-twitter"
-                        ></i></a>
-                </div>
+			<div class="row">
+				<ul>
+					<li><a href="/reports">Contact us</a></li>
+					<li><a href="/services">Our Services</a></li>
+					<li><a href="/privacy">Privacy Policy</a></li>
+					<li><a href="/terms">Terms & Conditions</a></li>
+					
+					
+				</ul>
+			</div>
 
-                <div class="row">
-                    <ul>
-                        <li><a href="/reports">Contact us</a></li>
-                        <li><a href="/services">Our Services</a></li>
-                        <li><a href="/privacy">Privacy Policy</a></li>
-                        <li><a href="/terms">Terms & Conditions</a></li>
-                        <li><a href="/reviews"> Reviews </a></li>
-                    </ul>
-                </div>
+			<div class="row">
+				Afterhours Copyright © 2023
+			</div>
+		</div>
+	</footer>
 
-                <div class="row">
-                    Afterhours Copyright © 2023
-                </div>
-            </div>
-        </footer>
+	<script>document.addEventListener("DOMContentLoaded", function() {
+    var menuButton = document.querySelector(".menu-button");
+    var navLinks = document.querySelector(".nav-links");
 
-    </body>
+    menuButton.addEventListener("click", function() {
+        this.classList.toggle("active");
+        navLinks.classList.toggle("active");
+    });
+});
+
+ document.addEventListener("DOMContentLoaded", initializeMenu);</script> 
+
+</body>
+
 
 </html>

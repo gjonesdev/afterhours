@@ -1034,7 +1034,7 @@ if (document.URL.includes("/bars")) {
             `<li>
 					<div class="row"></div>
 					<a href="/bars/${bar.bar._id}">
-						<div class="card">
+						<div class="card-bar">
 							${bar.bar.name} <br>						
 							${bar.bar.location.city} <br>
 							${bar.bar.ratingAverage} <br>
@@ -1133,3 +1133,6 @@ $("#delete-button").on("click", (e) => {
 $("#cancel-delete-button").on("click", (e) => {
 	$("#delete-confirm").addClass("hide");
 });
+
+
+

@@ -81,7 +81,6 @@ let exportedMethods = {
       .find({ ownerId: oId })
       .project({ _id: 1, name: 1, description: 1, location: 1 })
       .toArray();
-    if (ownerBars.length === 0) throw "No bars found";
     return ownerBars;
   },
   // All of the bars

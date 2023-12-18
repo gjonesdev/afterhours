@@ -69,36 +69,45 @@
 		<option value="mostReviews">Most Reviewed</option>
 	</select>
 </form>
-<div>
-	<form class="filters" id="filterForm">
-		{{#each tags}}
-		<div class="checkbox">
-			<input type="checkbox" id="{{this}}Input" name="{{this}}Input" value="{{this}}">
-			<label for="{{this}}Input">{{this}}</label>
-		</div>
+<form action="/barbycity" method="post" id="findByLocation">
+	<label for="findCityInput"></label>
+	<input type="text" id="findCityInput" name="findCityInput">
+	<button type="submit"></button>
+</form>
+<div class="grid-title">#AllTheBars</div>
+<div class="bars-container">
+	<div class="filter-container">
+		<form class="filters" id="filterForm">
+			<p class="filterp">#Filters:</p>
+			{{#each tags}}
+			<div class="checkbox">
+				<input type="checkbox" id="{{this}}Input" name="{{this}}Input" value="{{this}}">
+				<label for="{{this}}Input">{{this}}</label>
+			</div>
 			{{/each}}
-			<button type="submit">Apply Filters</button>
-	</form>
+			<button type="submit" class="submit-button">Apply Filters</button>
+		</form>
+		<a class="" id="resetFilters" href="/bars">Reset Filters</a>
+	</div>
 
 	<a class="" id="resetFilters" href="/bars">Reset Filters</a>
 
-</div>
-
-<ul id="barList">
-
-	{{#each bars}}
-	<li>
-		<div class="row"></div>
-		<a href="/bars/{{bar._id}}">
-			<div class="card">
-				{{bar.name}} <br>
-				{{bar.location.city}} <br>
-				{{bar.ratingAverage}} <br>
-				{{bar.reviewsCount}} reviews <br>
-				{{bar.favoritesCount}} favorites <br>
-			</div>
-		</a>
-	</li>
-	{{/each}}
-</ul>
+	<ul id="barList">
+		
+		{{#each bars}}
+		<li>
+			<div class="row"></div>
+			<a href="/bars/{{bar._id}}">
+				<div class="card-bar">
+					#BarName: {{bar.name}} <br>
+					#City: {{bar.location.city}} <br>
+					#RatingAverage: {{bar.ratingAverage}} <br>
+					{{bar.reviewsCount}} reviews <br>
+					{{bar.favoritesCount}} favorites <br>
+				</div>
+			</a>
+		</li>
+		{{/each}}
+		
+	</ul>
 </div>
