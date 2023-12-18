@@ -1,4 +1,4 @@
-<form action="/bars/update" method="post" id="bar-pdate">
+<form action="/bars/update" method="post" id="bar-pdate" enctype="multipart/form-data">
     <label for="barId"></label>
     <input type="hidden" value="{{id}}" name="updateBarId" id="updateBarId">
     <label for="updateName">Bar Name</label>
@@ -71,6 +71,16 @@
     <input type="text" value="{{phone}}" name="updatePhone" id="updatePhone">
     <label for="updateWebsite">Website</label>
     <input type="text" value="{{website}}" name="updateWebsite" id="updateWebsite">
+    
+    <div>
+			<h2>Gallery</h2>
+			<img src="/public/images/{{images.filename}}" alt="bar image" width="200" height="300">
+	</div>
+
+    <div class="input-box">
+        <input type="file" accept="image/jpeg, image/png, image/jpg" id="images" name="images">
+        <label for="images"></label>
+    </div>
     <button>Submit</button>
 
 </form>

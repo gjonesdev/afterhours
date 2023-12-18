@@ -13,7 +13,8 @@ let exportedMethods = {
     email,
     website,
     ownerId,
-    tags
+    tags,
+	images
   ) {
     name = validation.validateRequiredStr(name);
     description = validation.validateRequiredStr(description);
@@ -53,6 +54,7 @@ let exportedMethods = {
       favoritesCount: 0,
       creationDate: new Date(),
       BODDate: "",
+	  images
     };
     const barsCollection = await bars();
     const insertInfo = await barsCollection.insertOne(newBar);
@@ -102,6 +104,7 @@ let exportedMethods = {
         favoritesCount: 1,
         schedule: 1,
         BODDate: 1,
+		images: 1
       })
       .toArray();
     if (!allbars) throw "Was not able to get all bars!";
@@ -164,7 +167,8 @@ let exportedMethods = {
     location,
     email,
     website,
-    phoneNumber
+    phoneNumber,
+    images
   ) {
     name = validation.validateRequiredStr(name);
     description = validation.validateRequiredStr(description);
@@ -182,6 +186,7 @@ let exportedMethods = {
       website: website,
       phone: phoneNumber,
       lastModified: new Date(),
+      images: images
     };
     const barCol = await bars();
     const updatedData = await barCol.findOneAndUpdate(

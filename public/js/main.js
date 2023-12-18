@@ -333,6 +333,15 @@ const successCallback = (position) => {
 			}),
 		};
 		$.ajax(userLocationReq).then(function (responseMessage) {
+
+      let pathImage = "/public/images/";
+      if(responseMessage.BOD.images && responseMessage.BOD.images.filename){
+        pathImage += responseMessage.BOD.images.filename; 
+      }
+      else{
+        pathImage += "no_image.jpeg";
+      }
+
 			if (responseMessage.BOD.name) {
 				let element = $(
 					`<a href="/bars/${responseMessage.BOD._id}">
@@ -343,8 +352,11 @@ const successCallback = (position) => {
               ${responseMessage.BOD.ratingAverage} <br>
               ${responseMessage.BOD.reviewsCount} reviews <br>
               ${responseMessage.BOD.favoritesCount} favorites <br>
+              
+              <img src="${pathImage}" alt="bar images" width="200" height="300">
           </div>
         </a>`
+        
 				);
 				BODArea.append(element);
 			} else if (responseMessage.BOD.noBarsFound) {
