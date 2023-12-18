@@ -13,7 +13,7 @@
 
 
         {{/if}}
-        <form action="/bars/createBar" method="post" id="bar-create">
+        <form action="/bars/createBar" method="post" id="bar-create" enctype="multipart/form-data">
         {{!-- enctype="multipart/form-data"> --}}
 
             <input type="hidden" value="{{id}}" name="createBarId" id="createBarId" required="">

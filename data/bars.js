@@ -14,7 +14,7 @@ let exportedMethods = {
     website,
     ownerId,
     tags,
-	images
+	  images
   ) {
     name = validation.validateRequiredStr(name);
     description = validation.validateRequiredStr(description);
@@ -52,7 +52,7 @@ let exportedMethods = {
       favoritesCount: 0,
       creationDate: new Date(),
       BODDate: "",
-	  images
+	    images
     };
     const barsCollection = await bars();
     const insertInfo = await barsCollection.insertOne(newBar);
@@ -101,7 +101,7 @@ let exportedMethods = {
         favoritesCount: 1,
         schedule: 1,
         BODDate: 1,
-		images: 1
+		    images: 1
       })
       .toArray();
     if (!allbars) throw "Was not able to get all bars!";

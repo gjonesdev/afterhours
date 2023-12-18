@@ -1,5 +1,6 @@
 <ul id="respError">
 </ul>
+
 <form action="/bars" method="post" id="findByLocation">
 	<label for="findCityInput"></label>
 	<input type="text" id="findCityInput" name="findCityInput" placeholder="Enter City">
@@ -57,11 +58,10 @@
 		<option value="WY">WY</option>
 	</select>
 
-	<button type="submit">Search</button>
+	<button class="chatbtn" type="submit">Search</button>
 </form>
-<a href="/bars">Reset Drop Down</a>
 <form action="/sortBy" method="post" id="sortByForm">
-	<label for="sortByInput">Sort by</label>
+	<label for="sortBySelector">Sort by</label>
 	<select name="sortBySelector" id="sortBySelector">
 		<option disabled selected value> -- select an option -- </option>
 		<option value="highestrating">Highest Rated</option>
@@ -69,11 +69,7 @@
 		<option value="mostReviews">Most Reviewed</option>
 	</select>
 </form>
-<form action="/barbycity" method="post" id="findByLocation">
-	<label for="findCityInput"></label>
-	<input type="text" id="findCityInput" name="findCityInput">
-	<button type="submit"></button>
-</form>
+
 <div class="grid-title">#AllTheBars</div>
 <div class="bars-container">
 	<div class="filter-container">
@@ -87,13 +83,12 @@
 			{{/each}}
 			<button type="submit" class="submit-button">Apply Filters</button>
 		</form>
-		<a class="" id="resetFilters" href="/bars">Reset Filters</a>
 	</div>
 
 	<a class="" id="resetFilters" href="/bars">Reset Filters</a>
 
 	<ul id="barList">
-		
+
 		{{#each bars}}
 		<li>
 			<div class="row"></div>
@@ -113,26 +108,6 @@
 			</a>
 		</li>
 		{{/each}}
-		{{else}}
-		{{#each bars}}
-		<li>
-			<div class="row"></div>
-			<a href="/bars/{{_id}}">
-				<div class="card">
-					{{name}} <br>
-					{{location.city}} <br>
-					{{ratingAverage}} <br>
-					{{reviewsCount}} reviews <br>
-					{{favoritesCount}} favorites <br>
-					{{#if images.filename}}
-						<img src="/public/images/{{images.filename}}" alt="bar image" width="200" height="300">
-					{{else}}
-						<img src="/public/images/no_image.jpeg" alt="bar image" width="200" height="300">
-					{{/if}}
-				</div>
-			</a>
-		</li>
-		{{/each}}
-		{{/if}}
+
 	</ul>
 </div>

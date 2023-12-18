@@ -3,13 +3,10 @@ import { Router } from "express";
 const router = Router();
 import * as validation from "../helpers.js";
 import filtersHelp from "../filterhelper.js";
-import xss from "xss";
-import session from "express-session";
-import date from "date-and-time";
 import multer, { diskStorage } from "multer";
+
 let renderedList = [];
 let errors = new Set();
-
 router
   .route("/")
   .get(async (req, res) => {
@@ -80,7 +77,7 @@ router
       const allBars = await filtersHelp.allBarsPlus(cityBars);
       renderedList = allBars;
       return res.json({ reqResponse: allBars });
-    } catch (e) {}
+    } catch (e) {return res.status(400).json({ reqResponse: e.msg });} //double check validation error
   });
 
 router
@@ -112,16 +109,11 @@ router
         error: { status: 403, message: "Prohibited area" },
         message: "This function is not allowed for your account type",
       });
-    }
-
-    /**Upload the picture to the folder in the server ./image */
-    upload(req, res, async (err) =>{
-
-    console.log(req.file);
-
+    } 
+    upload(req, res, async (err) =>{ /**Upload the picture to the folder in the server ./image */
     req.body = req.body;
     let theBar = {};
-     errors = new Set();
+    errors = new Set();
     const streetAddress = req.body.createAddress;
     const city = req.body.createCity;
     const state = req.body.createState;
@@ -149,7 +141,7 @@ router
     try {
       validation.validateLocation(location);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
     }
 
     try {
@@ -161,7 +153,7 @@ router
     try {
       req.body.createPhone = validation.validatePhone(req.body.createPhone);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
     }
 
     try {
@@ -171,65 +163,8 @@ router
     } catch (e) {
       errors.add(e);
     }
-
-    /**Photos error handler */
-    try {
-      if(req.file === undefined || req.file.length <= 0) throw "You must select at least 1 photo.";
-    } catch (e) {
-      errors.add(e.msg);
-    }
-
-    if (err) {
-      try {
-        if (err.code === "LIMIT_UNEXPECTED_FILE") throw "Too many files to upload.";
-      } catch (e) {
-        errors.add(e.msg);
-      }
-
-      try {
-        if (err.code === "MISSING_FIELD_NAME") throw "Field name missing for photos.";
-      } catch (e) {
-        errors.add(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_FIELD_COUNT") throw "Too many fields for photos.";
-      } catch (e) {
-        errors.add(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_FIELD_VALUE") throw "Field value too long for photos.";
-      } catch (e) {
-        errors.add(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_FIELD_KEY") throw "Field name too long for photos";
-      } catch (e) {
-        errors.add(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_FILE_COUNT") throw "Too many files for photos";
-      } catch (e) {
-        errors.add(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_FILE_SIZE") throw "File too large for photos";
-      } catch (e) {
-        errors.add(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_PART_COUNT") throw "Too many parts for photos";
-      } catch (e) {
-        errors.add(e.msg);
-      }   
-  }
-  /**No errors, then create a bar with photo */
-  if (errors.length === 0) {
+  await photoErrorHandler(req, err);
+  if (errors.size === 0) { /**No errors, then create a bar with photo */
     let images = req.file;
     try {
       theBar = await barData.createBar(
@@ -245,11 +180,11 @@ router
       );
       filtersHelp.barDistanceHelper(true);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
     }
   }
 
-    if (errors.length > 0) {
+    if (errors.size > 0) {
       return res.status(400).render("createBar", {
         errors: errors,
         isError: true,
@@ -262,9 +197,9 @@ router
 
 router.route("/searchBar").post(async (req, res) => {
   if (!req.body) {
-    return res.status(400).render("bars", {
-      error: "Type something and I will find you a bar!",
-      isError: true,
+    return res.status(400).render("error", { 
+      error: { status: 400, message: "Missing input." },
+      message: "Search input is needed!",
     });
   }
   let searcCriteria = req.body.searchInput;
@@ -296,7 +231,7 @@ router.route("/editBar").post(async (req, res) => {
   const barId = req.body.barIdToEdit;
   errors = new Set();
   if (!barId) {
-    errors.push("Missing bar id");
+    errors.add("Missing bar id");
     return res.status(400).render("login", { errors: errors, hasErrors: true });
   }
 
@@ -321,10 +256,8 @@ router.route("/editBar").post(async (req, res) => {
 });
 
 router.route("/update").post(async (req, res) => {
-
-  /**Upload the picture to the folder in the server ./image */
-  upload(req, res, async (err) =>{
-    const errors = [];
+  upload(req, res, async (err) =>{ /**Upload the picture to the folder in the server ./image */
+    errors = new Set();
     const streetAddress = req.body.updateAddress;
     const city = req.body.updateCity;
     const state = req.body.updateState;
@@ -332,112 +265,53 @@ router.route("/update").post(async (req, res) => {
     let location = { streetAddress, city, state, zipCode };
     
     if (!req.body) {
-      errors.push("Information needs to be provided");
+      errors.add("Information needs to be provided");
       return res.render("editBar", { error: errors, isError: true });
     }
     try {
       req.body.updateBarId = validation.validateId(req.body.updateBarId);
     } catch (e) {
-      errors.push(e.msg);
+      errors.add(e.msg);
       res.render("editBar", { error: errors, isError: true });
     }
 
   try {
     req.body.updateName = validation.validateRequiredStr(req.body.updateName);
   } catch (e) {
-    errors.push(e.msg);
+    errors.add(e.msg);
   }
 
   try {
     req.body.updateDesc = validation.validateRequiredStr(req.body.updateDesc);
   } catch (e) {
-    errors.push(e.msg);
+    errors.add(e.msg);
   }
 
   try {
     location = validation.validateLocation(location);
   } catch (e) {
-    errors.push(e.msg);
+    errors.add(e.msg);// Check if the location is e.msg or just e
   }
 
   try {
     req.body.updateEmail = validation.validateEmail(req.body.updateEmail);
   } catch (e) {
-    errors.push(e.msg);
+    errors.add(e.msg);
   }
 
   try {
     req.body.updatePhone = validation.validatePhone(req.body.updatePhone);
   } catch (e) {
-    errors.push(e.msg);
+    errors.add(e.msg);
   }
 
   try {
     req.body.updateWebsite = validation.validateWebsite(req.body.updateWebsite);
   } catch (e) {
-    errors.push(e.msg);
+    errors.add(e.msg);
   }
-
-  
-    /**Photos error handler */
-    try {
-      if(req.file === undefined || req.file.length <= 0) throw "You must select at least 1 photo.";
-    } catch (e) {
-      errors.push(e.msg);
-    }
-  
-    if (err) {
-      try {
-        if (err.code === "LIMIT_UNEXPECTED_FILE") throw "Too many files to upload.";
-      } catch (e) {
-        errors.push(e.msg);
-      }
-
-      try {
-        if (err.code === "MISSING_FIELD_NAME") throw "Field name missing for photos.";
-      } catch (e) {
-        errors.push(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_FIELD_COUNT") throw "Too many fields for photos.";
-      } catch (e) {
-        errors.push(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_FIELD_VALUE") throw "Field value too long for photos.";
-      } catch (e) {
-        errors.push(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_FIELD_KEY") throw "Field name too long for photos";
-      } catch (e) {
-        errors.push(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_FILE_COUNT") throw "Too many files for photos";
-      } catch (e) {
-        errors.push(e);
-      }
-
-      try {
-        if (err.code === "LIMIT_FILE_SIZE") throw "File too large for photos";
-      } catch (e) {
-        errors.push(e.msg);
-      }
-
-      try {
-        if (err.code === "LIMIT_PART_COUNT") throw "Too many parts for photos";
-      } catch (e) {
-        errors.push(e.msg);
-      }   
-  }
-
-  /**No errors, then create a bar with photo */
-  if (errors.length === 0) {
+  await photoErrorHandler(req, err); /**Photos error handler */
+  if (errors.size === 0) {  /**No errors, then create a bar with photo */
     let images = req.file;
   try {
     const theBar = await barData.barProfileUpdate(
@@ -454,26 +328,75 @@ router.route("/update").post(async (req, res) => {
     res.redirect("/bars/" + req.body.updateBarId);
   } catch (e) {
     if (e.code === 404) {
-      errors.push(e.msg);
+      errors.add(e.msg);
     } else if (e.code === 400) {
-      errors.push(e.msg);
+      errors.add(e.msg);
     } else {
       return res.render("error", {
         error: { status: 500, message: e.msg },
         message: e.msg,
       });
     }
-  }
-}
-if (errors.length > 0) {
-  return res.status(400).render("editBar", {
-    errors: errors,
-    isError: true,
-  });
-} else {
-  return res.redirect("/bars/" + req.body.updateBarId);
-}
+   }
+  }//close if
+  if (errors.size > 0) {
+    return res.status(400).render("editBar", {
+      errors: errors,
+      hasErrors: true,
+      barInfo: req.body,
+    });
+  } 
+ });
 });
+
+router.route("/deleteBar").post(async (req, res) => {
+  if (!req.body.barIdToDelete) {
+    return res.status(400).render("error", {
+      error: { status: 400, message: "Bar info missing!" },
+      message: "Missing bar information",
+    });
+  }
+
+  try {
+    req.body.barIdToDelete = validation.validateId(req.body.barIdToDelete);
+  } catch (e) {
+    return res.status(400).render("error", {
+      error: { status: 400, message: "Invalid bar id!" },
+      message: "Invalid bar id",
+    });
+  }
+
+  let theBar = await barData.barById(req.body.barIdToDelete)
+  console.log(theBar)
+  let isOwner = false;
+  if (req.session.user) {
+    console.log(req.session.user);
+    console.log(req.session.user.accountId);
+    console.log(theBar.ownerId)
+    isOwner = theBar.ownerId === req.session.user.accountId;
+  } 
+  
+  if (!isOwner) {
+    return res.status(403).render("error", {
+      error: { status: "403", message: "Prohibited function" },
+      message:
+        "You are not the owner of this bar. Only owners can delete bars!",
+    });
+  }
+
+  try {
+    await barData.removeBar(req.body.barIdToDelete);
+    filtersHelp.barDistanceHelper(true);
+    return res.render("error", {
+      error: { status: ":(", message: "The Bar has been deleted succesfully!" },
+      message: "",
+    });
+  } catch (e) {
+    return res.status(500).render("error", {
+      error: { status: "500", message: "Server Error!" },
+      message: "Was not able to remove the Bar!",
+    });
+  }
 });
 
 router.route("/:barId").get(async (req, res) => {
@@ -487,15 +410,7 @@ router.route("/:barId").get(async (req, res) => {
   }
   try {
     const theBar = await barData.barById(req.params.barId);
-        /**Single path = ..\public\images\1702829435937-afterhours-IMG_20180811_193424773.jpg */
-        let pathImagesArray;
-        if(theBar.images && theBar.images.filename){
-            pathImagesArray = "/public/images/"+ theBar.images.filename;
-        }
-        else{
-          pathImagesArray = "/public/images/no_image.jpeg";
-        }
-        
+    let pathImagesArray = photoPath(theBar);
     let isOwner = false;
     let favoriteToggle = "Favorite";
     let reviewEmpty = true;
@@ -534,7 +449,7 @@ router.route("/:barId").get(async (req, res) => {
       reviewsCount: theBar.reviewsCount,
       ratingAverage: theBar.ratingAverage,
       favoritesCount: theBar.favoritesCount,
-      isOwner,
+      isOwner: true, /**Modificar esta parte */
       favoriteToggle,
       reviewEmpty,
       images: pathImagesArray
@@ -551,8 +466,13 @@ router.route("/barsByFilters").post(async (req, res) => {
     filters.push(filter);
   });
 
+  if (filters.length == 0) {
+    return res.json({ reqResponse: renderedList });
+  }
+
   try {
     const bars = filtersHelp.tagsFilter(filters, renderedList);
+
     res.json({ reqResponse: bars });
   } catch (e) {
     if (e.code === 404) {
@@ -586,7 +506,7 @@ router.route("/sortBy").post(async (req, res) => {
   }
 });
 
-// Storage Engin That Tells/Configures Multer for where (destination) and how (filename) to save/upload our files
+/**Diskstorage the photo */
 const fileStorageEngine = diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./public/images"); //important this is a direct path from our current file to storage location
@@ -596,8 +516,78 @@ const fileStorageEngine = diskStorage({
   },
 });
 
-// The Multer Middleware that is passed to routes that will receive income requests with file data (multipart/formdata)
-// You can create multiple middleware each with a different storage engine config so save different files in different locations on server
+/**Multer for upload the photo */
 const upload = multer({ storage: fileStorageEngine }).single("images");
+
+/**Photos error handler */
+const photoErrorHandler = async(req, err) => {
+      try {
+        if(req.file === undefined || req.file.length <= 0) throw "You must select at least 1 photo.";
+      } catch (e) {
+        errors.add(e);
+      }
+  
+      if (err) {
+        try {
+          if (err.code === "LIMIT_UNEXPECTED_FILE") throw "Too many files to upload.";
+        } catch (e) {
+          errors.add(e);
+        }
+  
+        try {
+          if (err.code === "MISSING_FIELD_NAME") throw "Field name missing for photos.";
+        } catch (e) {
+          errors.add(e);
+        }
+  
+        try {
+          if (err.code === "LIMIT_FIELD_COUNT") throw "Too many fields for photos.";
+        } catch (e) {
+          errors.add(e);
+        }
+  
+        try {
+          if (err.code === "LIMIT_FIELD_VALUE") throw "Field value too long for photos.";
+        } catch (e) {
+          errors.add(e);
+        }
+  
+        try {
+          if (err.code === "LIMIT_FIELD_KEY") throw "Field name too long for photos";
+        } catch (e) {
+          errors.add(e);
+        }
+  
+        try {
+          if (err.code === "LIMIT_FILE_COUNT") throw "Too many files for photos";
+        } catch (e) {
+          errors.add(e);
+        }
+  
+        try {
+          if (err.code === "LIMIT_FILE_SIZE") throw "File too large for photos";
+        } catch (e) {
+          errors.add(e);
+        }
+  
+        try {
+          if (err.code === "LIMIT_PART_COUNT") throw "Too many parts for photos";
+        } catch (e) {
+          errors.add(e);
+        }   
+    }
+}
+
+/**Photo path = ..\public\images\1702829435937-afterhours-IMG_20180811_193424773.jpg */
+const photoPath = (theBar) => {
+  let pathImagesArray;
+  if(theBar.images && theBar.images.filename){
+      pathImagesArray = "/public/images/"+ theBar.images.filename;
+  }
+  else{
+    pathImagesArray = "/public/images/no_image.jpeg";
+  }
+  return pathImagesArray;
+}
 
 export default router;
