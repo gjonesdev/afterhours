@@ -229,7 +229,7 @@ router.route("/bars").get(async (req, res) => {
 		return res.status(400).json({ error: e });
 	}
 	try {
-		bars = await barData.barByOwner(req.session.user.accountId);
+		const bars = await barData.barByOwner(req.session.user.accountId);
 		return res.render("ownerBars", {
 			bars,
 		});

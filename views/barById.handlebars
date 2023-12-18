@@ -7,6 +7,11 @@
 				<input type="hidden" id="barIdToEdit" name="barIdToEdit" value="{{id}}">
 				<button>Edit Bar</button>
 			</form>
+			<form action="/bars/deleteBar" method="post" id="bar-delete-button">
+				<label for="barIdToEdit"></label>
+				<input type="hidden" id="barIdToDelete" name="barIdToDelete" value="{{id}}">
+				<button>Delete Bar</button>
+			</form>
 			{{/if}}
 			<h1>
 				{{barName}}
@@ -111,8 +116,6 @@
 		<aside>
 			<p>{{website}}</p>
 			<p>{{phone}}</p>
-			{{! TODO: Need to add Google map direction}}
-			<a href="">Directions</a>
 			<p> {{location.streetAddress}}, {{location.city}}, {{location.state}}, {{location.zipCode}} </p>
 
 

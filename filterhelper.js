@@ -1,7 +1,6 @@
 import axios from "axios";
 import barData from "./data/bars.js";
 import date from "date-and-time";
-import "dotenv/config";
 
 //Global Variables
 let userCity = "";
@@ -51,7 +50,7 @@ let exportedMethods = {
       "&origins=" +
       userLoc +
       "&units=imperial&key=" +
-      process.env.GOOGLE_APY_KEY;
+      "AIzaSyCNmw9imxqmAtqkfDn194OzvwuTwjMOZXw";
 
     //Creating a bar distance time object
     const { data } = await axios.get(url);
@@ -310,21 +309,18 @@ let exportedMethods = {
   },
 
   tagsFilter(filterTags, bars) {
+    if (filterTags.length === 0) {
+      return bars
+    }
     let barsFound = new Set();
 
-    let tempTags = [];
-
-    filterTags.forEach((filter) => {
-      bars.forEach((bar) => {
-        const tags = bar.bar.tags;
-        tags.forEach((tag) => {
-          tempTags.push(tag.toLowerCase());
-        });
-        if (tempTags.includes(filter.toLowerCase())) {
-          barsFound.add(bar);
-        }
-      });
+    bars.forEach((bar) => {
+      console.log(bar.bar.tags)
+      if (filterTags.every(tag => bar.bar.tags.includes(tag))) {
+        barsFound.add(bar)
+      }
     });
+      
     if (barsFound.size === 0)
       throw {
         code: 1,
@@ -334,7 +330,7 @@ let exportedMethods = {
     const array = Array.from(barsFound);
 
     return array;
-  },
+  }
 };
 
 export default exportedMethods;
