@@ -149,7 +149,7 @@ router
     try {
       validation.validateLocation(location);
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
     }
 
     try {
@@ -161,7 +161,7 @@ router
     try {
       req.body.createPhone = validation.validatePhone(req.body.createPhone);
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
     }
 
     try {
@@ -176,56 +176,56 @@ router
     try {
       if(req.file === undefined || req.file.length <= 0) throw "You must select at least 1 photo.";
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
     }
 
     if (err) {
       try {
         if (err.code === "LIMIT_UNEXPECTED_FILE") throw "Too many files to upload.";
       } catch (e) {
-        errors.add(e);
+        errors.add(e.msg);
       }
 
       try {
         if (err.code === "MISSING_FIELD_NAME") throw "Field name missing for photos.";
       } catch (e) {
-        errors.add(e);
+        errors.add(e.msg);
       }
 
       try {
         if (err.code === "LIMIT_FIELD_COUNT") throw "Too many fields for photos.";
       } catch (e) {
-        errors.add(e);
+        errors.add(e.msg);
       }
 
       try {
         if (err.code === "LIMIT_FIELD_VALUE") throw "Field value too long for photos.";
       } catch (e) {
-        errors.add(e);
+        errors.add(e.msg);
       }
 
       try {
         if (err.code === "LIMIT_FIELD_KEY") throw "Field name too long for photos";
       } catch (e) {
-        errors.add(e);
+        errors.add(e.msg);
       }
 
       try {
         if (err.code === "LIMIT_FILE_COUNT") throw "Too many files for photos";
       } catch (e) {
-        errors.add(e);
+        errors.add(e.msg);
       }
 
       try {
         if (err.code === "LIMIT_FILE_SIZE") throw "File too large for photos";
       } catch (e) {
-        errors.add(e);
+        errors.add(e.msg);
       }
 
       try {
         if (err.code === "LIMIT_PART_COUNT") throw "Too many parts for photos";
       } catch (e) {
-        errors.add(e);
+        errors.add(e.msg);
       }   
   }
   /**No errors, then create a bar with photo */
@@ -245,7 +245,7 @@ router
       );
       filtersHelp.barDistanceHelper(true);
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
     }
   }
 
@@ -383,38 +383,38 @@ router.route("/update").post(async (req, res) => {
     try {
       if(req.file === undefined || req.file.length <= 0) throw "You must select at least 1 photo.";
     } catch (e) {
-      errors.push(e);
+      errors.push(e.msg);
     }
   
     if (err) {
       try {
         if (err.code === "LIMIT_UNEXPECTED_FILE") throw "Too many files to upload.";
       } catch (e) {
-        errors.push(e);
+        errors.push(e.msg);
       }
 
       try {
         if (err.code === "MISSING_FIELD_NAME") throw "Field name missing for photos.";
       } catch (e) {
-        errors.push(e);
+        errors.push(e.msg);
       }
 
       try {
         if (err.code === "LIMIT_FIELD_COUNT") throw "Too many fields for photos.";
       } catch (e) {
-        errors.push(e);
+        errors.push(e.msg);
       }
 
       try {
         if (err.code === "LIMIT_FIELD_VALUE") throw "Field value too long for photos.";
       } catch (e) {
-        errors.push(e);
+        errors.push(e.msg);
       }
 
       try {
         if (err.code === "LIMIT_FIELD_KEY") throw "Field name too long for photos";
       } catch (e) {
-        errors.push(e);
+        errors.push(e.msg);
       }
 
       try {
@@ -426,13 +426,13 @@ router.route("/update").post(async (req, res) => {
       try {
         if (err.code === "LIMIT_FILE_SIZE") throw "File too large for photos";
       } catch (e) {
-        errors.push(e);
+        errors.push(e.msg);
       }
 
       try {
         if (err.code === "LIMIT_PART_COUNT") throw "Too many parts for photos";
       } catch (e) {
-        errors.push(e);
+        errors.push(e.msg);
       }   
   }
 
