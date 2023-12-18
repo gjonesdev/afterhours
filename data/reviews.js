@@ -87,7 +87,6 @@ export const createReview = async (
 	const addReviewCount = await barCollection.updateOne(
 		{ _id: new ObjectId(barId) },
 		{
-			$push: { ratings: rating },
 			$set: { reviewsCount: reviewsArray.length },
 		}
 	);

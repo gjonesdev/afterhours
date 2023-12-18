@@ -84,11 +84,13 @@ router
 			);
 			if (result.inserted) {
 				return res.redirect(303, "/login");
-			} else {
-				return res.status(500).send("Internal Server Error");
 			}
 		} catch (e) {
-			return res.sendStatus(500);
+			return res.status(400).render("register", {
+				title: "register",
+				form: req.body,
+				error: { status: 400, message: e },
+			});
 		}
 	})
 	.delete(async (req, res) => {
@@ -227,7 +229,7 @@ router.route("/bars").get(async (req, res) => {
 		return res.status(400).json({ error: e });
 	}
 	try {
-		bars = await barData.barByOwner(req.session.user.accountId);
+		const bars = await barData.barByOwner(req.session.user.accountId);
 		return res.render("ownerBars", {
 			bars,
 		});

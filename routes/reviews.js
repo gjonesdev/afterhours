@@ -88,6 +88,7 @@ router
       const review = await reviewData.get(reviewId);
 
       await reviewData.deleteReview(reviewId, review.barId);
+      filtersHelp.barDistanceHelper(true);
 
       res.redirect("/account/reviews");
     } catch (e) {
@@ -126,11 +127,13 @@ router
         rating,
         req.body.comment
       );
+      filtersHelp.barDistanceHelper(true);
 
       res.redirect("/account/reviews");
     } catch (error) {
       const reviewId = req.params.reviewId;
       const review = await reviewData.get(reviewId);
+
       res.render("editReviews", { review, error });
     }
   });
