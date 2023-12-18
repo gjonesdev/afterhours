@@ -336,7 +336,7 @@ const successCallback = (position) => {
 			if (responseMessage.BOD.name) {
 				let element = $(
 					`<a href="/bars/${responseMessage.BOD._id}">
-          <div class="card">
+          <div class="card-bar">
               ${responseMessage.BOD.name} <br>
               ${responseMessage.BOD.description} <br>
               ${responseMessage.BOD.location.city} <br>
@@ -349,7 +349,7 @@ const successCallback = (position) => {
 				BODArea.append(element);
 			} else if (responseMessage.BOD.noBarsFound) {
 				let element = $(`<a href="/register">
-			<div class="card">
+			<div class="card-bar">
 				${responseMessage.BOD.noBarsFound} <br>
 				<p>If you want to add the first one, click here to create your bussines account!</p><br>
 			</div>
@@ -358,7 +358,7 @@ const successCallback = (position) => {
 				BODArea.append(element);
 			} else {
 				let element = $(`
-			<div class="card">
+			<div class="card-bar">
 				
 				<p>Server Error</p><br>
 			</div>
@@ -805,7 +805,7 @@ $("#filterForm").on("submit", (e) => {
 						`<li>
 					<div class="row"></div>
 					<a href="/bars/${bar._id}">
-						<div class="card">
+						<div class="card-bar">
 							${bar.name} <br>
 							${"distance"} mi from you!<br>
 							@ ${"duration"} driving <br>

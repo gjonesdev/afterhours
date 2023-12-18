@@ -6,16 +6,18 @@
 	{{/if}}
 </ul>
 
-<div class="carousel-container" data-review-length="{{review.length}}">
+<div class="carousel-container" data-reviews-length="{{reviews.length}}">
     <h1 class="reviews-title">#ReviewsFromYou:</h1>
-    <button class="carousel-arrow prev">&#9665;</button>
+
+    <button class="carousel-arrow prev" onclick="changeReview(-3)">&#9665;</button>
     <div class="carousel">
         <div class="carousel-inner">
-            {{#each review}}
+            {{#each reviews}}
             <div class="item-review">
                 <div class="star-rating" data-rating="{{this.rating}}">
                 </div>
-                <p class="review-barName">Bar Name: {{this.barName}}</p>
+                <br>
+                <p class="review-barName"> #BarName: {{this.barName}}</p>
                 <p class="review-barRating">Rating: {{this.rating}}</p>
                 <p class="review-barComment">Comment: {{this.comment}}</p>
                 <a href="/reviews/edit/{{this._id}}">Edit</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -24,22 +26,54 @@
             {{/each}}
         </div>
     </div>
-    <button class="carousel-arrow next">&#9655;</button>
-    <p>No reviews yet.</p>
+    <button class="carousel-arrow next" onclick="changeReview(3)">&#9655;</button>
+    
 
-<script>
-	document.addEventListener("DOMContentLoaded", function() {
+    <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const reviews = document.querySelectorAll('.item-review');
+    let currentIndex = 0;
+
+    function showReview(index) {
+      reviews.forEach((review, i) => {
+        const isVisible = i >= index && i < index + 3;
+        review.style.display = isVisible ? 'block' : 'none';
+      });
+    }
+
+    function changeReview(offset) {
+      currentIndex = (currentIndex + offset + reviews.length) % reviews.length;
+      showReview(currentIndex);
+    }
+
+    showReview(currentIndex);
+
     const starContainers = document.querySelectorAll('.star-rating');
 
     starContainers.forEach(container => {
-        const rating = container.getAttribute('data-rating');
-        const starCount = Math.round(parseFloat(rating));
+      const rating = container.getAttribute('data-rating');
+      const starCount = Math.round(parseFloat(rating));
 
-        for (let i = 0; i < starCount; i++) {
-            const star = document.createElement('span');
-            star.textContent = '⭐️'; 
-            container.appendChild(star);
-        }
+      container.innerHTML = '';
+
+      for (let i = 0; i < starCount; i++) {
+        const star = document.createElement('span');
+        star.textContent = '⭐️';
+        container.appendChild(star);
+      }
     });
-});
+
+    const prevButton = document.querySelector('.carousel-arrow.prev');
+    const nextButton = document.querySelector('.carousel-arrow.next');
+
+    prevButton.addEventListener('click', function () {
+      changeReview(-3);
+    });
+
+    nextButton.addEventListener('click', function () {
+      changeReview(3);
+    });
+  });
 </script>
+
+</div>

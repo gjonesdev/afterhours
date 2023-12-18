@@ -9,13 +9,13 @@
 
 	
 	<link rel="stylesheet" href="/public/css/styles.css">
-	{{!
+	
 	<!--FONT AWESOME-->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<!--GOOGLE FONTS-->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
-	<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap" rel="stylesheet">!}}
+	<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap" rel="stylesheet">!
 
 </head>
 
@@ -37,6 +37,7 @@
 					<div class="barMenu3"></div>
 				</div>
 				<ul class="nav-links">
+					<li><a href="/"> Home</a></li>
 					<li><a href="/bars"> Bar's List</a></li>
 					{{#if authenticated}}
 					<li><a href="/bars/createbar"> Create Bar</a></li>
@@ -103,7 +104,8 @@
     });
 });
 
-document.addEventListener("DOMContentLoaded", initializeMenu);</script>
+ document.addEventListener("DOMContentLoaded", initializeMenu);</script> 
+
 </body>
 
 

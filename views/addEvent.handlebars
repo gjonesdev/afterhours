@@ -8,6 +8,11 @@
         {{/each}}
     </ul>
     {{/if}}
+
+    <div class="form-container">
+         <h1 class="Events-title">#AddEvent 🥳</h1>
+   <div id="addEvent-section">
+        <div class="form-box">
     <form action="/events/createEvent" method="post" name="EventForm" id="EventForm">
         <label for=""></label>
         <input type="hidden" name="barIdInput" id="barIdInput" value="{{barId}}">
@@ -24,7 +29,8 @@
         <input type="time" name="startTimeInput" id="startTimeInput" value="{{eventInfo.startTimeInput}}">
         <label for="endTimeInput">End Time</label>
         <input type="time" name="endTimeInput" id="endTimeInput" value="{{eventInfo.endTimeInput}}">
-        <button type="submit"></button>
+        
+        <button type="submit">Save Changes</button>
 
     </form>
 
