@@ -9,24 +9,38 @@
     </ul>
     {{/if}}
 
+    <div class="form-container">
+   <div id="editReview-section">
+        <div class="form-box">
+            <h2 class="editReview-title">#EditYourEvent:</h1>
     <form action="/events/updateEvent" method="post" name="EventForm" id="EventForm">
         <label for="barIdInput"></label>
         <input type="hidden" name="barIdInput" id="barIdInput" value="{{barId}}">
+        <div class="input-box">
         <label for="eventIdInput"></label>
         <input type="hidden" name="eventIdInput" id="eventIdInput" value="{{eventInfo.eventIdInput}}">
-        <label for="enventDateInput">Event Date</label>
+        </div>
+        <div class="input-box">
+        <label for="eventDateInput">Event Date</label>
         <input type="date" name="eventDateInput" id="eventDateInput" value="{{eventInfo.eventDateInput}}">
+        </div>
+        <div class="input-box">
         <label for="eventNameInput">Event Name</label>
-        <input type="text " name="eventNameInput" id="eventNameInput" value="{{eventInfo.eventNameInput}}"
-            placeholder="Event Name">
+        <input type="text " name="eventNameInput" id="eventNameInput" value="{{eventInfo.eventNameInput}}">
+        </div>
+        <div class="input-box">
         <label for="eventDescInput">Description</label>
         <textarea id="eventDescInput" name="eventDescInput" rows="4" placeholder="Event description"
             class="full-width-input">{{eventInfo.eventDescInput}}</textarea>
-
+        </div>
+        <div class="input-box">
         <label for="startTimeInput">Start Time</label>
         <input type="time" name="startTimeInput" id="startTimeInput" value="{{eventInfo.startTimeInput}}">
+        </div>
+        <div class="input-box">
         <label for="endTimeInput">End Time</label>
         <input type="time" name="endTimeInput" id="endTimeInput" value="{{eventInfo.endTimeInput}}">
+        </div>
         <button type="submit">Submit Changes</button>
         <a href="/bars/{{barId}}">Cancel</a>
 

@@ -8,25 +8,31 @@
         {{/each}}
     </ul>
     {{/if}}
-    <form action="/events/createEvent" method="post" name="EventForm" id="EventForm">
-        <label for=""></label>
-        <input type="hidden" name="barIdInput" id="barIdInput" value="{{barId}}">
-        <label for="enventDateInput">Event Date</label>
-        <input type="date" name="eventDateInput" id="eventDateInput" value="{{eventInfo.eventDateInput}}">
-        <label for="eventNameInput">Event Name</label>
-        <input type="text " name="eventNameInput" id="eventNameInput" value="{{eventInfo.eventNameInput}}"
-            placeholder="Event Name">
-        <label for="eventDescInput">Description</label>
-        <textarea id="eventDescInput" name="eventDescInput" rows="4" placeholder="Event description"
-            class="full-width-input">{{eventInfo.eventDescInput}}</textarea>
 
-        <label for="startTimeInput">Start Time</label>
-        <input type="time" name="startTimeInput" id="startTimeInput" value="{{eventInfo.startTimeInput}}">
-        <label for="endTimeInput">End Time</label>
-        <input type="time" name="endTimeInput" id="endTimeInput" value="{{eventInfo.endTimeInput}}">
-        <button type="submit"></button>
-        <a href="/bars/{{barId}}">Cancel</a>
+    <div class="form-container">
+            <div class="form-box">
+                <h1 class="Events-title">#AddEvent 🥳</h1>
+                <form action="/events/createEvent" method="post" name="EventForm" id="EventForm">
+                    <label for=""></label>
+                    <input type="hidden" name="barIdInput" id="barIdInput" value="{{barId}}">
+                   
+                   <div class="input-box">
+                    <label for="eventDate"> Event Date</label>
+                    <input style="color: white;" type="date" name="eventDateInput" id="eventDateInput" value="{{eventInfo.eventDateInput}}">
+                    </form>
+                    <label for="eventNameInput">Event Name</label>
+                    <input type="text " name="eventNameInput" id="eventNameInput" value="{{eventInfo.eventNameInput}}">
+                    <label for="eventDescInput">Description</label>
+                    <textarea id="eventDescInput" name="eventDescInput" rows="4" placeholder="Event description"
+                        class="full-width-input">{{eventInfo.eventDescInput}}</textarea>
 
-    </form>
+                    <label for="startTimeInput">Start Time</label>
+                    <input type="time" name="startTimeInput" id="startTimeInput" value="{{eventInfo.startTimeInput}}">
+                    <label for="endTimeInput">End Time</label>
+                    <input type="time" name="endTimeInput" id="endTimeInput" value="{{eventInfo.endTimeInput}}">
+                    <button type="submit">Save Changes</button>
+                    <a style="color: white;" href="/bars/{{barId}}">Cancel</a>
 
-</div>
+                </form>
+
+            </div>

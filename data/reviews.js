@@ -20,7 +20,21 @@ export const createReview = async (
 	barId = validation.validateRequiredStr(barId);
 	rating = validation.validateRequiredRating(rating);
 	comment = validation.validateOptionalStr(comment);
-	let date = new Date().toString();
+	let date = new Date().toDateString();
+
+	//Check for Existing Review
+
+	const reviewCollection = await reviews();
+	
+	const existingReview = await reviewCollection.findOne({
+		barId: barId,
+		accountId: accountId,
+	});
+
+	if (existingReview) {
+		throw "You have already left a review for this bar"
+	}
+
 	const barCollection = await bars();
 
 	const theBar = await barsFunctions.barById(barId);
@@ -42,8 +56,6 @@ export const createReview = async (
 		comment,
 		date,
 	};
-
-	const reviewCollection = await reviews();
 
 	// Insert the review into the reviews collection
 	const res = await reviewCollection.insertOne(review);
@@ -75,7 +87,6 @@ export const createReview = async (
 	const addReviewCount = await barCollection.updateOne(
 		{ _id: new ObjectId(barId) },
 		{
-			$push: { ratings: rating },
 			$set: { reviewsCount: reviewsArray.length },
 		}
 	);
@@ -193,7 +204,7 @@ export const updateReview = async (
 	barId = validation.validateRequiredStr(barId);
 	rating = validation.validateRequiredRating(rating);
 	comment = validation.validateOptionalStr(comment);
-	let date = new Date().toString();
+	let date = new Date().toDateString();
 
 	const review = {
 		accountId,

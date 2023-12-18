@@ -21,15 +21,12 @@ function reportForm() {
   let commentInput = document.getElementById("commentInput");
   let errorDiv = document.getElementById("error");
 
-  if (reportFormDocument) {
-    reportFormDocument.addEventListener("submit", (event) => {
-      console.log("report-Form submission fired");
-      console.log("Has a form");
-
-      //Validate Name:
-      if (firstNameInput.value.trim()) {
-        firstNameInput.value = firstNameInput.value.trim();
-        errorDiv.hidden = true;
+	if (reportFormDocument) {
+		reportFormDocument.addEventListener("submit", (event) => {
+			//Validate Name:
+			if (firstNameInput.value.trim()) {
+				firstNameInput.value = firstNameInput.value.trim();
+				errorDiv.hidden = true;
 
         //Error check:
         if (!firstNameInput.value) {
@@ -734,7 +731,7 @@ const successCallback = (position) => {
         if (responseMessage.BOD.name) {
           let element = $(
             `<a href="/bars/${responseMessage.BOD._id}">
-          <div class="card">
+          <div class="card-bar">
               ${responseMessage.BOD.name} <br>
               ${responseMessage.BOD.description} <br>
               ${responseMessage.BOD.location.city} <br>
@@ -747,7 +744,7 @@ const successCallback = (position) => {
           BODArea.append(element);
         } else if (responseMessage.BOD.noBarsFound) {
           let element = $(`<a href="/register">
-			<div class="card">
+			<div class="card-bar">
 				${responseMessage.BOD.noBarsFound} <br>
 				<p>If you want to add the first one, click here to create your bussines account!</p><br>
 			</div>
@@ -756,7 +753,7 @@ const successCallback = (position) => {
           BODArea.append(element);
         } else {
           let element = $(`
-			<div class="card">
+			<div class="card-bar">
 				
 				<p>Server Error</p><br>
 			</div>
@@ -797,7 +794,7 @@ const successCallback = (position) => {
                 `<li>
 					  <div class="row"></div>
 					  <a href="/bars/${bar.bar._id}">
-						  <div class="card">
+						  <div class="card-bar">
 							  ${bar.bar.name} <br>							 
 							  ${bar.bar.location.city} <br>
 							  ${bar.bar.ratingAverage} <br>
@@ -842,7 +839,7 @@ const successCallback = (position) => {
                 `<li>
 					  <div class="row"></div>
 					  <a href="/bars/${bar.bar._id}">
-						  <div class="card">
+						  <div class="card-bar">
 							  ${bar.bar.name} <br>
 							  ${bar.distance} <br>
 							  @ ${bar.duration} driving <br>
@@ -890,7 +887,7 @@ const successCallback = (position) => {
                 `<li>
 					  <div class="row"></div>
 					  <a href="/bars/${bar.bar._id}">
-						  <div class="card">
+						  <div class="card-bar">
 							  ${bar.bar.name} <br>
 							  ${bar.bar.location.city} <br> 						 
 							  ${bar.bar.ratingAverage} <br>
@@ -932,7 +929,7 @@ const errorCallback = (error) => {
         if (responseMessage.BOD.name) {
           let element = $(
             `<a href="/bars/${responseMessage.BOD._id}">
-          <div class="card">
+          <div class="card-bar">
               ${responseMessage.BOD.name} <br>
               ${responseMessage.BOD.description} <br>
               ${responseMessage.BOD.location.city} <br>
@@ -945,7 +942,7 @@ const errorCallback = (error) => {
           BODArea.append(element);
         } else if (responseMessage.BOD.noBarsFound) {
           let element = $(`<a href="/register">
-			<div class="card">
+			<div class="card-bar">
 				${responseMessage.BOD.noBarsFound} <br>
 				<p>If you want to add the first one, click here to create your bussines account!</p><br>
 			</div>
@@ -992,7 +989,7 @@ const errorCallback = (error) => {
                 `<li>
 					  <div class="row"></div>
 					  <a href="/bars/${bar.bar._id}">
-						  <div class="card">
+						  <div class="card-bar">
 							  ${bar.bar.name} <br>							  
 							  ${bar.bar.location.city} <br>
 							  ${bar.bar.ratingAverage} <br>
@@ -1037,7 +1034,7 @@ if (document.URL.includes("/bars")) {
             `<li>
 					<div class="row"></div>
 					<a href="/bars/${bar.bar._id}">
-						<div class="card">
+						<div class="card-bar">
 							${bar.bar.name} <br>						
 							${bar.bar.location.city} <br>
 							${bar.bar.ratingAverage} <br>
@@ -1085,7 +1082,7 @@ if (document.URL.includes("/bars")) {
               `<li>
         <div class="row"></div>
         <a href="/bars/${bar.bar._id}">
-          <div class="card">
+          <div class="card-bar">
             ${bar.bar.name} <br>
             ${bar.bar.location.city} <br>       
             ${bar.bar.ratingAverage} <br>
@@ -1104,3 +1101,38 @@ if (document.URL.includes("/bars")) {
     );
   });
 }
+
+$("#favoriteButton").on("submit", (e) => {
+	e.preventDefault();
+	const inputs = $("#favoriteButton");
+	$.ajax({
+		method: "PUT",
+		url: "/user/favorites",
+		data: inputs.serialize(),
+	}).then(
+		(res) => {
+			let favoritesCount = Number($("#favoritesCount").text());
+			let buttonText = $("#favorite-submit-button").text();
+			buttonText === "Favorite"
+				? (buttonText = "Unfavorite") && favoritesCount++
+				: (buttonText = "Favorite") && favoritesCount--;
+			$("#favorite-submit-button").text(buttonText);
+			$("#favoritesCount").text(favoritesCount);
+		},
+		(res) => {
+			$("#favorite-submit-button").text("Error, please refresh.");
+			$("#favorite-submit-button").attr("disabled", true);
+		}
+	);
+});
+
+$("#delete-button").on("click", (e) => {
+	$("#delete-confirm").removeClass("hide");
+});
+
+$("#cancel-delete-button").on("click", (e) => {
+	$("#delete-confirm").addClass("hide");
+});
+
+
+

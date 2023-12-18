@@ -14,7 +14,7 @@ const constructorMethod = (app) => {
   app.use("/account", accountRoutes);
   app.use("/user", userRoutes);
   app.use("/reports", reports);
-  app.use("/:userId", reports);
+  app.use("/myreports", reports);
 
   app.use("*", (req, res) => {
     res.redirect("/");

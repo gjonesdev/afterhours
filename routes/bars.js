@@ -1,9 +1,8 @@
-import { reviewData, accountData, barData } from "../data/index.js";
+import { userData, reviewData, accountData, barData } from "../data/index.js";
 import { Router } from "express";
 const router = Router();
 import * as validation from "../helpers.js";
 import filtersHelp from "../filterhelper.js";
-import "dotenv/config";
 //import { filter } from "bluebird";
 
 let renderedList = [];
@@ -26,28 +25,32 @@ router
       bars: allTheBars,
       location: location,
       tags: [
-        "#Sport",
-        "#Cocktails",
-        "#Mixology",
-        "#CraftBeer",
-        "#WineWednesday",
-        "#BarEvents",
-        "#DrinkSpecials",
-        "#ThirstyThursday",
-        "#LiveMusic",
-        "#BeerTasting",
-        "#MixandMingle",
-        "#LadiesNight",
-        "#BarCrafting",
-        "#Tapas",
-        "#ChampagneNight",
-        "#AfterWorkDrinks",
-        "#SignatureCocktails",
-        "#WhiskeyTasting",
-        "#HappyHourDeals",
-        "#CraftCocktails",
-        "#Shots",
-        "#BarHopping",
+        "Sport",
+        "Grill",
+        "Margaritas",
+        "Tacos",
+        "Dance",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
       ],
     });
   })
@@ -344,22 +347,27 @@ router.route("/deleteBar").post(async (req, res) => {
     });
   }
 
+  let theBar = await barData.barById(req.body.barIdToDelete)
+  console.log(theBar)
   let isOwner = false;
   if (req.session.user) {
     console.log(req.session.user);
     console.log(req.session.user.accountId);
+    console.log(theBar.ownerId)
     isOwner = theBar.ownerId === req.session.user.accountId;
-  } /*
+  } 
+  
   if (!isOwner) {
     return res.status(403).render("error", {
       error: { status: "403", message: "Prohibited function" },
       message:
         "You are not the owner of this bar. Only owners can delete bars!",
     });
-  }*/
+  }
 
   try {
     await barData.removeBar(req.body.barIdToDelete);
+    filtersHelp.barDistanceHelper(true);
     return res.render("error", {
       error: { status: ":(", message: "The Bar has been deleted succesfully!" },
       message: "",
@@ -383,9 +391,30 @@ router.route("/:barId").get(async (req, res) => {
   }
   try {
     const theBar = await barData.barById(req.params.barId);
-
-    console.log(theBar);
-    //const isOwner = theBar.ownerId === req.session.accountId;
+    let isOwner = false;
+    let favoriteToggle = "Favorite";
+    let reviewEmpty = true;
+    if (req.session.user) {
+        isOwner = theBar.ownerId === req.session.user.accountId;
+        const account = await accountData.getAccount(
+            req.session.user.accountId
+        );
+        const user = await userData.getUser(account.userId);
+        user.favorites.forEach((favorite) => {
+            if (favorite.barId === theBar._id.toString()) {
+                favoriteToggle = "Unfavorite";
+            }
+        });
+			const userId = account.userId
+      theBar.reviews.forEach((review) => {
+          if (userId === review.accountId) {
+              reviewEmpty = false;
+          }
+      });
+      if (theBar.ownerId === req.session.user.accountId) {
+          reviewEmpty = false;
+      }
+    }
     res.render("barById", {
       id: theBar._id,
       barName: theBar.name,
@@ -400,7 +429,9 @@ router.route("/:barId").get(async (req, res) => {
       reviewsCount: theBar.reviewsCount,
       ratingAverage: theBar.ratingAverage,
       favoritesCount: theBar.favoritesCount,
-      isOwner: true,
+      isOwner,
+      favoriteToggle,
+      reviewEmpty,
     });
   } catch (e) {
     res.status(404).json({ error: "Bar not found!" });

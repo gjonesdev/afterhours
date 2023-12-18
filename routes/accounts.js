@@ -84,11 +84,13 @@ router
 			);
 			if (result.inserted) {
 				return res.redirect(303, "/login");
-			} else {
-				return res.status(500).send("Internal Server Error");
 			}
 		} catch (e) {
-			return res.sendStatus(500);
+			return res.status(400).render("register", {
+				title: "register",
+				form: req.body,
+				error: { status: 400, message: e },
+			});
 		}
 	})
 	.delete(async (req, res) => {
@@ -103,6 +105,7 @@ router
 				req.body.passwordInput.trim()
 			);
 			if (result.deleted) {
+				req.session.destroy();
 				return res.render("success", {
 					title: "success",
 					message: "Your account has been deleted successfully.",
@@ -208,9 +211,7 @@ router.route("/reviews").get(async (req, res) => {
 			req.session.user.accountId
 		);
 		const user = await userData.getUser(account.userId);
-		const reviews = await reviewData.getReviewsByAccountId(
-			account.userId
-		);
+		const reviews = await reviewData.getReviewsByAccountId(account.userId);
 		return res.render("reviews", {
 			reviews,
 			user,
@@ -228,7 +229,7 @@ router.route("/bars").get(async (req, res) => {
 		return res.status(400).json({ error: e });
 	}
 	try {
-		bars = await barData.barByOwner(req.session.user.accountId);
+		const bars = await barData.barByOwner(req.session.user.accountId);
 		return res.render("ownerBars", {
 			bars,
 		});

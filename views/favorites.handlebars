@@ -1,25 +1,26 @@
-<ul>
+<ul class="favoriteLinks">
 	<li><a href="/account" id="account-tab">Account Info</a></li>
-	<li><a href="/account/favorites" id="favorites-tab">Favorites</a></li>
 	<li><a href="/account/reviews" id="reviews-tab">My Reviews</a></li>
-	{{#if account.bars}}
+	
+    {{#if authenticatedOwner}}
 	<li><a href="/account/bars" id="bars-tab">My Bars</a></li>
 	{{/if}}
 </ul>
 
+<h1 class="reviews-title">#YourFavorites:</h1>
 <div id="favorites-section">
-	{{#if user.favorites}}
-
-	{{#each user.favorites}}
-	<p>{{this.barName}}</p>
-	<form action="/user/favorites" method="POST" id="favorite-button">
-		<input type="hidden" id="barId" name="barId" value="{{this.barId}}">
-		<input type="hidden" name="_method" value="PUT">
-		<button type="submit" class="submit-button">Remove Favorite</button>
-	</form>
-	{{/each}}
-
-	{{else}}
-	<p>No favorites yet.</p>
-	{{/if}}
+    {{#if user.favorites}}
+        {{#each user.favorites}}
+            <div class="favorite-card">
+                <p class="bar-name">{{this.barName}}</p>
+                <form action="/user/favorites" method="POST" class="favorite-button">
+                    <input type="hidden" id="barId" name="barId" value="{{this.barId}}">
+                    <input type="hidden" name="_method" value="PUT">
+                    <button type="submit" class="submit-button">Remove</button>
+                </form>
+            </div>
+        {{/each}}
+    {{else}}
+        <p>No favorites yet.</p>
+    {{/if}}
 </div>

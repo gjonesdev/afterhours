@@ -6,7 +6,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>{{title}} | AfterHours</title>
-	{{!
+
 
 	<link rel="stylesheet" href="/public/css/styles.css">
 
@@ -16,11 +16,12 @@
 	<!--GOOGLE FONTS-->
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Play&display=swap" rel="stylesheet">
-	}}
+
 </head>
 
 <body>
 	<header>
+
 		<nav class="main-nav" id="main-nav">
 			<div class="content-wrapper-sm">
 				<a href="/" class="navbar-brand">After<strong>hours</strong></a>
@@ -34,15 +35,14 @@
 					</form>
 				</div>
 
-				<div id="menu-button">
-					<div class="bar1"></div>
-					<div class="bar2"></div>
-					<div class="bar3"></div>
-				</div>
 				<ul class="nav-links">
-					<li id="bars-menu"><a href="/bars"> Bar's List</a></li>
+					<li><a href="/"> Home</a></li>
+					<li><a href="/bars"> Bar's List</a></li>
 					{{#if authenticated}}
-					<li><a href="/bars/createbar"> Create Bar</a></li>
+					{{#if authenticatedOwner}}
+					<li><a href="/bars/createbar">
+							Create Bar</a></li>
+					{{/if}}
 					<li><a href="/account">My Account</a></li>
 					<li><a href="/logout">Logout</a></li>
 					{{else}}
@@ -51,7 +51,6 @@
 					{{/if}}
 					<li><a href="/about"> About Us</a></li>
 					<li><a href="/reports">Contact</a></li>
-
 				</ul>
 			</div>
 		</nav>
@@ -70,7 +69,6 @@
 		integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
 	<script src='/public/js/main.js'></script>
 
-
 	<footer>
 		<div class="footer">
 			<div class="row">
@@ -86,7 +84,7 @@
 					<li><a href="/services">Our Services</a></li>
 					<li><a href="/privacy">Privacy Policy</a></li>
 					<li><a href="/terms">Terms & Conditions</a></li>
-					<li><a href="/reviews"> Reviews </a></li>
+
 
 				</ul>
 			</div>

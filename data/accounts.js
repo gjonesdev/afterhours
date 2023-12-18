@@ -126,8 +126,6 @@ export const deleteAccount = async (accountId, password) => {
 		_id: new ObjectId(accountId),
 	});
 
-	console.log(deleted);
-
 	if (!deleted) {
 		throw "No account with that id.";
 	}
