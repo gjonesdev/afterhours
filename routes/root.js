@@ -21,7 +21,7 @@ router
   .post(async (req, res) => {
     const userLocation = {
       latitude: xss(req.body.latitude),
-      longitude: xss(req.body.longitude)
+      longitude: xss(req.body.longitude),
     };
 
     if (
@@ -36,12 +36,17 @@ router
       if (oldUserLoc.isNeeded) {
         const barsDistance = await filtersFun.barsDistance(userLocation);
         oldUserLoc.isNeeded = false;
-        // oldBarsList = barsDistance;
       }
       const barOfTheDay = await filtersFun.barOfTheDay();
       res.json({ BOD: barOfTheDay });
     } catch (e) {
-      res.status(500).json({ BOD: e });
+      if (e.code === 1) {
+        res.status(404).json({ BOD: e.msg });
+      } else if (e.code === 2) {
+        res.status(400).json({ BOD: e.msg });
+      } else {
+        res.status(500).json({ BOD: e.msg });
+      }
     }
   });
 

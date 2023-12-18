@@ -2,6 +2,7 @@ import { Router } from "express";
 import { validateId, validateUser } from "../helpers.js";
 import { userData } from "../data/index.js";
 import { getAccount } from "../data/accounts.js";
+import filtersHelp from "../filterhelper.js";
 
 const router = Router();
 
@@ -61,13 +62,9 @@ router.route("/favorites").put(async (req, res) => {
 			req.body.barId
 		);
 		filtersHelp.barDistanceHelper(true);
-		if (bar.updated) {
-			return res.redirect(303, "back");
-		} else {
-			return res.redirect(303, "back");
-		}
+		return res.redirect(303, "back")
 	} catch (e) {
-		return res.redirect(303, "back");
+		return res.status(500).json({ error: e });
 	}
 });
 

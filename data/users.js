@@ -70,7 +70,8 @@ export const updateFavorites = async (userId, barId) => {
 		const barName = barResult.name;
 		userResult = await userCollection.findOneAndUpdate(
 			{ _id: new ObjectId(userId) },
-			{ $pull: { favorites: { barId, barName } } }
+			{ $pull: { favorites: { barId, barName } } },
+			{ returnDocument: "after" }
 		);
 	} else {
 		barResult = await barCollection.findOneAndUpdate(
@@ -81,11 +82,12 @@ export const updateFavorites = async (userId, barId) => {
 		const barName = barResult.name;
 		userResult = await userCollection.findOneAndUpdate(
 			{ _id: new ObjectId(userId) },
-			{ $push: { favorites: { barId, barName } } }
+			{ $push: { favorites: { barId, barName } } },
+			{ returnDocument: "after" }
 		);
 	}
 
-	if (!(userResult && barResult)) {
+	if (!userResult || !barResult) {
 		throw "Something went wrong.";
 	}
 

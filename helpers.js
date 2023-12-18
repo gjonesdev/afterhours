@@ -15,10 +15,11 @@ export const validateId = (id) => {
 
 // Validate string
 export const validateRequiredStr = (str) => {
-  if (!str) throw "Input must be provided!";
-  if (typeof str !== "string") throw "Input must be a valid string!";
+  if (!str) throw { code: 400, msg: "Input must be provided!" };
+  if (typeof str !== "string")
+    throw { code: 400, msg: "Input must be a valid string!" };
   str = str.trim();
-  if (str.length === 0) throw "Input is an empty string!";
+  if (str.length === 0) throw { code: 400, msg: "Input is an empty string!" };
 
   return str;
 };

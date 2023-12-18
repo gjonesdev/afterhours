@@ -1,4 +1,181 @@
-<div>
+<div class="barId-wrapper">
+	<div class="profile-header">
+		<div class="profile-img">
+			<img src="https://as2.ftcdn.net/v2/jpg/02/48/87/19/1000_F_248871906_nIvY0CpdBjTgaduYig9D3aXhUSadcNBF.jpg"
+				width="200" alt="profile image">
+		</div>
+		<div class="profile-nav-info">
+			<h3 class="user-name">{{barName}}</h3>
+			<div class="address">
+				<p> {{location.streetAddress}}, {{location.city}}, {{location.state}}, {{location.zipCode}} </p>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+<div class="main-bd">
+	<div class="left-side">
+		<div class="profile-side">
+			<p class="mobile-no"> 📲 {{phone}}</p>
+			<p class="user-email">📧 {{email}}</p>
+			<div class="user-bio">
+				<h3>Bio</h3>
+				<p class="bio">{{description}}</p>
+			</div>
+			<div class="profile-btn">
+
+				{{#if authenticated}}
+				<form action="/reviews" method="post" id="review-button">
+					<label for="barIdToreview"></label>
+					<input type="hidden" id="barIdToreview" name="barIdToreview" value="{{id}}">
+					<label for="barNameToreview"></label>
+					<input type="hidden" id="barNameToreview" name="barNameToreview" value="{{barName}}">
+					<button class="chatbtn">Write a review</button>
+				</form>
+				<form id="favoriteButton">
+					<input type="hidden" id="barId" name="barId" value="{{id}}">
+					<button type="submit" id="favorite-submit-button" class="createbtn">{{favoriteToggle}}</button>
+				</form>
+				{{else}}
+				<a class="link" href="/login">You need to be a user to write reviews. Click here to log in!</a>
+				{{/if}}
+
+			</div>
+
+			<div class="user-rating">
+				<h3 class="rating">Average Rating: {{ratingAverage}}</h3>
+				<h3 class="rating">Favorites: <span id="favoritesCount">{{favoritesCount}}</span></h3>
+				<div class="rate">
+					<span class="no-of-user-rate"><span>{{reviews.length}}</span>&nbsp;&nbsp;reviews</span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="right-side">
+		<div class="nav">
+			<ul>
+				<li data-panel-index="0" class="user-post active">Events</li>
+				<li data-panel-index="1" class="user-review">Reviews</li>
+				{{!-- <li data-panel-index="2" class="user-setting">Settings</li> --}}
+			</ul>
+		</div>
+		<div class="profile-body">
+			<div class="profile-posts tab">
+				<h1>Happy Hour Events</h1>
+				{{#if isOwner}}
+				<form action="/events/addEvent" method="post" id="add-event-button">
+					<label for="barIdToEdit"></label>
+					<input type="hidden" id="addEventInput" name="addEventInput" value="{{id}}">
+					<button>Add Event</button>
+				</form>
+				{{/if}}
+				<ul>
+					{{#each schedule}}
+					<li>
+						<p> {{date}}</p>
+						<p> {{eventName}}</p>
+						<p> {{description}}</p>
+						<p> {{startTime}}</p>
+						<p> {{endTime}}</p>
+						{{#if ../isOwner}}
+						<form action="/events/editEvent" method="post" id="edit-event-but">
+							<label for="editEventIdInput"></label>
+							<input type="hidden" name="editEventIdInput" id="editEventIdInput" value="{{_id}}">
+							<label for="editEventBarIdInput"></label>
+							<input type="hidden" name="editEventBarIdInput" id="editEventBarIdInput" value="{{../id}}">
+							<button type="submit">Edit</button>
+						</form>
+						<form action="/events/deleteEvent" method="post" id="delete-event-but">
+							<label for="deleteEvenIdtInput"></label>
+							<input type="hidden" name="deleteEvenIdtInput" id="deleteEvenIdtInput" value="{{_id}}">
+							<label for="deleteEventBarIdInput"></label>
+							<input type="hidden" name="deleteEventBarIdInput" id="deleteEventBarIdInput"
+								value="{{../id}}">
+							<button type="submit">Delete</button>
+						</form>
+						{{/if}}
+					</li>
+					{{/each}}
+				</ul>
+			</div>
+
+			<div class="profile-reviews tab">
+				<h1>All Reviews</h1>
+				<ul class="barList" style="list-style: none;">
+					{{#each reviews}}
+					<li>
+						<div class="card-bar">
+							<p><strong>User:</strong> {{firstName}}</p>
+							<p><strong>rating:</strong> {{rating}}</p>
+							<p><strong>Date:</strong> {{date}}</p>
+							<p><strong>Comment:</strong> {{comment}}</p>
+						</div>
+					</li>
+					<br>
+					<br>
+					{{/each}}
+				</ul>
+			</div>
+		</div>
+
+
+		<div class="profile-settings tab">
+			<div class="account-setting">
+				<h1>Gallery</h1>
+
+
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+	function initializeProfile() {
+		$(".nav ul li").click(function () {
+			$(this)
+				.addClass("active")
+				.siblings()
+				.removeClass("active");
+
+			const panelIndex = $(this).data("panel-index");
+			tabs(panelIndex);
+		});
+
+		const tab = document.querySelectorAll(".profile-body .tab");
+
+		function tabs(panelIndex) {
+			tab.forEach(function (node) {
+				node.style.display = "none";
+			});
+			tab[panelIndex].style.display = "block";
+		}
+		tabs(0);
+
+		if (document.querySelector(".alert-message").innerText > 9) {
+			document.querySelector(".alert-message").style.fontSize = ".7rem";
+		}
+	}
+
+	// Ensure the document is ready before executing the script
+	$(document).ready(function () {
+		initializeProfile();
+	});
+</script>
+
+
+
+
+
+
+<!--<div>
 	<div class="bar-main-image">
 		<div class=" bar-main-info">
 			{{#if isOwner}}
@@ -7,13 +184,18 @@
 				<input type="hidden" id="barIdToEdit" name="barIdToEdit" value="{{id}}">
 				<button>Edit Bar</button>
 			</form>
+			<form action="/bars/deleteBar" method="post" id="bar-delete-button">
+				<label for="barIdToEdit"></label>
+				<input type="hidden" id="barIdToDelete" name="barIdToDelete" value="{{id}}">
+				<button>Delete Bar</button>
+			</form>
 			{{/if}}
 			<h1>
 				{{barName}}
 			</h1>
 			<p>{{ratingAverage}}</p>
 			<p> ({{reviewsCount}} reviews)</p>
-			<p> ({{favoritesCount}} favorites)</p>
+			<p> (<span id="favoritesCount">{{favoritesCount}}</span> favorites)</p>
 			{{#each tags}}
 			<li>
 				{{this}}
@@ -68,17 +250,20 @@
 	<div>
 
 		{{#if authenticated}}
-		<form action="/reviews" method="post" id="review-button">
-			<label for="barIdToreview"></label>
-			<input type="hidden" id="barIdToreview" name="barIdToreview" value="{{id}}">
-			<label for="barNameToreview"></label>
-			<input type="hidden" id="barNameToreview" name="barNameToreview" value="{{barName}}">
-			<button>Write a review</button>
-		</form>
-		<form action="/user/favorites" method="POST" id="favorite-button">
+			{{#if reviewEmpty}}
+			<form action="/reviews" method="post" id="review-button">
+				<label for="barIdToreview"></label>
+				<input type="hidden" id="barIdToreview" name="barIdToreview" value="{{id}}">
+				<label for="barNameToreview"></label>
+				<input type="hidden" id="barNameToreview" name="barNameToreview" value="{{barName}}">
+				<button>Write a review</button>
+			</form>
+			{{/if}}
+		{{/if}}
+		{{#if authenticated}}
+		<form id="favoriteButton">
 			<input type="hidden" id="barId" name="barId" value="{{id}}">
-			<input type="hidden" name="_method" value="PUT">
-			<button type="submit" class="submit-button">Favorite</button>
+			<button type="submit" class="submit-button" id="favorite-submit-button">{{favoriteToggle}}</button>
 		</form>
 		{{else}}
 		<a href="/login">You need to be a user to write reviews. Click here to log in!</a>
@@ -109,9 +294,9 @@
 		<aside>
 			<p>{{website}}</p>
 			<p>{{phone}}</p>
-			{{! TODO: Need to add Google map direction}}
-			<a href="">Directions</a>
 			<p> {{location.streetAddress}}, {{location.city}}, {{location.state}}, {{location.zipCode}} </p>
 
-
+			<button>Add photo</button>
 	</div>
+
+</div>-->

@@ -9,6 +9,7 @@
     </ul>
     {{/if}}
 
+    
     <form action="/events/updateEvent" method="post" name="EventForm" id="EventForm">
         <label for="barIdInput"></label>
         <input type="hidden" name="barIdInput" id="barIdInput" value="{{barId}}">
@@ -28,6 +29,7 @@
         <label for="endTimeInput">End Time</label>
         <input type="time" name="endTimeInput" id="endTimeInput" value="{{eventInfo.endTimeInput}}">
         <button type="submit">Submit Changes</button>
+        <a href="/bars/{{barId}}">Cancel</a>
 
     </form>
 
