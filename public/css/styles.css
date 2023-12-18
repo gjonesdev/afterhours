@@ -172,26 +172,27 @@ header {
 	padding: 1rem;
 }
 
-.search-bar {
+/* .search-bar {
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	background-color: rgba(0, 0, 0, 0);
 	border: 1px solid white;
 	border-radius: 10px;
-	padding: 0.5rem;
+	padding: 0.25rem;
 	margin-right: 0.5rem;
-	width: 300%;
-	margin: 20px auto;
+	width: 250%;
+	margin: 5px auto;
 	
-}
+} */
 
 .search-bar input {
-	border: none;
+	border: 1px solid white;
+	border-radius: 10px;
 	background: transparent;
 	margin-right: 0.5rem;
 	color: white;
-	padding: 0.25rem;
+	padding: 1rem;
 	text-align: center;
 	outline: none;
 	flex-grow: 1;

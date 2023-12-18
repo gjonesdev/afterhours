@@ -60,7 +60,6 @@
 
 	<button class="chatbtn" type="submit">Search</button>
 </form>
-<a href="/bars">Reset Drop Down</a>
 <form action="/sortBy" method="post" id="sortByForm">
 	<label for="sortByInput">Sort by</label>
 	<select name="sortBySelector" id="sortBySelector">
@@ -70,11 +69,7 @@
 		<option value="mostReviews">Most Reviewed</option>
 	</select>
 </form>
-<form action="/barbycity" method="post" id="findByLocation">
-	<label for="findCityInput"></label>
-	<input type="text" id="findCityInput" name="findCityInput">
-	<button type="submit"></button>
-</form>
+
 <div class="grid-title">#AllTheBars</div>
 <div class="bars-container">
 	<div class="filter-container">
@@ -88,7 +83,6 @@
 			{{/each}}
 			<button type="submit" class="submit-button">Apply Filters</button>
 		</form>
-		<a class="" id="resetFilters" href="/bars">Reset Filters</a>
 	</div>
 
 	<a class="" id="resetFilters" href="/bars">Reset Filters</a>
