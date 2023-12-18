@@ -61,7 +61,7 @@
 	<button class="chatbtn" type="submit">Search</button>
 </form>
 <form action="/sortBy" method="post" id="sortByForm">
-	<label for="sortByInput">Sort by</label>
+	<label for="sortBySelector">Sort by</label>
 	<select name="sortBySelector" id="sortBySelector">
 		<option disabled selected value> -- select an option -- </option>
 		<option value="highestrating">Highest Rated</option>
@@ -88,7 +88,7 @@
 	<a class="" id="resetFilters" href="/bars">Reset Filters</a>
 
 	<ul id="barList">
-		
+
 		{{#each bars}}
 		<li>
 			<div class="row"></div>
@@ -103,6 +103,6 @@
 			</a>
 		</li>
 		{{/each}}
-		
+
 	</ul>
 </div>

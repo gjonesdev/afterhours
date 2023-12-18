@@ -189,9 +189,9 @@ router
   });
 router.route("/searchBar").post(async (req, res) => {
   if (!req.body) {
-    return res.status(400).render("bars", {
-      error: "Type something and I will find you a bar!",
-      isError: true,
+    return res.status(400).render("error", {
+      error: { status: 400, message: "Missing input." },
+      message: "Search input is needed!",
     });
   }
   let searcCriteria = req.body.searchInput;
@@ -445,8 +445,13 @@ router.route("/barsByFilters").post(async (req, res) => {
     filters.push(filter);
   });
 
+  if (filters.length == 0) {
+    return res.json({ reqResponse: renderedList });
+  }
+
   try {
     const bars = filtersHelp.tagsFilter(filters, renderedList);
+
     res.json({ reqResponse: bars });
   } catch (e) {
     if (e.code === 404) {
