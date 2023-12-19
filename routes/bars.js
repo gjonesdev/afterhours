@@ -194,28 +194,164 @@ router.route("/searchBar").post(async (req, res) => {
       message: "Search input is needed!",
     });
   }
-  let searcCriteria = req.body.searchInput;
+  let searchCriteria = req.body.searchInput;
   try {
-    searcCriteria = validation.validateRequiredStr(searcCriteria);
+    searchCriteria = validation.validateRequiredStr(searchCriteria);
   } catch (e) {
-    return res.status(400).render("bars", { error: e.msg, isError: true });
+    return res.status(400).render("bars", { error: e.msg, isError: true, tags: [
+        "Sport",
+        "Grill",
+        "Margaritas",
+        "Tacos",
+        "Dance",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
+      ], });
   }
   let allBars;
   try {
-    const searchBar = await barData.barSearch(searcCriteria);
+    const searchBar = await barData.barSearch(searchCriteria);
     allBars = await filtersHelp.allBarsPlus(searchBar);
   } catch (e) {
     if (e.code === 404) {
-      res.status(404).render("bars", { error: e.msg, isError: true });
+      res.status(404).render("bars", { error: e.msg, isError: true, tags: [
+        "Sport",
+        "Grill",
+        "Margaritas",
+        "Tacos",
+        "Dance",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
+      ], });
     } else if (e.code === 400) {
-      res.status(400).render("bars", { error: e.msg, isError: true });
+      res.status(400).render("bars", { error: e.msg, isError: true, tags: [
+        "Sport",
+        "Grill",
+        "Margaritas",
+        "Tacos",
+        "Dance",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
+      ], });
     } else {
-      res.status(500).render("bars", { error: e.msg, isError: true });
+      res.status(500).render("bars", { error: e.msg, isError: true, tags: [
+        "Sport",
+        "Grill",
+        "Margaritas",
+        "Tacos",
+        "Dance",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
+      ], });
     }
   }
   renderedList = allBars;
   res.render("bars", {
     bars: allBars,
+	tags: [
+        "Sport",
+        "Grill",
+        "Margaritas",
+        "Tacos",
+        "Dance",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
+      ],
   });
 });
 

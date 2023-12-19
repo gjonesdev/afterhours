@@ -445,10 +445,9 @@ const validatePhone = (phone) => {
     return;
   }
   phone.value = phone.value.trim();
-
   if (!/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(phone.value)) {
     errors.push("Phone number must be valid.");
-    password.classList.add("invalid-input");
+    phone.classList.add("invalid-input");
   }
 
   return phone.value.replace(/\D/g, "");
