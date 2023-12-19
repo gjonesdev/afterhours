@@ -1029,17 +1029,28 @@ if (document.URL.includes("/bars")) {
     }).then((res) => {
       const foundBars = res.reqResponse;
       foundBars.forEach((bar) => {
+        updatedBarTags = []
+        barTags = bar.bar.tags;
+        if (barTags.length > 1) {
+          let firstTag = barTags[0];
+          let secondTag = barTags[1] + "..."
+          updatedBarTags.push(firstTag)
+          updatedBarTags.push(secondTag)
+        } else {
+          updatedBarTags = barTags
+        }
         $("#barList").append(
           $(
             `<li>
 					<div class="row"></div>
 					<a href="/bars/${bar.bar._id}">
 						<div class="card-bar">
-							${bar.bar.name} <br>						
-							${bar.bar.location.city} <br>
-							${bar.bar.ratingAverage} <br>
+							#BarName: ${bar.bar.name} <br>						
+							#City: ${bar.bar.location.city} <br>
+							#RatingAverage: ${bar.bar.ratingAverage} <br>
 							${bar.bar.reviewsCount} reviews <br>
 							${bar.bar.favoritesCount} favorites <br>
+              #${updatedBarTags} <br>
 						</div>
 					</a>
 					</div>
