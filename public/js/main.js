@@ -697,7 +697,6 @@ if (accountForm) {
 navigator.permissions
   .query({ name: "geolocation" })
   .then(function (permissionStatus) {
-    //console.log("geolocation permission state is ", permissionStatus.state);
 
     permissionStatus.onchange = function () {
       if (this.state === "denied") {
@@ -705,12 +704,10 @@ navigator.permissions
           "Allow Afterhours to use your device location to find bars and events near you!"
         );
       }
-      // console.log("geolocation permission state has changed to ", this.state);
     };
   });
 //-------------------------------Location Allowed-----------------------------------
 const successCallback = (position) => {
-  console.log(position);
   if (document.URL.includes("/")) {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
@@ -744,7 +741,7 @@ const successCallback = (position) => {
              <p> <strong>#RatingAverage: </strong> ${responseMessage.BOD.ratingAverage} </p> 
              <p> <strong>#Reviews: </strong> ${responseMessage.BOD.reviewsCount} </p> 
              <p> <strong>#Favorites: </strong> ${responseMessage.BOD.favoritesCount} </p>
-              <img src="${pathImage}" alt="bar images" width="200" height="auto">
+              <img src="${pathImage}" alt="bar images" width="200" height="300">
           </div>
         </a>`
           );
@@ -824,7 +821,7 @@ const successCallback = (position) => {
 							  ${bar.bar.ratingAverage} <br>
 							  ${bar.bar.reviewsCount} reviews <br>
 							  ${bar.bar.favoritesCount} favorites <br>
-                <img src="${pathImage}" alt="bar images" width="200" height="auto">
+                <img src="${pathImage}" alt="bar images" width="200" height="300">
 						  </div>
 					  </a>
 					  </div>

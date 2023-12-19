@@ -14,10 +14,8 @@
         <div class="form-box">
             <h2 class="editReview-title">#EditYourEvent:</h1>
     <form action="/events/updateEvent" method="post" name="EventForm" id="EventForm">
-        <label for="barIdInput"></label>
         <input type="hidden" name="barIdInput" id="barIdInput" value="{{barId}}">
         <div class="input-box">
-        <label for="eventIdInput"></label>
         <input type="hidden" name="eventIdInput" id="eventIdInput" value="{{eventInfo.eventIdInput}}">
         </div>
         <div class="input-box">
@@ -26,7 +24,7 @@
         </div>
         <div class="input-box">
         <label for="eventNameInput">Event Name</label>
-        <input type="text " name="eventNameInput" id="eventNameInput" value="{{eventInfo.eventNameInput}}">
+        <input type="text" name="eventNameInput" id="eventNameInput" value="{{eventInfo.eventNameInput}}">
         </div>
         <div class="input-box">
         <label for="eventDescInput">Description</label>
