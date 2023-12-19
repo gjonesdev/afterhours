@@ -445,10 +445,9 @@ const validatePhone = (phone) => {
     return;
   }
   phone.value = phone.value.trim();
-
   if (!/\(?([0-9]{3})\)?([ .-]?)([0-9]{3})\2([0-9]{4})/.test(phone.value)) {
     errors.push("Phone number must be valid.");
-    password.classList.add("invalid-input");
+    phone.classList.add("invalid-input");
   }
 
   return phone.value.replace(/\D/g, "");
@@ -729,6 +728,15 @@ const successCallback = (position) => {
       };
       $.ajax(userLocationReq).then(function (responseMessage) {
         if (responseMessage.BOD.name || responseMessage.BOD.name2) {
+          let pathImage = "/public/images/";
+          if (
+            responseMessage.BOD.images &&
+            responseMessage.BOD.images.filename
+          ) {
+            pathImage += responseMessage.BOD.images.filename;
+          } else {
+            pathImage += "no_image.jpeg";
+          }
           let element = $(
             `<a href="/bars/${responseMessage.BOD._id}">
           <div class="card-bar">
@@ -738,6 +746,7 @@ const successCallback = (position) => {
               ${responseMessage.BOD.ratingAverage} <br>
               ${responseMessage.BOD.reviewsCount} reviews <br>
               ${responseMessage.BOD.favoritesCount} favorites <br>
+              <img src="${pathImage}" alt="bar images" width="200" height="300">
           </div>
         </a>`
           );
@@ -799,6 +808,12 @@ const successCallback = (position) => {
           const defaultList = res.reqResponse;
 
           defaultList.forEach((bar) => {
+            let pathImage = "/public/images/";
+            if (bar.bar.images && bar.bar.images.filename) {
+              pathImage += bar.bar.images.filename;
+            } else {
+              pathImage += "no_image.jpeg";
+            }
             $("#barList").append(
               $(
                 `<li>
@@ -810,6 +825,7 @@ const successCallback = (position) => {
 							  ${bar.bar.ratingAverage} <br>
 							  ${bar.bar.reviewsCount} reviews <br>
 							  ${bar.bar.favoritesCount} favorites <br>
+                <img src="${pathImage}" alt="bar images" width="200" height="300">
 						  </div>
 					  </a>
 					  </div>
@@ -845,6 +861,12 @@ const successCallback = (position) => {
           const barsList = res.reqResponse;
 
           barsList.forEach((bar) => {
+            let pathImage = "/public/images/";
+            if (bar.bar.images && bar.bar.images.filename) {
+              pathImage += bar.bar.images.filename;
+            } else {
+              pathImage += "no_image.jpeg";
+            }
             $("#barList").append(
               $(
                 `<li>
@@ -856,6 +878,7 @@ const successCallback = (position) => {
 							  ${bar.bar.ratingAverage} <br>
 							  ${bar.bar.reviewsCount} reviews <br>
 							  ${bar.bar.favoritesCount} favorites <br>
+                <img src="${pathImage}" alt="bar images" width="200" height="300"></img>
 						  </div>
 					  </a>
 					  </div>
@@ -890,6 +913,15 @@ const errorCallback = (error) => {
       };
       $.ajax(userLocationReq).then(function (responseMessage) {
         if (responseMessage.BOD.name) {
+          let pathImage = "/public/images/";
+          if (
+            responseMessage.BOD.images &&
+            responseMessage.BOD.images.filename
+          ) {
+            pathImage += responseMessage.BOD.images.filename;
+          } else {
+            pathImage += "no_image.jpeg";
+          }
           let element = $(
             `<a href="/bars/${responseMessage.BOD._id}">
           <div class="card-bar">
@@ -899,6 +931,7 @@ const errorCallback = (error) => {
               ${responseMessage.BOD.ratingAverage} <br>
               ${responseMessage.BOD.reviewsCount} reviews <br>
               ${responseMessage.BOD.favoritesCount} favorites <br>
+              <img src="${pathImage}" alt="bar images" width="200" height="300">
           </div>
         </a>`
           );
@@ -946,6 +979,12 @@ const errorCallback = (error) => {
           const barsList = res.reqResponse;
 
           barsList.forEach((bar) => {
+            let pathImage = "/public/images/";
+            if (bar.bar.images && bar.bar.images.filename) {
+              pathImage += bar.bar.images.filename;
+            } else {
+              pathImage += "no_image.jpeg";
+            }
             $("#barList").append(
               $(
                 `<li>
@@ -957,6 +996,7 @@ const errorCallback = (error) => {
 							  ${bar.bar.ratingAverage} <br>
 							  ${bar.bar.reviewsCount} reviews <br>
 							  ${bar.bar.favoritesCount} favorites <br>
+                <img src="${pathImage}" alt="bar images" width="200" height="300"></img>
 						  </div>
 					  </a>
 					  </div>
@@ -991,17 +1031,36 @@ $("#filterForm").on("submit", (e) => {
   }).then((res) => {
     const foundBars = res.reqResponse;
     foundBars.forEach((bar) => {
+      let pathImage = "/public/images/";
+      if (bar.bar.images && bar.bar.images.filename) {
+        pathImage += bar.bar.images.filename;
+      } else {
+        pathImage += "no_image.jpeg";
+      }
+
+      updatedBarTags = [];
+      barTags = bar.bar.tags;
+      if (barTags.length > 1) {
+        let firstTag = barTags[0];
+        let secondTag = barTags[1] + "...";
+        updatedBarTags.push(firstTag);
+        updatedBarTags.push(secondTag);
+      } else {
+        updatedBarTags = barTags;
+      }
       $("#barList").append(
         $(
           `<li>
 					<div class="row"></div>
 					<a href="/bars/${bar.bar._id}">
 						<div class="card-bar">
-							${bar.bar.name} <br>						
-							${bar.bar.location.city} <br>
-							${bar.bar.ratingAverage} <br>
+							#BarName: ${bar.bar.name} <br>						
+							#City: ${bar.bar.location.city} <br>
+							#RatingAverage: ${bar.bar.ratingAverage} <br>
 							${bar.bar.reviewsCount} reviews <br>
 							${bar.bar.favoritesCount} favorites <br>
+							#${updatedBarTags} <br>
+              <img src="${pathImage}" alt="bar images" width="200" height="300"></img>
 						</div>
 					</a>
 					</div>
@@ -1040,6 +1099,12 @@ if (document.URL.includes("/bars")) {
         const barsInCity = res.reqResponse;
 
         barsInCity.forEach((bar) => {
+          let pathImage = "/public/images/";
+          if (bar.bar.images && bar.bar.images.filename) {
+            pathImage += bar.bar.images.filename;
+          } else {
+            pathImage += "no_image.jpeg";
+          }
           $("#barList").append(
             $(
               `<li>
@@ -1051,6 +1116,7 @@ if (document.URL.includes("/bars")) {
             ${bar.bar.ratingAverage} <br>
             ${bar.bar.reviewsCount} reviews <br>
             ${bar.bar.favoritesCount} favorites <br>
+            <img src="${pathImage}" alt="bar images" width="200" height="300"></img>
           </div>
         </a>
         </div>

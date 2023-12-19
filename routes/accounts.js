@@ -23,13 +23,9 @@ router
 				req.session.user.accountId
 			);
 			const user = await userData.getUser(account.userId);
-			const userReviews = await reviewData.getReviewsByAccountId(
-				account.userId
-			);
 			return res.render("account", {
 				account,
 				user,
-				userReviews,
 			});
 		} catch (e) {
 			return res.status(404).json({ error: e });
@@ -172,12 +168,12 @@ router
 				req.body.currentPasswordInput.trim()
 			);
 			if (result.updated) {
+				req.session.statusMessage = "Successfully updated login info!";
 				return res.redirect(303, `/account`);
-			} else {
-				return res.status(500).send("Internal Server Error");
 			}
 		} catch (e) {
-			return res.status(404).json({ error: e });
+			req.session.statusMessage = "Incorrect Password."
+			return res.redirect(303, `/account`);
 		}
 	});
 

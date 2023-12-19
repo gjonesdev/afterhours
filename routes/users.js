@@ -25,18 +25,19 @@ router.route("/").put(async (req, res) => {
 		account.userId = validateId(account.userId);
 		userInfo = validateUser(userInfo);
 	} catch (e) {
-		return res.status(400).json({ error: e });
+		req.session.status = {status: 400, message: e};
+		return res.redirect(303, `/account`);
 	}
 
 	try {
 		const result = await userData.updateUser(account.userId, userInfo);
 		if (result.updated) {
-			return res.redirect(303, `/account`);
-		} else {
-			return res.status(500).send("Internal Server Error");
+			req.session.statusMessage = "Successfully updated login info!";
+		return res.redirect(303, `/account`);
 		}
 	} catch (e) {
-		return res.status(404).json({ error: e });
+		req.session.statusMessage = "Internal server error.";
+		return res.redirect(303, `/account`);
 	}
 });
 

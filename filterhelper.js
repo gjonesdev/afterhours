@@ -79,8 +79,8 @@ let exportedMethods = {
     for (let i = 0; i < bars.length; i++) {
       const barsDistance = {
         bar: bars[i],
-        distance: distances.elements[i].distance.text,
-        duration: distances.elements[i].duration.text,
+        distance: distances.elements[i].distance?.text || "0",
+        duration: distances.elements[i].duration?.text || "0",
       };
 
       barsDistanceList.push(barsDistance);
@@ -234,7 +234,7 @@ let exportedMethods = {
       const barstate = bar.location.state;
       if (city.length > 0) {
         if (
-          barCity.toLowerCase() === city.toLowerCase() &&
+          barCity.toLowerCase().includes(city.toLowerCase()) &&
           barstate.toLowerCase() === state.toLowerCase()
         ) {
           barsInCity.push(bar);

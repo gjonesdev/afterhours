@@ -13,7 +13,8 @@ let exportedMethods = {
     email,
     website,
     ownerId,
-    tags
+    tags,
+    images
   ) {
     name = validation.validateRequiredStr(name);
     description = validation.validateRequiredStr(description);
@@ -53,6 +54,7 @@ let exportedMethods = {
       favoritesCount: 0,
       creationDate: new Date(),
       BODDate: "",
+      images,
     };
     const barsCollection = await bars();
     const insertInfo = await barsCollection.insertOne(newBar);
@@ -81,7 +83,16 @@ let exportedMethods = {
     const barsCollection = await bars();
     const ownerBars = await barsCollection
       .find({ ownerId: oId })
-      .project({ _id: 1, name: 1, description: 1, location: 1 })
+      .project({
+        _id: 1,
+        name: 1,
+        description: 1,
+        location: 1,
+        favoritesCount: 1,
+        ratingAverage: 1,
+        reviewsCount: 1,
+        images: 1,
+      })
       .toArray();
     return ownerBars;
   },
@@ -101,6 +112,7 @@ let exportedMethods = {
         favoritesCount: 1,
         schedule: 1,
         BODDate: 1,
+        images: 1,
       })
       .toArray();
     if (!allbars) throw "Was not able to get all bars!";
@@ -133,7 +145,7 @@ let exportedMethods = {
         const barDescription = bar.description.toLowerCase();
 
         if (
-          barName.startsWith(word) ||
+          barName.includes(word) ||
           barDescription.includes(word) ||
           tempTags.includes(word)
         ) {
@@ -161,6 +173,18 @@ let exportedMethods = {
       deleted: true,
     };
 
+    //delete review associated with bar
+
+    if (barToDelete.reviews.length !== 0) {
+      const reviewCollection = await reviews();
+      const deleteReviews = await reviewCollection.deleteMany({
+        barId: barId,
+      });
+      if (!deleteReviews) {
+        throw "Could not delete reviews associated with bar";
+      }
+    }
+
     return deletedbar;
   },
   async barProfileUpdate(
@@ -170,7 +194,8 @@ let exportedMethods = {
     location,
     email,
     website,
-    phoneNumber
+    phoneNumber,
+    images
   ) {
     name = validation.validateRequiredStr(name);
     description = validation.validateRequiredStr(description);
@@ -188,6 +213,7 @@ let exportedMethods = {
       website: website,
       phone: phoneNumber,
       lastModified: new Date(),
+      images: images,
     };
     const barCol = await bars();
     const updatedData = await barCol.findOneAndUpdate(
@@ -311,7 +337,7 @@ let exportedMethods = {
     eventDesc = validation.validateRequiredStr(eventDesc);
     startTime = validation.validateTime(startTime, "Start Time");
     endTime = validation.validateTime(endTime, "End Time");
-    const awaitaddedEvent = await this.addEvent(
+    const addedEvent = await this.addEvent(
       barId,
       date,
       eventName,
@@ -320,7 +346,6 @@ let exportedMethods = {
       endTime
     );
     const deletedEvent = await this.deleteEvent(eventId, barId);
-    //try
     return;
   },
 
