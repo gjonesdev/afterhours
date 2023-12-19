@@ -609,7 +609,7 @@ if (accountForm) {
 			}
 
 			if (!ratingSelected) {
-				errors.push("Client Side: Rating must be selected");
+				errors.push("Rating must be selected");
 			}
 
 			if (isEmpty(barIdInput.value) || isEmpty(barNameInput.value)) {
@@ -668,7 +668,7 @@ if (accountForm) {
 			}
 
 			if (!ratingSelected) {
-				errors.push("Client Side: Rating must be selected");
+				errors.push("Rating must be selected");
 			}
 
 			if (isEmpty(barIdInput.value) || isEmpty(barNameInput.value)) {
@@ -739,13 +739,13 @@ const successCallback = (position) => {
           let element = $(
             `<a href="/bars/${responseMessage.BOD._id}">
           <div class="card-bar">
-              ${responseMessage.BOD.name} <br>
-              ${responseMessage.BOD.description} <br>
-              ${responseMessage.BOD.location.city} <br>
-              ${responseMessage.BOD.ratingAverage} <br>
-              ${responseMessage.BOD.reviewsCount} reviews <br>
-              ${responseMessage.BOD.favoritesCount} favorites <br>
-              <img src="${pathImage}" alt="bar images" width="200" height="300">
+             <p> <strong>#Name: </strong>${responseMessage.BOD.name}</p> 
+             <p> <strong>#Description: </strong> ${responseMessage.BOD.description}</p>
+			 <p> <strong>#City: </strong> ${responseMessage.BOD.location.city} </p> 
+             <p> <strong>#RatingAverage: </strong> ${responseMessage.BOD.ratingAverage} </p> 
+             <p> <strong>#Reviews: </strong> ${responseMessage.BOD.reviewsCount} </p> 
+             <p> <strong>#Favorites: </strong> ${responseMessage.BOD.favoritesCount} </p>
+              <img src="${pathImage}" alt="bar images" width="200" height="auto">
           </div>
         </a>`
           );
@@ -815,7 +815,7 @@ const successCallback = (position) => {
 							  ${bar.bar.ratingAverage} <br>
 							  ${bar.bar.reviewsCount} reviews <br>
 							  ${bar.bar.favoritesCount} favorites <br>
-                <img src="${pathImage}" alt="bar images" width="200" height="300">
+                <img src="${pathImage}" alt="bar images" width="200" height="auto">
 						  </div>
 					  </a>
 					  </div>
