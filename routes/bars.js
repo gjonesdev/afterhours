@@ -449,7 +449,7 @@ router.route("/:barId").get(async (req, res) => {
       reviewsCount: theBar.reviewsCount,
       ratingAverage: theBar.ratingAverage,
       favoritesCount: theBar.favoritesCount,
-      isOwner: true, /**Modificar esta parte */
+      isOwner,
       favoriteToggle,
       reviewEmpty,
       images: pathImagesArray
