@@ -12,7 +12,7 @@
                 <input type="hidden" name="barId" value="{{review.barId}}" id="barIdInput">
                 <input type="hidden" name="barName" value="{{review.barName}}" id="barNameInput">
 
-                <label for="Choose your new rating below:" style="color: rgb(228, 228, 235);">Choose your new rating below:</label>
+                <label style="color: rgb(228, 228, 235);">Choose your new rating below:</label>
                 <fieldset class="rating">
                     <label for="ratingInput1">🍺 #DiveDisaster (1/5)</label>
                     <input type="radio" name="rating" id="ratingInput1" value="1">
@@ -31,7 +31,7 @@
                 </fieldset>
 
                 <br>
-                <label for="Edit your comment below:" style="color: rgb(228, 228, 235);"> Edit your comment below:</label>
+                <label style="color: rgb(228, 228, 235);"> Edit your comment below:</label>
                 <textarea class="commentArea" name="comment" id="commentInput" cols="40" rows="3">{{review.comment}}</textarea>
 
                 <button type="submit">Save Changes</button>
