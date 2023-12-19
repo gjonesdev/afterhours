@@ -56,7 +56,6 @@ let exportedMethods = {
     const { data } = await axios.get(url);
     const { rows } = data;
     distances = rows[0];
-    console.log(data);
 
     let userAddress = data.origin_addresses[0];
     if (userAddress[0] === "")
@@ -284,7 +283,6 @@ let exportedMethods = {
     let barsFound = new Set();
 
     bars.forEach((bar) => {
-      console.log(bar.bar.tags);
       if (filterTags.every((tag) => bar.bar.tags.includes(tag))) {
         barsFound.add(bar);
       }

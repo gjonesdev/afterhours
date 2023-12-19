@@ -436,9 +436,9 @@ router.route("/update").post(async (req, res) => {
   } catch (e) {
     errors.add(e);
   }
-  await photoErrorHandler(req, err); /**Photos error handler */
+  //await photoErrorHandler(req, err); /**Photos error handler */
   if (errors.size === 0) {  /**No errors, then create a bar with photo */
-    let images = req.file;
+    //let images = req.file;
   try {
     const theBar = await barData.barProfileUpdate(
       req.body.updateBarId,
@@ -448,7 +448,7 @@ router.route("/update").post(async (req, res) => {
       req.body.updateEmail,
       req.body.updateWebsite,
       req.body.updatePhone,
-      images
+      //images
     );
     filtersHelp.barDistanceHelper(true);
     res.redirect("/bars/" + req.body.updateBarId);
@@ -467,6 +467,7 @@ router.route("/update").post(async (req, res) => {
       email: req.body.updateEmail,
       website: req.body.updateWebsite,
       phone: req.body.updatePhone,
+      //images
     });
   } 
  };
@@ -491,12 +492,8 @@ router.route("/deleteBar").post(async (req, res) => {
   }
 
   let theBar = await barData.barById(req.body.barIdToDelete);
-  console.log(theBar);
   let isOwner = false;
   if (req.session.user) {
-    console.log(req.session.user);
-    console.log(req.session.user.accountId);
-    console.log(theBar.ownerId);
     isOwner = theBar.ownerId === req.session.user.accountId;
   }
 
