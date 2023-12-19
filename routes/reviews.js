@@ -112,11 +112,14 @@ router
   .post(async (req, res) => {
     try {
       req.params.reviewId = validateId(req.params.reviewId);
-      const reviewId = req.params.reviewId;
-      const review = await reviewData.get(reviewId);
+      req.body.comment = validateOptionalStr(req.body.comment);
       let rating = Number(req.body.rating);
-      rating = validateRequiredRating(rating);
-      let comment = validateOptionalStr(req.body.comment);
+      req.body.rating = validateRequiredRating(rating);
+      
+      let comment = req.body.comment;
+      const reviewId = req.params.reviewId;
+
+      const review = await reviewData.get(reviewId);
 
       let result = await reviewData.updateReview(
         reviewId,
