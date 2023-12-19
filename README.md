@@ -1,5 +1,7 @@
 # AfterHours – Database Proposal
 
+Link: https://github.com/gjonesdev/afterhours
+
 ## Group Members
 
 Matthew Fultz - 20011320
@@ -24,6 +26,10 @@ leave reviews. The primary aim of this application is to provide a convenient to
 helping them discover and make the most of enticing offers in their area while tailoring their search to 
 their specific preferences and gaining insights into what each bar uniquely offer through the comment 
 and favorite feature.
+
+## SETTING UP APPLICATION
+
+To set up this project, clone the repo and run 'npm i' to gather and all dependencies. Once dependencies are done installing you can run the project using 'npm start', it is recommended you run 'npm run seed' to populate the DB beforehand. Ensure your database is running before attempting this setup. NOTE: Please allow location for best experience.
 
 ## Core Features:
 

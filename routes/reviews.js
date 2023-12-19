@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { validateId, validateReview } from "../helpers.js";
+import { validateId, validateOptionalStr, validateRequiredRating, validateReview } from "../helpers.js";
 import { reviewData, accountData, barData, userData } from "../data/index.js";
 import filtersHelp from "../filterhelper.js";
 
@@ -113,10 +113,10 @@ router
     try {
       req.params.reviewId = validateId(req.params.reviewId);
       const reviewId = req.params.reviewId;
-
       const review = await reviewData.get(reviewId);
-
-      const rating = Number(req.body.rating);
+      let rating = Number(req.body.rating);
+      rating = validateRequiredRating(rating);
+      let comment = validateOptionalStr(req.body.comment);
 
       let result = await reviewData.updateReview(
         reviewId,
@@ -125,7 +125,7 @@ router
         review.barName,
         review.barId,
         rating,
-        req.body.comment
+        comment
       );
       filtersHelp.barDistanceHelper(true);
 

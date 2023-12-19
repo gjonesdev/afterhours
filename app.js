@@ -13,7 +13,6 @@ import {
 	registerRedirect,
 	rewriteUnsupportedBrowserMethods,
 } from "./middleware.js";
-import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
