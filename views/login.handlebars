@@ -1,15 +1,19 @@
 <div class="form-container">
 	<div class="form-box">
 		<h2>#Login 🍸</h2>
+		{{#if error}}
+		<p class="response-error">Error {{error.status}}: {{error.message}}</p>
+		{{/if}}
+		<ul id="error-list" class="error-list hide"></ul>
 		<form class="login-form" id="login-form" action="/login" method="POST">
 			<div class="input-box">
 				<label class="input-label" for="emailInput">Email</label>
-				<input class="input" type="email" id="emailInput" name="emailInput" placeholder="Email" required=""
+				<input class="input" type="email" id="emailInput" name="emailInput" required=""
 					value="{{form.emailInput}}">
 			</div>
 			<div class="input-box">
 				<label class="input-label" for="passwordInput">Password</label>
-				<input class="input" type="password" id="passwordInput" name="passwordInput" placeholder="Password" required="">
+				<input class="input" type="password" id="passwordInput" name="passwordInput" required="">
 			</div>
 
 			<button type="submit" class="submit-button">
@@ -18,10 +22,6 @@
 		</form>
 	</div>
 	<div class="message-container">
-		{{#if error}}
-		<p class="response-error">Error {{error.status}}: {{error.message}}</p>
-		{{/if}}
-		<ul id="error-list" class="error-list hide"></ul>
 		<p>Do not have an account?</p></br>
 		<a class="link" href="/register">Click here to register!</a>
 	</div>

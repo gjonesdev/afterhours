@@ -14,13 +14,16 @@ export const rewriteUnsupportedBrowserMethods = (req, res, next) => {
 };
 
 export const defaultRedirect = async (req, res, next, app) => {
-    if (req.session.user) {
+	
+app.locals.statusMessage = req.session.statusMessage
+	req.session.statusMessage = ""
+    app.locals.authenticated = false;
+	app.locals.authenticatedOwner = false;
+	if (req.session.user) {
         app.locals.authenticated = true;
         app.locals.authenticatedOwner =
             req.session.user.accountType === "owner";
-    } else {
-        app.locals.authenticated = false;
-    }
+    } 
 
     console.log(
         `[${new Date().toUTCString()}]: ${req.method} ${req.originalUrl} (${
@@ -30,10 +33,11 @@ export const defaultRedirect = async (req, res, next, app) => {
         })`
     );
 
-    req.body &&
+    if (req.body) {
         Object.keys(req.body).forEach((input) => {
             req.body[input] = xss(req.body[input]);
         });
+	}
 
     next();
 };

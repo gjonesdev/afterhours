@@ -2,6 +2,11 @@
 	<div class="form-box">
 		<h2>#Register 🥂</h2>
 
+		<ul id="error-list" class="error-list hide"></ul>
+		{{#if error}}
+		<p class="response-error">Error {{error.status}}: {{error.message}}</p>
+		{{/if}}
+
 		<form class="registration-form" id="registration-form" action="/account" method="POST">
 			<div class="input-box">
 				<label class="input-label" for="firstNameInput">First Name</label>
@@ -49,15 +54,8 @@
 	</div>
 
 	<div class="message-container">
-
-		{{#if error}}
-		<p class="response-error">Error {{error.status}}: {{error.message}}</p>
-		{{/if}}
-		<ul id="error-list" class="error-list hide"></ul>
 		<p>Already have an account?</p></br>
 		<a class="link" href="/login">Click here to login!</a>
-
-
 	</div>
 
 </div>

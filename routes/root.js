@@ -40,12 +40,16 @@ router
       const barOfTheDay = await filtersFun.barOfTheDay();
       res.json({ BOD: barOfTheDay });
     } catch (e) {
-      if (e.code === 1) {
-        res.status(404).json({ BOD: e.msg });
-      } else if (e.code === 2) {
-        res.status(400).json({ BOD: e.msg });
+      if (e.code === 404) {
+        res.json({
+          BOD: {
+            noBarsFound: `We have not bars listed yet. We are working on adding some bars.`,
+          },
+        });
+      } else if (e.code === 400) {
+        res.status(400).json({ BOD: e });
       } else {
-        res.status(500).json({ BOD: e.msg });
+        res.status(500).json({ BOD: e });
       }
     }
   });
