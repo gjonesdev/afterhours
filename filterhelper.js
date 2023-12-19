@@ -85,7 +85,7 @@ let exportedMethods = {
 
       barsDistanceList.push(barsDistance);
     }
-    if (barsDistanceList.length === 0) throw { code: 404, msg: "0 Results!" };
+    if (barsDistanceList.length === 0) throw "0 Results!";
 
     return barsDistanceList;
   },

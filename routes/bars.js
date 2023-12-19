@@ -236,14 +236,9 @@ router
         const searchBar = await barData.barSearch(searchCriteria);
         allBars = await filtersHelp.allBarsPlus(searchBar);
       } catch (e) {
-        if (e.code === 404) {
-          res.status(404).render("bars", { error: e.msg, isError: true });
-        } else if (e.code === 400) {
-          res.status(400).render("bars", { error: e.msg, isError: true });
-        } else {
-          res.status(500).render("bars", { error: e.msg, isError: true });
-        }
+        res.status(404).render("bars", { error: e, isError: true });
       }
+
       renderedList = allBars;
       res.render("bars", {
         bars: allBars,
@@ -323,7 +318,7 @@ router
       try {
         req.body.updateBarId = validation.validateId(req.body.updateBarId);
       } catch (e) {
-        errors.push(e.msg);
+        errors.push(e);
         res.render("editBar", { error: errors, isError: true });
       }
 
