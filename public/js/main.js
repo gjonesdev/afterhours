@@ -822,54 +822,7 @@ const successCallback = (position) => {
           $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
       );
     };
-    /*
-    $("#findByLocation").on("submit", (e) => {
-      e.preventDefault();
-      $("#respError").empty();
 
-      const location = $("#findCityInput").val();
-      const locType = $("#loc-type-selector").val();
-
-      $.ajax({
-        method: "POST",
-        url: "/bars",
-        contentType: "application/json",
-        data: JSON.stringify({
-          location: location,
-          isAllowed: true,
-        }),
-      }).then(
-        (res) => {
-          $("#barList").empty();
-          const barsInCity = res.reqResponse;
-
-          barsInCity.forEach((bar) => {
-            $("#barList").append(
-              $(
-                `<li>
-					  <div class="row"></div>
-					  <a href="/bars/${bar.bar._id}">
-						  <div class="card-bar">
-							  ${bar.bar.name} <br>
-							  ${bar.distance} <br>
-							  @ ${bar.duration} driving <br>
-							  ${bar.bar.location.city} <br>
-							  ${bar.bar.ratingAverage} <br>
-							  ${bar.bar.reviewsCount} reviews <br>
-							  ${bar.bar.favoritesCount} favorites <br>
-						  </div>
-					  </a>
-					  </div>
-				  </li>`
-              )
-            );
-          });
-        },
-        (res) =>
-          $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
-      );
-    });
-*/
     //----------------------------------------SORT AND FILTERS (location allowed)---------------------------------------------------------------
     // Sorting loc allowed rendered list
     $("#sortBySelector").change((e) => {
