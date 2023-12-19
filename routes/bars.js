@@ -7,6 +7,8 @@ import multer, { diskStorage } from "multer";
 
 let renderedList = [];
 let errors = new Set();
+let appliedFilters = [];
+
 router
   .route("/")
   .get(async (req, res) => {
@@ -20,6 +22,7 @@ router
       barsDistance = await filtersHelp.sortedBarsbyDistance();
       allTheBars = barsDistance;
     }
+    appliedFilters = [];
     renderedList = allTheBars;
     res.render("bars", {
       bars: allTheBars,
@@ -69,15 +72,24 @@ router
       searchState = validation.validateRequiredStr(searchState);
       searchCity = validation.validateOptionalStr(searchCity);
     } catch (e) {
-      return res.status(400).json({ reqResponse: e.msg });
+      return res.status(400).json({ reqResponse: e });
     }
 
     try {
       const cityBars = await filtersHelp.cityBars(searchCity, searchState);
       const allBars = await filtersHelp.allBarsPlus(cityBars);
+      const filtered = filtersHelp.tagsFilter(appliedFilters, allBars);
       renderedList = allBars;
-      return res.json({ reqResponse: allBars });
-    } catch (e) {return res.status(400).json({ reqResponse: e.msg });} //double check validation error
+      return res.json({ reqResponse: filtered });
+    } catch (e) {
+      if (e.code === 404) {
+        renderedList = [0];
+        return res.status(404).json({ reqResponse: e });
+      } else {
+        renderedList = [0];
+        return res.status(500).json({ reqResponse: e });
+      }
+    }
   });
 
 router
@@ -129,13 +141,13 @@ router
     try {
       req.body.createName = validation.validateRequiredStr(req.body.createName);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
     }
 
     try {
       req.body.createDesc = validation.validateRequiredStr(req.body.createDesc);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
     }
 
     try {
@@ -147,7 +159,7 @@ router
     try {
       req.body.createEmail = validation.validateEmail(req.body.createEmail);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
     }
 
     try {
@@ -157,9 +169,11 @@ router
     }
 
     try {
-      req.body.createWebsite = validation.validateWebsite(
-        req.body.createWebsite
-      );
+      if (req.body.createWebsite.length > 0) {
+        req.body.createWebsite = validation.validateWebsite(
+          req.body.createWebsite
+        );
+      }
     } catch (e) {
       errors.add(e);
     }
@@ -188,6 +202,12 @@ router
       return res.status(400).render("createBar", {
         errors: errors,
         isError: true,
+        barName: req.body.createName,
+        description: req.body.createDesc,
+        location: location,
+        email: req.body.createEmail,
+        website: req.body.createWebsite,
+        phone: req.body.createPhone,
       });
     } else {
       return res.redirect("/bars/" + theBar._id);
@@ -197,10 +217,7 @@ router
 
 router.route("/searchBar").post(async (req, res) => {
   if (!req.body) {
-    return res.status(400).render("error", { 
-      error: { status: 400, message: "Missing input." },
-      message: "Search input is needed!",
-    });
+    return res.status(400).render("success", { message: "Input is needed!" });
   }
   let searchCriteria = req.body.searchInput;
   try {
@@ -241,7 +258,7 @@ router.route("/searchBar").post(async (req, res) => {
     allBars = await filtersHelp.allBarsPlus(searchBar);
   } catch (e) {
     if (e.code === 404) {
-      res.status(404).render("bars", { error: e.msg, isError: true, tags: [
+      res.status(404).render("bars", { error: e, isError: true, tags: [
         "Sport",
         "Grill",
         "Margaritas",
@@ -270,7 +287,7 @@ router.route("/searchBar").post(async (req, res) => {
         "BarHopping",
       ], });
     } else if (e.code === 400) {
-      res.status(400).render("bars", { error: e.msg, isError: true, tags: [
+      res.status(400).render("bars", { error: e, isError: true, tags: [
         "Sport",
         "Grill",
         "Margaritas",
@@ -299,7 +316,7 @@ router.route("/searchBar").post(async (req, res) => {
         "BarHopping",
       ], });
     } else {
-      res.status(500).render("bars", { error: e.msg, isError: true, tags: [
+      res.status(500).render("bars", { error: e, isError: true, tags: [
         "Sport",
         "Grill",
         "Margaritas",
@@ -407,44 +424,44 @@ router.route("/update").post(async (req, res) => {
     try {
       req.body.updateBarId = validation.validateId(req.body.updateBarId);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
       res.render("editBar", { error: errors, isError: true });
     }
 
   try {
     req.body.updateName = validation.validateRequiredStr(req.body.updateName);
   } catch (e) {
-    errors.add(e.msg);
+    errors.add(e);
   }
 
   try {
     req.body.updateDesc = validation.validateRequiredStr(req.body.updateDesc);
   } catch (e) {
-    errors.add(e.msg);
+    errors.add(e);
   }
 
   try {
     location = validation.validateLocation(location);
   } catch (e) {
-    errors.add(e.msg);// Check if the location is e.msg or just e
+    errors.add(e);
   }
 
   try {
     req.body.updateEmail = validation.validateEmail(req.body.updateEmail);
   } catch (e) {
-    errors.add(e.msg);
+    errors.add(e);
   }
 
   try {
     req.body.updatePhone = validation.validatePhone(req.body.updatePhone);
   } catch (e) {
-    errors.add(e.msg);
+    errors.add(e);
   }
 
   try {
     req.body.updateWebsite = validation.validateWebsite(req.body.updateWebsite);
   } catch (e) {
-    errors.add(e.msg);
+    errors.add(e);
   }
   await photoErrorHandler(req, err); /**Photos error handler */
   if (errors.size === 0) {  /**No errors, then create a bar with photo */
@@ -463,26 +480,24 @@ router.route("/update").post(async (req, res) => {
     filtersHelp.barDistanceHelper(true);
     res.redirect("/bars/" + req.body.updateBarId);
   } catch (e) {
-    if (e.code === 404) {
-      errors.add(e.msg);
-    } else if (e.code === 400) {
-      errors.add(e.msg);
-    } else {
-      return res.render("error", {
-        error: { status: 500, message: e.msg },
-        message: e.msg,
-      });
-    }
-   }
-  }//close if
-  if (errors.size > 0) {
-    return res.status(400).render("editBar", {
+    errors.add(e);
+  }
+
+  if (errors.length > 0) {
+    res.status(400).render("editBar", {
       errors: errors,
       hasErrors: true,
-      barInfo: req.body,
+      id: req.body.updateBarId,
+      barName: req.body.updateName,
+      description: req.body.updateDesc,
+      location: location,
+      email: req.body.updateEmail,
+      website: req.body.updateWebsite,
+      phone: req.body.updatePhone,
     });
   } 
- });
+ };
+})
 });
 
 router.route("/deleteBar").post(async (req, res) => {
@@ -502,16 +517,16 @@ router.route("/deleteBar").post(async (req, res) => {
     });
   }
 
-  let theBar = await barData.barById(req.body.barIdToDelete)
-  console.log(theBar)
+  let theBar = await barData.barById(req.body.barIdToDelete);
+  console.log(theBar);
   let isOwner = false;
   if (req.session.user) {
     console.log(req.session.user);
     console.log(req.session.user.accountId);
-    console.log(theBar.ownerId)
+    console.log(theBar.ownerId);
     isOwner = theBar.ownerId === req.session.user.accountId;
-  } 
-  
+  }
+
   if (!isOwner) {
     return res.status(403).render("error", {
       error: { status: "403", message: "Prohibited function" },
@@ -523,9 +538,8 @@ router.route("/deleteBar").post(async (req, res) => {
   try {
     await barData.removeBar(req.body.barIdToDelete);
     filtersHelp.barDistanceHelper(true);
-    return res.render("error", {
-      error: { status: ":(", message: "The Bar has been deleted succesfully!" },
-      message: "",
+    return res.render("success", {
+      message: "The Bar has been deleted succesfully!",
     });
   } catch (e) {
     return res.status(500).render("error", {
@@ -551,24 +565,22 @@ router.route("/:barId").get(async (req, res) => {
     let favoriteToggle = "Favorite";
     let reviewEmpty = true;
     if (req.session.user) {
-        isOwner = theBar.ownerId === req.session.user.accountId;
-        const account = await accountData.getAccount(
-            req.session.user.accountId
-        );
-        const user = await userData.getUser(account.userId);
-        user.favorites.forEach((favorite) => {
-            if (favorite.barId === theBar._id.toString()) {
-                favoriteToggle = "Unfavorite";
-            }
-        });
-			const userId = account.userId
+      isOwner = theBar.ownerId === req.session.user.accountId;
+      const account = await accountData.getAccount(req.session.user.accountId);
+      const user = await userData.getUser(account.userId);
+      user.favorites.forEach((favorite) => {
+        if (favorite.barId === theBar._id.toString()) {
+          favoriteToggle = "Unfavorite";
+        }
+      });
+      const userId = account.userId;
       theBar.reviews.forEach((review) => {
-          if (userId === review.accountId) {
-              reviewEmpty = false;
-          }
+        if (userId === review.accountId) {
+          reviewEmpty = false;
+        }
       });
       if (theBar.ownerId === req.session.user.accountId) {
-          reviewEmpty = false;
+        reviewEmpty = false;
       }
     }
     res.render("barById", {
@@ -606,6 +618,7 @@ router.route("/barsByFilters").post(async (req, res) => {
 
   Object.values(req.body).forEach((filter) => {
     filters.push(filter);
+    appliedFilters.push(filter);
   });
 
   if (filters.length == 0) {

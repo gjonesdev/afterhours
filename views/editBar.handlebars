@@ -9,8 +9,7 @@
 	</ul>
 	{{/if}}
 
-	<form action="/bars/update" method="post" id="bar-pdate" enctype="multipart/form-data">
-		<label for="barId"></label>
+	<form action="/bars/update" method="post" id="bar-pdate">
 		<input type="hidden" value="{{id}}" name="updateBarId" id="updateBarId">
 		<label for="updateName">Bar Name</label>
 		<input type="text" value="{{barName}}" name="updateName" id="updateName">
@@ -21,7 +20,7 @@
 		<label for="updateCity">City</label>
 		<input type="text" value="{{location.city}}" name="updateCity" id="updateCity">
 		<label for="updateState">State</label>
-		<select value="{{location.state}}" name="updateState" id="updateState">
+		<select name="updateState" id="updateState">
 			<option value="AL">AL</option>
 			<option value="AK">AK</option>
 			<option value="AZ">AZ</option>

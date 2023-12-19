@@ -17,7 +17,7 @@ let exportedMethods = {
     const bars = await barData.allBars();
     if (!bars.length)
       throw {
-        code: 1,
+        code: 404,
         msg: "No bars in the data base yet. Try to create one!",
       };
 
@@ -60,7 +60,7 @@ let exportedMethods = {
 
     let userAddress = data.origin_addresses[0];
     if (userAddress[0] === "")
-      throw { code: 2, msg: "Invalid City and State!" };
+      throw { code: 400, msg: "Invalid City and State!" };
     let splitUserAddress = userAddress.split(", ");
     if (splitUserAddress.length === 4) {
       userCity = splitUserAddress[1];
@@ -85,7 +85,7 @@ let exportedMethods = {
 
       barsDistanceList.push(barsDistance);
     }
-    if (barsDistanceList.length === 0) throw { code: 1, msg: "0 Results!" };
+    if (barsDistanceList.length === 0) throw { code: 404, msg: "0 Results!" };
 
     return barsDistanceList;
   },
@@ -223,16 +223,9 @@ let exportedMethods = {
     return sortedBars;
   },
 
-  async cityBars(city, state) {
+  async cityBars(city, state, filters) {
     let neededLocation = "";
-    //const locationArray = trmLocation.split(",");
 
-    //const city = locationArray[0];
-    // const state = locationArray[1].trim();
-
-    // neededLocation = `${city.toLowerCase()},${state.toLowerCase()}`;
-    //const userCityHolder = userCity;
-    //const userStateHolder = userState;
     const allBars = await barData.allBars();
 
     let barsInCity = [];
@@ -259,35 +252,11 @@ let exportedMethods = {
       );
     });
 
-    // userCity = userCityHolder;
-    //userState = userStateHolder;
     return sortedBars;
   },
 
-  async zipCodeBars(zipCode) {
-    const userCityHolder = userCity;
-    const userStateHolder = userState;
-    const allBars = await this.barsDistance(zipCode);
-    let barsInCity = [];
-    allBars.forEach((bar) => {
-      const barCity = bar.bar.location.city;
-      const barstate = bar.bar.location.state;
-
-      if (
-        barCity.toLowerCase() === userCity.toLowerCase() &&
-        barstate.toLowerCase() === userState.toLowerCase()
-      ) {
-        barsInCity.push(bar);
-      }
-    });
-    userCity = userCityHolder;
-    userState = userStateHolder;
-
-    return this.sortedByRating(barsInCity);
-  },
   // This function is only used if the location is not provided. This is to add 0 distance.
   async allBarsPlus(bars) {
-    // const allbars = await barData.allBars();
     const allBarsPlus = [];
 
     bars.forEach((x) => {
@@ -310,27 +279,27 @@ let exportedMethods = {
 
   tagsFilter(filterTags, bars) {
     if (filterTags.length === 0) {
-      return bars
+      return bars;
     }
     let barsFound = new Set();
 
     bars.forEach((bar) => {
-      console.log(bar.bar.tags)
-      if (filterTags.every(tag => bar.bar.tags.includes(tag))) {
-        barsFound.add(bar)
+      console.log(bar.bar.tags);
+      if (filterTags.every((tag) => bar.bar.tags.includes(tag))) {
+        barsFound.add(bar);
       }
     });
-      
+
     if (barsFound.size === 0)
       throw {
-        code: 1,
+        code: 404,
         msg: "0 bars found",
       };
 
     const array = Array.from(barsFound);
 
     return array;
-  }
+  },
 };
 
 export default exportedMethods;

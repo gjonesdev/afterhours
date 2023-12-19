@@ -89,7 +89,7 @@
 	</div>
 
 	<ul id="barList">
-
+		{{#if bars}}
 		{{#each bars}}
 		<li>
 			<div class="row"></div>
@@ -109,6 +109,8 @@
 			</a>
 		</li>
 		{{/each}}
-
+		{{else}}
+		<p>No bars found.</p>
+		{{/if}}
 	</ul>
 </div>
