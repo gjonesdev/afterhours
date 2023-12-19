@@ -7,16 +7,29 @@
 
 <h1 class="reviews-title">#YourBars:</h1>
 <div id="favorites-section">
-    {{#if bars}}
-        {{#each bars}}
-            <div class="favorite-card">
-                <p class="bar-name">{{this.name}}</p>
-                <p>Bar Name: {{this.name}}</p>
-                <p>Rating: {{this.ratingAverage}}</p>
-                <a href="/bars/{{this._id}}">Edit</a>
-            </div>
-        {{/each}}
-    {{else}}
-        <p>No bars yet.</p>
-    {{/if}}
+	{{#if bars}}
+	<ul>
+		{{#each bars}}
+		<li>
+			<div class="row"></div>
+			<a href="/bars/{{this._id}}">
+				<div class="card-bar">
+					#BarName: {{this.name}} <br>
+					#City: {{this.location.city}} <br>
+					#RatingAverage: {{this.ratingAverage}} <br>
+					{{this.reviewsCount}} reviews <br>
+					{{this.favoritesCount}} favorites <br>
+					{{#if this.images.filename}}
+					<img src="/public/images/{{this.images.filename}}" alt="bar image" width="200" height="300">
+					{{else}}
+					<img src="/public/images/no_image.jpeg" alt="bar image" width="200" height="300">
+					{{/if}}
+				</div>
+			</a>
+		</li>
+		{{/each}}
+	</ul>
+	{{else}}
+	<p>No bars yet.</p>
+	{{/if}}
 </div>

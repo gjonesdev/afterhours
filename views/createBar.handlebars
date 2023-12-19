@@ -13,7 +13,7 @@
 
 
         {{/if}}
-        <form action="/bars/createBar" method="post" id="bar-create">
+        <form action="/bars/createBar" method="post" id="bar-create" enctype="multipart/form-data">
         {{!-- enctype="multipart/form-data"> --}}
 
             <input type="hidden" value="{{id}}" name="createBarId" id="createBarId" required="">
@@ -156,8 +156,8 @@
             </div>
 
             <div class="input-box">
-                <input type="file" accept="image/jpeg, image/png, image/jpg" id="imageUpload" name="file" multiple>
-                <label for="imageUpload"></label>
+                <input type="file" accept="image/jpeg, image/png, image/jpg" id="images" name="images">
+                <label for="images"></label>
             </div>
             
             <button type="submit" class="submit-button">
