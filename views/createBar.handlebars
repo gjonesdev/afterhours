@@ -14,19 +14,19 @@
 
         {{/if}}
         <form action="/bars/createBar" method="post" id="bar-create">
-        {{!-- enctype="multipart/form-data"> --}}
+            {{!-- enctype="multipart/form-data"> --}}
 
-            <input type="hidden" value="{{id}}" name="createBarId" id="createBarId" required="">
-            <label for="barId"></label>
+            <input type="hidden" value="{{id}}" name="createBarId" id="createBarId">
+
 
             <div class="input-box">
                 <label for="createName">Bar Name</label>
-                <input type="text" value="{{barName}}" name="createName" id="createName" required="">                
+                <input type="text" value="{{barName}}" name="createName" id="createName" required="">
             </div>
 
             <div class="input-box">
                 <label for="createDesc">Description</label>
-                <input type="text" value="{{description}}" name="createDesc" id="createDesc" required="">                
+                <input type="text" value="{{description}}" name="createDesc" id="createDesc" required="">
             </div>
 
             <div class="input-box">
@@ -38,12 +38,12 @@
             <div class="input-box">
                 <label for="createCity">City</label>
                 <input type="text" value="{{location.city}}" name="createCity" id="createCity" required="">
-                
+
             </div>
 
             <div class="input-box">
                 <label for="createState"> Choose a State</label>
-                <select name="createState" id="createState">
+                <select name="createState" id="createState" required>
                     <option disabled selected value> -- select an option -- </option>
                     <option value="AL">AL</option>
                     <option value="AK">AK</option>
@@ -101,25 +101,25 @@
             <div class="input-box">
                 <label for="createZipCode">Zip</label>
                 <input type="text" value="{{location.zipCode}}" name="createZipCode" id="createZipCode" required="">
-                
+
             </div>
 
             <div class="input-box">
                 <label for="createEmail">Email</label>
-                <input type="text" value="{{email}}" name="createEmail" id="createEmail" required="">
-                
+                <input type="email" value="{{email}}" name="createEmail" id="createEmail" required="">
+
             </div>
 
             <div class="input-box">
                 <label for="createPhone">Phone</label>
-                <input type="text" value="{{phone}}" name="createPhone" id="createPhone" required="">
-                
+                <input type="tel" value="{{phone}}" name="createPhone" id="createPhone" required="">
+
             </div>
 
             <div class="input-box">
                 <label for="createWebsite">Website</label>
-                <input type="text" value="{{website}}" name="createWebsite" id="createWebsite" required="">
-                
+                <input type="text" value="{{website}}" name="createWebsite" id="createWebsite">
+
             </div>
 
             <div class="input-box">
@@ -159,7 +159,7 @@
                 <input type="file" accept="image/jpeg, image/png, image/jpg" id="imageUpload" name="file" multiple>
                 <label for="imageUpload"></label>
             </div>
-            
+
             <button type="submit" class="submit-button">
                 #CraftMeaBar
             </button>
@@ -174,10 +174,11 @@
             <p class="response-error">Error {{error.status}}: {{error.message}}</p>
             {{/if}}
             <ul id="error-list" class="error-list hide"></ul>
-            <p>Already have an account?</p></br>
+            <p>Already have an account?</p>
             <a class="link" href="/login">Click here to login!</a>
 
 
         </div>
 
     </div>
+</div>

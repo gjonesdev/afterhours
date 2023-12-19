@@ -21,12 +21,12 @@ function reportForm() {
   let commentInput = document.getElementById("commentInput");
   let errorDiv = document.getElementById("error");
 
-	if (reportFormDocument) {
-		reportFormDocument.addEventListener("submit", (event) => {
-			//Validate Name:
-			if (firstNameInput.value.trim()) {
-				firstNameInput.value = firstNameInput.value.trim();
-				errorDiv.hidden = true;
+  if (reportFormDocument) {
+    reportFormDocument.addEventListener("submit", (event) => {
+      //Validate Name:
+      if (firstNameInput.value.trim()) {
+        firstNameInput.value = firstNameInput.value.trim();
+        errorDiv.hidden = true;
 
         //Error check:
         if (!firstNameInput.value) {
@@ -728,7 +728,7 @@ const successCallback = (position) => {
         }),
       };
       $.ajax(userLocationReq).then(function (responseMessage) {
-        if (responseMessage.BOD.name) {
+        if (responseMessage.BOD.name || responseMessage.BOD.name2) {
           let element = $(
             `<a href="/bars/${responseMessage.BOD._id}">
           <div class="card-bar">
@@ -751,13 +751,23 @@ const successCallback = (position) => {
 		</a>`);
 
           BODArea.append(element);
+        } else if (responseMessage.BOD.msg) {
+          let element = $(`<a href="/register">
+			<div class="card-bar">
+				${responseMessage.BOD.e} <br>
+				<p>If you want to add the first one, click here to create your bussines account!</p><br>
+			</div>
+		</a>`);
+          BODArea.append(element);
         } else {
           let element = $(`
 			<div class="card-bar">
+          
 				
 				<p>Server Error</p><br>
 			</div>
 		</a>`);
+          BODArea.append(element);
         }
       });
     })(window.jQuery); //End jQuery
@@ -812,7 +822,7 @@ const successCallback = (position) => {
           $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
       );
     };
-
+    /*
     $("#findByLocation").on("submit", (e) => {
       e.preventDefault();
       $("#respError").empty();
@@ -859,7 +869,7 @@ const successCallback = (position) => {
           $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`)
       );
     });
-
+*/
     //----------------------------------------SORT AND FILTERS (location allowed)---------------------------------------------------------------
     // Sorting loc allowed rendered list
     $("#sortBySelector").change((e) => {
@@ -961,9 +971,8 @@ const errorCallback = (error) => {
     })(window.jQuery); //End jQuery
   } //
 
+  //---------------------- without location allowed-------------------------------------
   if (document.URL.includes("/")) {
-    //---------------------- without location allowed-------------------------------------
-
     $("#sortBySelector").change((e) => {
       e.preventDefault();
       $("#respError").empty();
@@ -1014,24 +1023,24 @@ navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
 
 //-----------------------------------------end location check-----------------------------------
 //Tags filter
-if (document.URL.includes("/bars")) {
-  $("#filterForm").on("submit", (e) => {
-    e.preventDefault();
-    errors = [];
+//if (document.URL.includes("/bars")) {
+$("#filterForm").on("submit", (e) => {
+  e.preventDefault();
+  errors = [];
 
-    const inputs = $("#filterForm");
+  const inputs = $("#filterForm");
 
-    $("#barList").empty();
-    $.ajax({
-      method: "POST",
-      url: "/bars/barsByFilters",
-      data: inputs.serialize(),
-    }).then((res) => {
-      const foundBars = res.reqResponse;
-      foundBars.forEach((bar) => {
-        $("#barList").append(
-          $(
-            `<li>
+  $("#barList").empty();
+  $.ajax({
+    method: "POST",
+    url: "/bars/barsByFilters",
+    data: inputs.serialize(),
+  }).then((res) => {
+    const foundBars = res.reqResponse;
+    foundBars.forEach((bar) => {
+      $("#barList").append(
+        $(
+          `<li>
 					<div class="row"></div>
 					<a href="/bars/${bar.bar._id}">
 						<div class="card-bar">
@@ -1044,14 +1053,14 @@ if (document.URL.includes("/bars")) {
 					</a>
 					</div>
 				</li>`
-          )
-        );
-      }),
-        (res) =>
-          $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`);
-    });
+        )
+      );
+    }),
+      (res) =>
+        $("#respError").append(`<li>${res.responseJSON.reqResponse}</li>`);
   });
-}
+});
+//}
 //---------------------------------------Search/ city by user input-------------------------------------
 
 //City Search
@@ -1059,6 +1068,7 @@ if (document.URL.includes("/bars")) {
   $("#findByLocation").on("submit", (e) => {
     e.preventDefault();
     $("#respError").empty();
+    $("#barList").empty();
 
     const city = $("#findCityInput").val();
     const state = $("#findStateInput").val();
@@ -1103,36 +1113,33 @@ if (document.URL.includes("/bars")) {
 }
 
 $("#favoriteButton").on("submit", (e) => {
-	e.preventDefault();
-	const inputs = $("#favoriteButton");
-	$.ajax({
-		method: "PUT",
-		url: "/user/favorites",
-		data: inputs.serialize(),
-	}).then(
-		(res) => {
-			let favoritesCount = Number($("#favoritesCount").text());
-			let buttonText = $("#favorite-submit-button").text();
-			buttonText === "Favorite"
-				? (buttonText = "Unfavorite") && favoritesCount++
-				: (buttonText = "Favorite") && favoritesCount--;
-			$("#favorite-submit-button").text(buttonText);
-			$("#favoritesCount").text(favoritesCount);
-		},
-		(res) => {
-			$("#favorite-submit-button").text("Error, please refresh.");
-			$("#favorite-submit-button").attr("disabled", true);
-		}
-	);
+  e.preventDefault();
+  const inputs = $("#favoriteButton");
+  $.ajax({
+    method: "PUT",
+    url: "/user/favorites",
+    data: inputs.serialize(),
+  }).then(
+    (res) => {
+      let favoritesCount = Number($("#favoritesCount").text());
+      let buttonText = $("#favorite-submit-button").text();
+      buttonText === "Favorite"
+        ? (buttonText = "Unfavorite") && favoritesCount++
+        : (buttonText = "Favorite") && favoritesCount--;
+      $("#favorite-submit-button").text(buttonText);
+      $("#favoritesCount").text(favoritesCount);
+    },
+    (res) => {
+      $("#favorite-submit-button").text("Error, please refresh.");
+      $("#favorite-submit-button").attr("disabled", true);
+    }
+  );
 });
 
 $("#delete-button").on("click", (e) => {
-	$("#delete-confirm").removeClass("hide");
+  $("#delete-confirm").removeClass("hide");
 });
 
 $("#cancel-delete-button").on("click", (e) => {
-	$("#delete-confirm").addClass("hide");
+  $("#delete-confirm").addClass("hide");
 });
-
-
-

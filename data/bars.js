@@ -20,12 +20,14 @@ let exportedMethods = {
     location = validation.validateLocation(location);
     email = validation.validateEmail(email);
     ownerId = validation.validateId(ownerId);
-    website = validation.validateWebsite(website);
+    if (website.length > 0) {
+      website = validation.validateWebsite(website);
+    }
     phoneNumber = validation.validatePhone(phoneNumber);
     let validTags = [];
     if (tags.length > 0) {
       if (!Array.isArray(tags)) {
-        tags = tags.split(',')
+        tags = tags.split(",");
       }
       tags.forEach((element) => {
         element = validation.validateOptionalStr(element);
@@ -70,7 +72,7 @@ let exportedMethods = {
     const thebar = await barsCollection.findOne({
       _id: new ObjectId(barId),
     });
-    if (thebar === null) throw { code: 404, msg: "No bar with that id" };
+    if (thebar === null) throw "No bar with that id";
     return thebar;
   },
   // Bar by owner
@@ -109,12 +111,10 @@ let exportedMethods = {
   },
 
   async barSearch(searchName) {
-    if (!searchName) throw { code: 400, msg: "Input must be provided!" };
-    if (typeof searchName !== "string")
-      throw { code: 400, msg: "Input must be a valid string!" };
+    if (!searchName) throw "Input must be provided!";
+    if (typeof searchName !== "string") throw "Input must be a valid string!";
     searchName = searchName.trim();
-    if (searchName.length === 0)
-      throw { code: 400, msg: "Input is an empty string!" };
+    if (searchName.length === 0) throw "Input is an empty string!";
 
     searchName = searchName.toLowerCase();
     let multiWorlds = searchName.split(" ");
@@ -143,10 +143,7 @@ let exportedMethods = {
     });
 
     if (barsFound.size === 0)
-      throw {
-        code: 404,
-        msg: `0 bars found with the name "${searchName}" or a description containing "${searchName}"`,
-      };
+      throw `0 bars found with the name "${searchName}" or a description containing "${searchName}"`;
 
     const array = Array.from(barsFound);
 
@@ -158,24 +155,11 @@ let exportedMethods = {
     const barToDelete = await barCol.findOneAndDelete({
       _id: new ObjectId(barId),
     });
-    if (!barToDelete)
-      throw { code: 500, msg: `Could not delete bar with id: ${barId}` };
+    if (!barToDelete) throw `Could not delete bar with id: ${barId}`;
     const deletedbar = {
       barName: barToDelete.name,
       deleted: true,
     };
-
-    //delete review associated with bar
-
-    // if (barToDelete.reviews.length !== 0) {
-    //   const reviewCollection = await reviews();
-    //   const deleteReviews = await reviewCollection.deleteMany({
-    //     barId: barId
-    //   })
-    //   if (!deleteReviews) {
-    //     throw 'Could not delete reviews associated with bar'
-    //   }
-    // }
 
     return deletedbar;
   },
@@ -213,7 +197,7 @@ let exportedMethods = {
     );
 
     if (!updatedData) {
-      throw { code: 500, msg: "Could not update event successfully" };
+      throw "Could not update event successfully";
     }
     return updatedData;
   },
@@ -231,11 +215,7 @@ let exportedMethods = {
     let eTimeObj = date.parse(endTime.toUpperCase(), "hh:mm A");
     const minEndTime = date.addMinutes(sTimeObj, 30);
     if (sTimeObj >= eTimeObj || minEndTime > eTimeObj)
-      throw {
-        code: 400,
-        msg:
-          "Start time can't be later than end time or end time has to be 30 minutes greater than start time! ",
-      };
+      throw "Start time can't be later than end time or end time has to be 30 minutes greater than start time! ";
 
     const aEvent = {
       _id: new ObjectId(),
@@ -252,8 +232,7 @@ let exportedMethods = {
       { $push: { schedule: aEvent } }
     );
 
-    if (addEvent.modifiedCount === 0)
-      throw { code: 500, msg: " Event could not be added!" };
+    if (addEvent.modifiedCount === 0) throw " Event could not be added!";
 
     const theSchedule = await barCol.findOne(
       {
@@ -273,8 +252,7 @@ let exportedMethods = {
       { _id: new ObjectId(barId) },
       { $pull: { schedule: { _id: new ObjectId(eventId) } } }
     );
-    if (theEvent.modifiedCount === 0)
-      throw { code: 500, msg: "Event could not be removed!" };
+    if (theEvent.modifiedCount === 0) throw "Event could not be removed!";
 
     return theEvent;
   },
@@ -333,8 +311,7 @@ let exportedMethods = {
     eventDesc = validation.validateRequiredStr(eventDesc);
     startTime = validation.validateTime(startTime, "Start Time");
     endTime = validation.validateTime(endTime, "End Time");
-    const deletedEvent = this.deleteEvent(eventId, barId);
-    const addedEvent = this.addEvent(
+    const awaitaddedEvent = await this.addEvent(
       barId,
       date,
       eventName,
@@ -342,6 +319,7 @@ let exportedMethods = {
       startTime,
       endTime
     );
+    const deletedEvent = await this.deleteEvent(eventId, barId);
 
     return;
   },
@@ -358,7 +336,7 @@ let exportedMethods = {
     );
 
     const theBar = await barCol.findOne({ _id: new ObjectId(barId) });
-    if (theBar === null) throw { code: 500, msg: "No bar with that id" };
+    if (theBar === null) throw "No bar with that id";
 
     return theBar;
   },
