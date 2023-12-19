@@ -223,34 +223,7 @@ router.route("/searchBar").post(async (req, res) => {
   try {
     searchCriteria = validation.validateRequiredStr(searchCriteria);
   } catch (e) {
-    return res.status(400).render("bars", { error: e.msg, isError: true, tags: [
-        "Sport",
-        "Grill",
-        "Margaritas",
-        "Tacos",
-        "Dance",
-        "Cocktails",
-        "Mixology",
-        "CraftBeer",
-        "WineWednesday",
-        "BarEvents",
-        "DrinkSpecials",
-        "ThirstyThursday",
-        "LiveMusic",
-        "BeerTasting",
-        "MixandMingle",
-        "LadiesNight",
-        "BarCrafting",
-        "Tapas",
-        "ChampagneNight",
-        "AfterWorkDrinks",
-        "SignatureCocktails",
-        "WhiskeyTasting",
-        "HappyHourDeals",
-        "CraftCocktails",
-        "Shots",
-        "BarHopping",
-      ], });
+    return res.status(400).render("success", { message: e });
   }
   let allBars;
   try {
@@ -285,7 +258,7 @@ router.route("/searchBar").post(async (req, res) => {
         "CraftCocktails",
         "Shots",
         "BarHopping",
-      ], });
+      ],  });
     } else if (e.code === 400) {
       res.status(400).render("bars", { error: e, isError: true, tags: [
         "Sport",

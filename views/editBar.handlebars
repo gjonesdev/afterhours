@@ -9,7 +9,7 @@
 	</ul>
 	{{/if}}
 
-	<form action="/bars/update" method="post" id="bar-pdate">
+	<form action="/bars/update" method="post" id="bar-pdate" enctype="multipart/form-data">
 		<input type="hidden" value="{{id}}" name="updateBarId" id="updateBarId">
 		<label for="updateName">Bar Name</label>
 		<input type="text" value="{{barName}}" name="updateName" id="updateName">

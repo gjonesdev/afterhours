@@ -337,7 +337,6 @@ let exportedMethods = {
       endTime
     );
     const deletedEvent = await this.deleteEvent(eventId, barId);
-
     return;
   },
 

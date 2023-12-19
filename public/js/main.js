@@ -1161,5 +1161,5 @@ $("#delete-button").on("click", (e) => {
 });
 
 $("#cancel-delete-button").on("click", (e) => {
-	$("#delete-confirm").addClass("hide");
+  $("#delete-confirm").addClass("hide");
 });
