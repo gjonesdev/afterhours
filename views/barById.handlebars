@@ -17,15 +17,18 @@
 	<div class="left-side">
 		<div class="profile-side">
 			{{#if isOwner}}
-			<form action="/bars/editBar" method="post" id="bar-edit-button">
-				<input type="hidden" id="barIdToEdit" name="barIdToEdit" value="{{id}}">
-				<button>Edit Bar</button>
-			</form>
-			<form action="/bars/deleteBar" method="post" id="bar-delete-button">
-				<input type="hidden" id="barIdToDelete" name="barIdToDelete" value="{{id}}">
-				<button>Delete Bar</button>
-			</form>
+			<div class="profile-btn">
+				<form action="/bars/editBar" method="post" id="bar-edit-button">
+					<input type="hidden" id="barIdToEdit" name="barIdToEdit" value="{{id}}">
+					<button class="chatbtn">Edit Bar</button>
+				</form>
+				<form action="/bars/deleteBar" method="post" id="bar-delete-button">
+					<input type="hidden" id="barIdToDelete" name="barIdToDelete" value="{{id}}">
+					<button class="chatbtn">Delete Bar</button>
+				</form>
+			</div>
 			{{/if}}
+
 
 			<p class="mobile-no"> 📲 {{phone}}</p>
 			<p class="user-email">📧 {{email}}</p>
@@ -71,7 +74,7 @@
 			<ul>
 				<li data-panel-index="0" class="user-post active">Events</li>
 				<li data-panel-index="1" class="user-review">Reviews</li>
-				{{!-- <li data-panel-index="2" class="user-setting">Settings</li> --}}
+				<li data-panel-index="2" class="user-setting">#Hashtags</li>
 			</ul>
 		</div>
 		<div class="profile-body">
@@ -133,54 +136,53 @@
 					{{/each}}
 				</ul>
 			</div>
-		</div>
-
-
-		<div class="profile-settings tab">
-			<div class="account-setting">
-				<h1>Gallery</h1>
-
-
-
+			<div class="profile-settings tab">
+				<h1>Tags</h1>
+				<ul class="barList" style="list-style: none;">
+					{{#each tags}}
+					<li>
+						<div class="card-bar">
+							<p><strong>#</strong>{{this}}</p>
+						</div>
+					</li>
+					{{/each}}
+				</ul>
 			</div>
 		</div>
 	</div>
 
-</div>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script>
+		function initializeProfile() {
+			$(".nav ul li").click(function () {
+				$(this)
+					.addClass("active")
+					.siblings()
+					.removeClass("active");
 
-
-
-
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script>
-	function initializeProfile() {
-		$(".nav ul li").click(function () {
-			$(this)
-				.addClass("active")
-				.siblings()
-				.removeClass("active");
-
-			const panelIndex = $(this).data("panel-index");
-			tabs(panelIndex);
-		});
-
-		const tab = document.querySelectorAll(".profile-body .tab");
-
-		function tabs(panelIndex) {
-			tab.forEach(function (node) {
-				node.style.display = "none";
+				const panelIndex = $(this).data("panel-index");
+				tabs(panelIndex);
 			});
-			tab[panelIndex].style.display = "block";
-		}
-		tabs(0);
 
-		if (document.querySelector(".alert-message").innerText > 9) {
-			document.querySelector(".alert-message").style.fontSize = ".7rem";
-		}
-	}
+			const tab = document.querySelectorAll(".profile-body .tab");
 
-	// Ensure the document is ready before executing the script
-	$(document).ready(function () {
-		initializeProfile();
-	});
-</script>
+			function tabs(panelIndex) {
+				tab.forEach(function (node) {
+					node.style.display = "none";
+				});
+				tab[panelIndex].style.display = "block";
+			}
+			tabs(0);
+
+			if (document.querySelector(".alert-message")) {
+				if (document.querySelector(".alert-message").innerText > 9) {
+					document.querySelector(".alert-message").style.fontSize = ".7rem";
+				}
+			}
+		}
+
+		// Ensure the document is ready before executing the script
+		$(document).ready(function () {
+			initializeProfile();
+		});
+	</script>

@@ -149,9 +149,22 @@ header {
 	padding: 1rem;
 }
 
-.search-bar input {
+.search-bar {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: rgba(0, 0, 0, 0);
 	border: 1px solid white;
 	border-radius: 10px;
+	padding: 0.5rem;
+	margin-right: 25rem;
+	width: 50%;
+	margin: 20 auto;
+	max-width: 100%;
+}
+
+.search-bar input {
+	border: none;
 	background: transparent;
 	margin-right: 0.5rem;
 	color: white;
@@ -167,13 +180,17 @@ header {
 	color: white;
 	border: none;
 	cursor: pointer;
-	margin-left: auto;
+	margin-right: 0;
 }
 
 .search-bar input::placeholder {
 	color: white;
-	text-align: center;
-	max-width: 100%;
+    text-align: center;
+    min-width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* css for main image */
@@ -190,7 +207,7 @@ header {
 	margin: auto;
 	min-height: 100vh;
 	z-index: -1;
-	margin-top: -146px;
+	margin-top: -180px;
 }
 
 .centered {
@@ -303,6 +320,7 @@ header {
 	box-shadow: 0 15px 25px rgba(0, 0, 0, 0.6);
 }
 
+/* Beams from Codepen */
 .laser-beams {
 	position: absolute;
 	width: 100%;
@@ -566,10 +584,11 @@ a.link {
 	cursor: pointer;
 }
 
-.profile-image {
+.profile-image1 {
 	width: auto;
 	height: 50%;
-	border-radius: 50%;
+	border-radius: 20%;
+	margin-left: 10px;
 }
 
 .text-container {
@@ -1055,6 +1074,10 @@ p.error {
   }
   
   .card-bar {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 	background-color: rgba(0, 0, 0, 0.5);
 	border: none;
 	border-radius: 20px;
@@ -1064,6 +1087,7 @@ p.error {
 	text-decoration: none;
 	color: white;
 	box-sizing: border-box;
+	
   }
   
   .card-bar:hover {
@@ -1493,3 +1517,8 @@ button.createbtn i {
 	background-color: transparent;
 	color: white;
 }
+
+.bar-square{
+	z-index: 999;
+}
+
