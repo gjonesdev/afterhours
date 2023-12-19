@@ -1082,6 +1082,17 @@ if (document.URL.includes("/bars")) {
         }
         else{
           pathImage += "no_image.jpeg";
+		}
+		
+        updatedBarTags = []
+        barTags = bar.bar.tags;
+        if (barTags.length > 1) {
+          let firstTag = barTags[0];
+          let secondTag = barTags[1] + "..."
+          updatedBarTags.push(firstTag)
+          updatedBarTags.push(secondTag)
+        } else {
+          updatedBarTags = barTags
         }
         $("#barList").append(
           $(
@@ -1089,11 +1100,12 @@ if (document.URL.includes("/bars")) {
 					<div class="row"></div>
 					<a href="/bars/${bar.bar._id}">
 						<div class="card-bar">
-							${bar.bar.name} <br>						
-							${bar.bar.location.city} <br>
-							${bar.bar.ratingAverage} <br>
+							#BarName: ${bar.bar.name} <br>						
+							#City: ${bar.bar.location.city} <br>
+							#RatingAverage: ${bar.bar.ratingAverage} <br>
 							${bar.bar.reviewsCount} reviews <br>
 							${bar.bar.favoritesCount} favorites <br>
+							#${updatedBarTags} <br>
               <img src="${pathImage}" alt="bar images" width="200" height="300"></img>
 						</div>
 					</a>
