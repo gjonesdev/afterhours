@@ -6,51 +6,54 @@
 
 <div>
     <div class="card-wrapper">
-    <!-- Server Side Error -->
-    <h2>#{{barName}}</h2>
-    
+        <!-- Server Side Error -->
+        <h2>#{{barName}}</h2>
 
-    <div class="form-container">
-        <h1 class="reviews-title">#LeaveYourReview4 ⬆️:</h1>
 
-        <div id="LeaveReview-section">
-            <div class="form-box">
+        <div class="form-container">
+            <h1 class="reviews-title">#LeaveYourReview4 ⬆️:</h1>
 
-                <form action="/reviews/createReview" method="post" id="ratingForm">
-                    <input type="hidden" name="barId" value="{{barId}}" id="barIdInput">
-                    <input type="hidden" name="barName" value="{{barName}}" id="barNameInput">
+            <div id="LeaveReview-section">
+                <div class="form-box">
 
-                    <label style="color: rgb(228, 228, 235);">Please leave a review below:</label>
-                    <br>
-                    <br>
-                    <fieldset class="rating">
-                        <label for="ratingInput1">🍺  #DiveDisaster (1/5)</label>
-                        <input type="radio" name="rating" id="ratingInput1" value="1">
+                    <form action="/reviews/createReview" method="post" id="ratingForm">
+                        <input type="hidden" name="barId" value="{{barId}}" id="barIdInput">
+                        <input type="hidden" name="barName" value="{{barName}}" id="barNameInput">
+
+                        <label style="color: rgb(228, 228, 235);">Please leave a review below:</label>
                         <br>
-                        <label for="ratingInput2">🍺🍺    #Mehpub (2/5)</label>
-                        <input type="radio" name="rating" id="ratingInput2" value="2">
                         <br>
-                        <label for="ratingInput3">🍺🍺🍺   #SlightlySketchy (3/5)</label>
-                        <input type="radio" name="rating" id="ratingInput3" value="3">
+                        <fieldset class="rating">
+                            <label for="ratingInput1">🍺 #DiveDisaster (1/5)</label>
+                            <input type="radio" name="rating" id="ratingInput1" value="1">
+                            <br>
+                            <label for="ratingInput2">🍺🍺 #Mehpub (2/5)</label>
+                            <input type="radio" name="rating" id="ratingInput2" value="2">
+                            <br>
+                            <label for="ratingInput3">🍺🍺🍺 #SlightlySketchy (3/5)</label>
+                            <input type="radio" name="rating" id="ratingInput3" value="3">
+                            <br>
+                            <label for="ratingInput4">🍺🍺🍺🍺 #CoolCorner (4/5)</label>
+                            <input type="radio" name="rating" id="ratingInput4" value="4">
+                            <br>
+                            <label for="ratingInput5">🍺🍺🍺🍺🍺 #Legendary (5/5)</label>
+                            <input type="radio" name="rating" id="ratingInput5" value="5">
+                        </fieldset>
                         <br>
-                        <label for="ratingInput4">🍺🍺🍺🍺  #CoolCorner (4/5)</label>
-                        <input type="radio" name="rating" id="ratingInput4" value="4">
+                        <label style="color: rgb(228, 228, 235);"> Please leave a comment below:</label>
                         <br>
-                        <label for="ratingInput5">🍺🍺🍺🍺🍺 #Legendary (5/5)</label>
-                        <input type="radio" name="rating" id="ratingInput5" value="5">
-                    </fieldset>
+                        <br>
+                        <textarea class="commentArea" name="comment" id="commentInput" cols="40" rows="6"></textarea>
+                        <button type="submit">Post Review</button>
+                    </form>
                     <br>
-                    <label style="color: rgb(228, 228, 235);"> Please leave a comment below:</label>
                     <br>
-                    <br>
-                    <textarea class="commentArea" name="comment" id="commentInput" cols="40" rows="6"></textarea>
-                    <button type="submit">Post Review</button>
-                </form>
-                <br>
-                <br>
-                {{#if error}}
-    <p style="color: white;"> {{error}} </p>
-    {{/if}}</div>
+                    {{#if error}}
+                    <p style="color: white;"> {{error}} </p>
+                    {{/if}}
+                </div>
                 <a class="link" href="/bars/{{barId}}"> # Back to {{barName}} 💃🕺</a>
             </div>
         </div>
+    </div>
+</div>

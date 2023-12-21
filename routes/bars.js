@@ -423,31 +423,31 @@ router.route("/update").post(async (req, res) => {
     try {
       req.body.updateName = validation.validateRequiredStr(req.body.updateName);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
     }
 
     try {
       req.body.updateDesc = validation.validateRequiredStr(req.body.updateDesc);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
     }
 
     try {
       location = validation.validateLocation(location);
     } catch (e) {
-      errors.add(e.msg); // Check if the location is e.msg or just e
+      errors.add(e); // Check if the location is e.msg or just e
     }
 
     try {
       req.body.updateEmail = validation.validateEmail(req.body.updateEmail);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
     }
 
     try {
       req.body.updatePhone = validation.validatePhone(req.body.updatePhone);
     } catch (e) {
-      errors.add(e.msg);
+      errors.add(e);
     }
 
     try {
@@ -481,7 +481,7 @@ router.route("/update").post(async (req, res) => {
         errors.add(e);
       }
     } //close if
-    if (errors.length > 0) {
+    if (errors.size > 0) {
       res.status(400).render("editBar", {
         errors: errors,
         hasErrors: true,
@@ -788,4 +788,75 @@ const photoPath = (theBar) => {
   return pathImagesArray;
 };
 
+/**Optional Photos error handler */
+const optionalPhoto = async (req, err) => {
+  let images;
+  if (req.file === undefined || req.file.length <= 0) {
+    //throw "You must select at least 1 photo.";
+    const barId = req.body.updateBarId;
+    if (!barId) return images;
+    const theBar = await barData.barById(barId);
+    if (theBar.images) images = theBar.images;
+  } else {
+    await photoErrorHandlerEdit(req, err);
+    images = req.file;
+  }
+  return images;
+};
+
+const photoErrorHandlerEdit = async (req, err) => {
+  if (err) {
+    try {
+      if (err.code === "LIMIT_UNEXPECTED_FILE")
+        throw "Too many files to upload.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "MISSING_FIELD_NAME")
+        throw "Field name missing for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_COUNT") throw "Too many fields for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_VALUE")
+        throw "Field value too long for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_KEY")
+        throw "Field name too long for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FILE_COUNT") throw "Too many files for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FILE_SIZE") throw "File too large for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_PART_COUNT") throw "Too many parts for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+  }
+};
 export default router;

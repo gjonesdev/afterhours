@@ -10,15 +10,18 @@
     {{/if}}
 
     <div class="form-container">
-            <div class="form-box">
-                <h1 class="Events-title">#AddEvent 🥳</h1>
-                <form action="/events/createEvent" method="post" name="EventForm" id="EventForm">
-                    <input type="hidden" name="barIdInput" id="barIdInput" value="{{barId}}">
-                   
-                   <div class="input-box">
+        <div class="form-box">
+            <h1 class="Events-title">#AddEvent 🥳</h1>
+            <form action="/events/createEvent" method="post" name="EventForm" id="EventForm">
+                <input type="hidden" name="barIdInput" id="barIdInput" value="{{barId}}">
+
+                <div class="input-box">
                     <label> Event Date</label>
-                    <input style="color: white;" type="date" name="eventDateInput" id="eventDateInput" value="{{eventInfo.eventDateInput}}">
-                    </form>
+                    <input style="color: white;" type="date" name="eventDateInput" id="eventDateInput"
+                        value="{{eventInfo.eventDateInput}}">
+
+
+
                     <label for="eventNameInput">Event Name</label>
                     <input type="text" name="eventNameInput" id="eventNameInput" value="{{eventInfo.eventNameInput}}">
                     <label for="eventDescInput">Description</label>
@@ -31,7 +34,10 @@
                     <input type="time" name="endTimeInput" id="endTimeInput" value="{{eventInfo.endTimeInput}}">
                     <button type="submit">Save Changes</button>
                     <a style="color: white;" href="/bars/{{barId}}">Cancel</a>
+                </div>
 
-                </form>
+            </form>
 
-            </div>
+        </div>
+    </div>
+</div>
