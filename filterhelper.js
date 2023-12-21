@@ -288,11 +288,7 @@ let exportedMethods = {
       }
     });
 
-    if (barsFound.size === 0)
-      throw {
-        code: 404,
-        msg: "0 bars found",
-      };
+    if (barsFound.size === 0) throw "0 bars found";
 
     const array = Array.from(barsFound);
 

@@ -121,99 +121,105 @@ router
         error: { status: 403, message: "Prohibited area" },
         message: "This function is not allowed for your account type",
       });
-    } 
-    upload(req, res, async (err) =>{ /**Upload the picture to the folder in the server ./image */
-    req.body = req.body;
-    let theBar = {};
-    errors = new Set();
-    const streetAddress = req.body.createAddress;
-    const city = req.body.createCity;
-    const state = req.body.createState;
-    const zipCode = req.body.createZipCode;
-    const location = { streetAddress, city, state, zipCode };
-    const tags = req.body.tags;
-
-    if (!req.body) {
-      errors.add("Information needs to be provided");
-      return res.render("createBar", { error: errors, isError: true });
     }
+    upload(req, res, async (err) => {
+      /**Upload the picture to the folder in the server ./image */
+      req.body = req.body;
+      let theBar = {};
+      errors = new Set();
+      const streetAddress = req.body.createAddress;
+      const city = req.body.createCity;
+      const state = req.body.createState;
+      const zipCode = req.body.createZipCode;
+      const location = { streetAddress, city, state, zipCode };
+      const tags = req.body.tags;
 
-    try {
-      req.body.createName = validation.validateRequiredStr(req.body.createName);
-    } catch (e) {
-      errors.add(e);
-    }
-
-    try {
-      req.body.createDesc = validation.validateRequiredStr(req.body.createDesc);
-    } catch (e) {
-      errors.add(e);
-    }
-
-    try {
-      validation.validateLocation(location);
-    } catch (e) {
-      errors.add(e);
-    }
-
-    try {
-      req.body.createEmail = validation.validateEmail(req.body.createEmail);
-    } catch (e) {
-      errors.add(e);
-    }
-
-    try {
-      req.body.createPhone = validation.validatePhone(req.body.createPhone);
-    } catch (e) {
-      errors.add(e);
-    }
-
-    try {
-      if (req.body.createWebsite.length > 0) {
-        req.body.createWebsite = validation.validateWebsite(
-          req.body.createWebsite
-        );
+      if (!req.body) {
+        errors.add("Information needs to be provided");
+        return res.render("createBar", { error: errors, isError: true });
       }
-    } catch (e) {
-      errors.add(e);
-    }
-  await photoErrorHandler(req, err);
-  if (errors.size === 0) { /**No errors, then create a bar with photo */
-    let images = req.file;
-    try {
-      theBar = await barData.createBar(
-        req.body.createName,
-        req.body.createDesc,
-        location,
-        req.body.createPhone,
-        req.body.createEmail,
-        req.body.createWebsite,
-        accountId,
-        tags,
-        images
-      );
-      filtersHelp.barDistanceHelper(true);
-    } catch (e) {
-      errors.add(e);
-    }
-  }
 
-    if (errors.size > 0) {
-      return res.status(400).render("createBar", {
-        errors: errors,
-        isError: true,
-        barName: req.body.createName,
-        description: req.body.createDesc,
-        location: location,
-        email: req.body.createEmail,
-        website: req.body.createWebsite,
-        phone: req.body.createPhone,
-      });
-    } else {
-      return res.redirect("/bars/" + theBar._id);
-    }
+      try {
+        req.body.createName = validation.validateRequiredStr(
+          req.body.createName
+        );
+      } catch (e) {
+        errors.add(e);
+      }
+
+      try {
+        req.body.createDesc = validation.validateRequiredStr(
+          req.body.createDesc
+        );
+      } catch (e) {
+        errors.add(e);
+      }
+
+      try {
+        validation.validateLocation(location);
+      } catch (e) {
+        errors.add(e);
+      }
+
+      try {
+        req.body.createEmail = validation.validateEmail(req.body.createEmail);
+      } catch (e) {
+        errors.add(e);
+      }
+
+      try {
+        req.body.createPhone = validation.validatePhone(req.body.createPhone);
+      } catch (e) {
+        errors.add(e);
+      }
+
+      try {
+        if (req.body.createWebsite.length > 0) {
+          req.body.createWebsite = validation.validateWebsite(
+            req.body.createWebsite
+          );
+        }
+      } catch (e) {
+        errors.add(e);
+      }
+      await photoErrorHandler(req, err);
+      if (errors.size === 0) {
+        /**No errors, then create a bar with photo */
+        let images = req.file;
+        try {
+          theBar = await barData.createBar(
+            req.body.createName,
+            req.body.createDesc,
+            location,
+            req.body.createPhone,
+            req.body.createEmail,
+            req.body.createWebsite,
+            accountId,
+            tags,
+            images
+          );
+          filtersHelp.barDistanceHelper(true);
+        } catch (e) {
+          errors.add(e);
+        }
+      }
+
+      if (errors.size > 0) {
+        return res.status(400).render("createBar", {
+          errors: errors,
+          isError: true,
+          barName: req.body.createName,
+          description: req.body.createDesc,
+          location: location,
+          email: req.body.createEmail,
+          website: req.body.createWebsite,
+          phone: req.body.createPhone,
+        });
+      } else {
+        return res.redirect("/bars/" + theBar._id);
+      }
+    });
   });
-});
 
 router.route("/searchBar").post(async (req, res) => {
   if (!req.body) {
@@ -231,125 +237,137 @@ router.route("/searchBar").post(async (req, res) => {
     allBars = await filtersHelp.allBarsPlus(searchBar);
   } catch (e) {
     if (e.code === 404) {
-      res.status(404).render("bars", { error: e, isError: true, tags: [
-        "Sport",
-        "Grill",
-        "Margaritas",
-        "Tacos",
-        "Dance",
-        "Cocktails",
-        "Mixology",
-        "CraftBeer",
-        "WineWednesday",
-        "BarEvents",
-        "DrinkSpecials",
-        "ThirstyThursday",
-        "LiveMusic",
-        "BeerTasting",
-        "MixandMingle",
-        "LadiesNight",
-        "BarCrafting",
-        "Tapas",
-        "ChampagneNight",
-        "AfterWorkDrinks",
-        "SignatureCocktails",
-        "WhiskeyTasting",
-        "HappyHourDeals",
-        "CraftCocktails",
-        "Shots",
-        "BarHopping",
-      ],  });
+      res.status(404).render("bars", {
+        error: e,
+        isError: true,
+        tags: [
+          "Sport",
+          "Grill",
+          "Margaritas",
+          "Tacos",
+          "Dance",
+          "Cocktails",
+          "Mixology",
+          "CraftBeer",
+          "WineWednesday",
+          "BarEvents",
+          "DrinkSpecials",
+          "ThirstyThursday",
+          "LiveMusic",
+          "BeerTasting",
+          "MixandMingle",
+          "LadiesNight",
+          "BarCrafting",
+          "Tapas",
+          "ChampagneNight",
+          "AfterWorkDrinks",
+          "SignatureCocktails",
+          "WhiskeyTasting",
+          "HappyHourDeals",
+          "CraftCocktails",
+          "Shots",
+          "BarHopping",
+        ],
+      });
     } else if (e.code === 400) {
-      res.status(400).render("bars", { error: e, isError: true, tags: [
-        "Sport",
-        "Grill",
-        "Margaritas",
-        "Tacos",
-        "Dance",
-        "Cocktails",
-        "Mixology",
-        "CraftBeer",
-        "WineWednesday",
-        "BarEvents",
-        "DrinkSpecials",
-        "ThirstyThursday",
-        "LiveMusic",
-        "BeerTasting",
-        "MixandMingle",
-        "LadiesNight",
-        "BarCrafting",
-        "Tapas",
-        "ChampagneNight",
-        "AfterWorkDrinks",
-        "SignatureCocktails",
-        "WhiskeyTasting",
-        "HappyHourDeals",
-        "CraftCocktails",
-        "Shots",
-        "BarHopping",
-      ], });
+      res.status(400).render("bars", {
+        error: e,
+        isError: true,
+        tags: [
+          "Sport",
+          "Grill",
+          "Margaritas",
+          "Tacos",
+          "Dance",
+          "Cocktails",
+          "Mixology",
+          "CraftBeer",
+          "WineWednesday",
+          "BarEvents",
+          "DrinkSpecials",
+          "ThirstyThursday",
+          "LiveMusic",
+          "BeerTasting",
+          "MixandMingle",
+          "LadiesNight",
+          "BarCrafting",
+          "Tapas",
+          "ChampagneNight",
+          "AfterWorkDrinks",
+          "SignatureCocktails",
+          "WhiskeyTasting",
+          "HappyHourDeals",
+          "CraftCocktails",
+          "Shots",
+          "BarHopping",
+        ],
+      });
     } else {
-      res.status(500).render("bars", { error: e, isError: true, tags: [
-        "Sport",
-        "Grill",
-        "Margaritas",
-        "Tacos",
-        "Dance",
-        "Cocktails",
-        "Mixology",
-        "CraftBeer",
-        "WineWednesday",
-        "BarEvents",
-        "DrinkSpecials",
-        "ThirstyThursday",
-        "LiveMusic",
-        "BeerTasting",
-        "MixandMingle",
-        "LadiesNight",
-        "BarCrafting",
-        "Tapas",
-        "ChampagneNight",
-        "AfterWorkDrinks",
-        "SignatureCocktails",
-        "WhiskeyTasting",
-        "HappyHourDeals",
-        "CraftCocktails",
-        "Shots",
-        "BarHopping",
-      ], });
+      res.status(500).render("bars", {
+        error: e,
+        isError: true,
+        tags: [
+          "Sport",
+          "Grill",
+          "Margaritas",
+          "Tacos",
+          "Dance",
+          "Cocktails",
+          "Mixology",
+          "CraftBeer",
+          "WineWednesday",
+          "BarEvents",
+          "DrinkSpecials",
+          "ThirstyThursday",
+          "LiveMusic",
+          "BeerTasting",
+          "MixandMingle",
+          "LadiesNight",
+          "BarCrafting",
+          "Tapas",
+          "ChampagneNight",
+          "AfterWorkDrinks",
+          "SignatureCocktails",
+          "WhiskeyTasting",
+          "HappyHourDeals",
+          "CraftCocktails",
+          "Shots",
+          "BarHopping",
+        ],
+      });
     }
   }
   renderedList = allBars;
   res.render("bars", {
     bars: allBars,
-	tags: [
-        "Sport",
-        "Grill",
-        "Margaritas",
-        "Tacos",
-        "Dance",
-        "Cocktails",
-        "Mixology",
-        "CraftBeer",
-        "WineWednesday",
-        "BarEvents",
-        "DrinkSpecials",
-        "ThirstyThursday",
-        "LiveMusic",
-        "BeerTasting",
-        "MixandMingle",
-        "LadiesNight",
-        "BarCrafting",
-        "Tapas",
-        "ChampagneNight",
-        "AfterWorkDrinks",
-        "SignatureCocktails",
-        "WhiskeyTasting",
-        "HappyHourDeals",
-        "CraftCocktails",
-        "Shots",
-        "BarHopping",
-      ],
+    tags: [
+      "Sport",
+      "Grill",
+      "Margaritas",
+      "Tacos",
+      "Dance",
+      "Cocktails",
+      "Mixology",
+      "CraftBeer",
+      "WineWednesday",
+      "BarEvents",
+      "DrinkSpecials",
+      "ThirstyThursday",
+      "LiveMusic",
+      "BeerTasting",
+      "MixandMingle",
+      "LadiesNight",
+      "BarCrafting",
+      "Tapas",
+      "ChampagneNight",
+      "AfterWorkDrinks",
+      "SignatureCocktails",
+      "WhiskeyTasting",
+      "HappyHourDeals",
+      "CraftCocktails",
+      "Shots",
+      "BarHopping",
+    ],
   });
 });
 
@@ -365,7 +383,7 @@ router.route("/editBar").post(async (req, res) => {
     const theBar = await barData.barById(barId);
     let images = {};
     images.filename = "no_image.jpeg";
-    if(theBar.images) images = theBar.images;
+    if (theBar.images) images = theBar.images;
     res.render("editBar", {
       id: theBar._id,
       barName: theBar.name,
@@ -374,7 +392,7 @@ router.route("/editBar").post(async (req, res) => {
       email: theBar.email,
       website: theBar.website,
       phone: theBar.phone,
-      images: images
+      images: images,
     });
   } catch (e) {
     res.status(500).json({ error: "Server Error" });
@@ -382,14 +400,15 @@ router.route("/editBar").post(async (req, res) => {
 });
 
 router.route("/update").post(async (req, res) => {
-  upload(req, res, async (err) =>{ /**Upload the picture to the folder in the server ./image */
+  upload(req, res, async (err) => {
+    /**Upload the picture to the folder in the server ./image */
     errors = new Set();
     const streetAddress = req.body.updateAddress;
     const city = req.body.updateCity;
     const state = req.body.updateState;
     const zipCode = req.body.updateZipCode;
     let location = { streetAddress, city, state, zipCode };
-    
+
     if (!req.body) {
       errors.add("Information needs to be provided");
       return res.render("editBar", { error: errors, isError: true });
@@ -397,81 +416,131 @@ router.route("/update").post(async (req, res) => {
     try {
       req.body.updateBarId = validation.validateId(req.body.updateBarId);
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
       res.render("editBar", { error: errors, isError: true });
     }
 
-  try {
-    req.body.updateName = validation.validateRequiredStr(req.body.updateName);
-  } catch (e) {
-    errors.add(e);
-  }
+    try {
+      req.body.updateName = validation.validateRequiredStr(req.body.updateName);
+    } catch (e) {
+      errors.add(e);
+    }
 
-  try {
-    req.body.updateDesc = validation.validateRequiredStr(req.body.updateDesc);
-  } catch (e) {
-    errors.add(e);
-  }
+    try {
+      req.body.updateDesc = validation.validateRequiredStr(req.body.updateDesc);
+    } catch (e) {
+      errors.add(e);
+    }
 
-  try {
-    location = validation.validateLocation(location);
-  } catch (e) {
-    errors.add(e);
-  }
+    try {
+      location = validation.validateLocation(location);
+    } catch (e) {
+      errors.add(e); // Check if the location is e.msg or just e
+    }
 
-  try {
-    req.body.updateEmail = validation.validateEmail(req.body.updateEmail);
-  } catch (e) {
-    errors.add(e);
-  }
+    try {
+      req.body.updateEmail = validation.validateEmail(req.body.updateEmail);
+    } catch (e) {
+      errors.add(e);
+    }
 
-  try {
-    req.body.updatePhone = validation.validatePhone(req.body.updatePhone);
-  } catch (e) {
-    errors.add(e);
-  }
+    try {
+      req.body.updatePhone = validation.validatePhone(req.body.updatePhone);
+    } catch (e) {
+      errors.add(e);
+    }
 
-  try {
-    req.body.updateWebsite = validation.validateWebsite(req.body.updateWebsite);
-  } catch (e) {
-    errors.add(e);
-  }
-  //await photoErrorHandler(req, err); /**Photos error handler */
-  if (errors.size === 0) {  /**No errors, then create a bar with photo */
-    //let images = req.file;
-  try {
-    const theBar = await barData.barProfileUpdate(
-      req.body.updateBarId,
-      req.body.updateName,
-      req.body.updateDesc,
-      location,
-      req.body.updateEmail,
-      req.body.updateWebsite,
-      req.body.updatePhone,
-      //images
-    );
-    filtersHelp.barDistanceHelper(true);
-    res.redirect("/bars/" + req.body.updateBarId);
-  } catch (e) {
-    errors.add(e);
-  }
+    try {
+      req.body.updateWebsite = validation.validateWebsite(
+        req.body.updateWebsite
+      );
+    } catch (e) {
+      errors.add(e.msg);
+    }
+    const images = await optionalPhoto(
+      req,
+      err
+    ); /**Optional Photos error handler */
+    if (errors.size === 0) {
+      /**No errors, then edit a bar with optional photo */
 
-  if (errors.length > 0) {
-    res.status(400).render("editBar", {
-      errors: errors,
-      hasErrors: true,
-      id: req.body.updateBarId,
-      barName: req.body.updateName,
-      description: req.body.updateDesc,
-      location: location,
-      email: req.body.updateEmail,
-      website: req.body.updateWebsite,
-      phone: req.body.updatePhone,
-      //images
+      try {
+        const theBar = await barData.barProfileUpdate(
+          req.body.updateBarId,
+          req.body.updateName,
+          req.body.updateDesc,
+          location,
+          req.body.updateEmail,
+          req.body.updateWebsite,
+          req.body.updatePhone,
+          images
+        );
+        filtersHelp.barDistanceHelper(true);
+        res.redirect("/bars/" + req.body.updateBarId);
+      } catch (e) {
+        errors.add(e);
+      }
+    } //close if
+    if (errors.size > 0) {
+      res.status(400).render("editBar", {
+        errors: errors,
+        hasErrors: true,
+        id: req.body.updateBarId,
+        barName: req.body.updateName,
+        description: req.body.updateDesc,
+        location: location,
+        email: req.body.updateEmail,
+        website: req.body.updateWebsite,
+        phone: req.body.updatePhone,
+        //images
+      });
+    }
+  });
+});
+
+router.route("/deleteBar").post(async (req, res) => {
+  if (!req.body.barIdToDelete) {
+    return res.status(400).render("error", {
+      error: { status: 400, message: "Bar info missing!" },
+      message: "Missing bar information",
     });
-  } 
- };
-})
+  }
+
+  try {
+    req.body.barIdToDelete = validation.validateId(req.body.barIdToDelete);
+  } catch (e) {
+    return res.status(400).render("error", {
+      error: { status: 400, message: "Invalid bar id!" },
+      message: "Invalid bar id",
+    });
+  }
+
+  let theBar = await barData.barById(req.body.barIdToDelete);
+  let isOwner = false;
+  if (req.session.user) {
+    isOwner = theBar.ownerId === req.session.user.accountId;
+  }
+
+  if (!isOwner) {
+    return res.status(403).render("error", {
+      error: { status: "403", message: "Prohibited function" },
+      message:
+        "You are not the owner of this bar. Only owners can delete bars!",
+    });
+  }
+
+  try {
+    await barData.removeBar(req.body.barIdToDelete);
+    filtersHelp.barDistanceHelper(true);
+    return res.render("success", {
+      message: "The Bar has been deleted succesfully!",
+    });
+  } catch (e) {
+    return res.status(500).render("error", {
+      error: { status: "500", message: "Server Error!" },
+      message: "Was not able to remove the Bar!",
+    });
+  }
 });
 
 router.route("/deleteBar").post(async (req, res) => {
@@ -570,16 +639,16 @@ router.route("/:barId").get(async (req, res) => {
       isOwner,
       favoriteToggle,
       reviewEmpty,
-      images: pathImagesArray
+      images: pathImagesArray,
     });
   } catch (e) {
-	return res.status(404).render("error", {
-		title: "Error",
-		error: {
-		  status: 404,
-		  message: "That bar does not exist.",
-		},
-	  });
+    return res.status(404).render("error", {
+      title: "Error",
+      error: {
+        status: 404,
+        message: "That bar does not exist.",
+      },
+    });
   }
 });
 
@@ -645,74 +714,149 @@ const fileStorageEngine = diskStorage({
 const upload = multer({ storage: fileStorageEngine }).single("images");
 
 /**Photos error handler */
-const photoErrorHandler = async(req, err) => {
-      try {
-        if(req.file === undefined || req.file.length <= 0) throw "You must select at least 1 photo.";
-      } catch (e) {
-        errors.add(e);
-      }
-  
-      if (err) {
-        try {
-          if (err.code === "LIMIT_UNEXPECTED_FILE") throw "Too many files to upload.";
-        } catch (e) {
-          errors.add(e);
-        }
-  
-        try {
-          if (err.code === "MISSING_FIELD_NAME") throw "Field name missing for photos.";
-        } catch (e) {
-          errors.add(e);
-        }
-  
-        try {
-          if (err.code === "LIMIT_FIELD_COUNT") throw "Too many fields for photos.";
-        } catch (e) {
-          errors.add(e);
-        }
-  
-        try {
-          if (err.code === "LIMIT_FIELD_VALUE") throw "Field value too long for photos.";
-        } catch (e) {
-          errors.add(e);
-        }
-  
-        try {
-          if (err.code === "LIMIT_FIELD_KEY") throw "Field name too long for photos";
-        } catch (e) {
-          errors.add(e);
-        }
-  
-        try {
-          if (err.code === "LIMIT_FILE_COUNT") throw "Too many files for photos";
-        } catch (e) {
-          errors.add(e);
-        }
-  
-        try {
-          if (err.code === "LIMIT_FILE_SIZE") throw "File too large for photos";
-        } catch (e) {
-          errors.add(e);
-        }
-  
-        try {
-          if (err.code === "LIMIT_PART_COUNT") throw "Too many parts for photos";
-        } catch (e) {
-          errors.add(e);
-        }   
+const photoErrorHandler = async (req, err) => {
+  try {
+    if (req.file === undefined || req.file.length <= 0)
+      throw "You must select at least 1 photo.";
+  } catch (e) {
+    errors.add(e);
+  }
+
+  if (err) {
+    try {
+      if (err.code === "LIMIT_UNEXPECTED_FILE")
+        throw "Too many files to upload.";
+    } catch (e) {
+      errors.add(e);
     }
-}
+
+    try {
+      if (err.code === "MISSING_FIELD_NAME")
+        throw "Field name missing for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_COUNT") throw "Too many fields for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_VALUE")
+        throw "Field value too long for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_KEY")
+        throw "Field name too long for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FILE_COUNT") throw "Too many files for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FILE_SIZE") throw "File too large for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_PART_COUNT") throw "Too many parts for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+  }
+};
 
 /**Photo path = ..\public\images\1702829435937-afterhours-IMG_20180811_193424773.jpg */
 const photoPath = (theBar) => {
   let pathImagesArray;
-  if(theBar.images && theBar.images.filename){
-      pathImagesArray = "/public/images/"+ theBar.images.filename;
-  }
-  else{
+  if (theBar.images && theBar.images.filename) {
+    pathImagesArray = "/public/images/" + theBar.images.filename;
+  } else {
     pathImagesArray = "/public/images/no_image.jpeg";
   }
   return pathImagesArray;
-}
+};
 
+/**Optional Photos error handler */
+const optionalPhoto = async (req, err) => {
+  let images;
+  if (req.file === undefined || req.file.length <= 0) {
+    //throw "You must select at least 1 photo.";
+    const barId = req.body.updateBarId;
+    if (!barId) return images;
+    const theBar = await barData.barById(barId);
+    if (theBar.images) images = theBar.images;
+  } else {
+    await photoErrorHandlerEdit(req, err);
+    images = req.file;
+  }
+  return images;
+};
+
+const photoErrorHandlerEdit = async (req, err) => {
+  if (err) {
+    try {
+      if (err.code === "LIMIT_UNEXPECTED_FILE")
+        throw "Too many files to upload.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "MISSING_FIELD_NAME")
+        throw "Field name missing for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_COUNT") throw "Too many fields for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_VALUE")
+        throw "Field value too long for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_KEY")
+        throw "Field name too long for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FILE_COUNT") throw "Too many files for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FILE_SIZE") throw "File too large for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_PART_COUNT") throw "Too many parts for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+  }
+};
 export default router;

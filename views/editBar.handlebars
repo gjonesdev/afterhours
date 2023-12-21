@@ -35,8 +35,8 @@
 				</div>
 				<div class="input-box">
 					<label for="updateState">State</label>
-					<select value="{{location.state}}" name="updateState" id="updateState">
-						<option value="{{location.state}}"selected>{{location.state}}</option>
+					<select name="updateState" id="updateState">
+						<option value="{{location.state}}" selected>{{location.state}}</option>
 						<option value="AL">AL</option>
 						<option value="AK">AK</option>
 						<option value="AZ">AZ</option>
@@ -106,9 +106,19 @@
 					<label for="updateWebsite">Website</label>
 					<input type="text" value="{{website}}" name="updateWebsite" id="updateWebsite">
 				</div>
+				<div>
+					<h2>Gallery</h2>
+					<img src="/public/images/{{images.filename}}" alt="bar image" width="200" height="300">
+				</div>
+
+				<div class="input-box">
+					<input type="file" accept="image/jpeg, image/png, image/jpg" id="images" name="images">
+					<label for="images"></label>
+				</div>
 				<button type="submit">Submit</button>
 				<a href="/bars/{{id}}">Cancel</a>
 
 			</form>
 		</div>
 	</div>
+</div>
