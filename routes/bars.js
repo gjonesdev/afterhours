@@ -7,6 +7,8 @@ import multer, { diskStorage } from "multer";
 
 let renderedList = [];
 let errors = new Set();
+let appliedFilters = [];
+
 router
   .route("/")
   .get(async (req, res) => {
@@ -20,6 +22,7 @@ router
       barsDistance = await filtersHelp.sortedBarsbyDistance();
       allTheBars = barsDistance;
     }
+    appliedFilters = [];
     renderedList = allTheBars;
     res.render("bars", {
       bars: allTheBars,
@@ -75,9 +78,18 @@ router
     try {
       const cityBars = await filtersHelp.cityBars(searchCity, searchState);
       const allBars = await filtersHelp.allBarsPlus(cityBars);
+      const filtered = filtersHelp.tagsFilter(appliedFilters, allBars);
       renderedList = allBars;
-      return res.json({ reqResponse: allBars });
-    } catch (e) {return res.status(400).json({ reqResponse: e.msg });} //double check validation error
+      return res.json({ reqResponse: filtered });
+    } catch (e) {
+      if (e.code === 404) {
+        renderedList = [0];
+        return res.status(404).json({ reqResponse: e });
+      } else {
+        renderedList = [0];
+        return res.status(500).json({ reqResponse: e });
+      }
+    }
   });
 
 router
@@ -157,9 +169,11 @@ router
     }
 
     try {
-      req.body.createWebsite = validation.validateWebsite(
-        req.body.createWebsite
-      );
+      if (req.body.createWebsite.length > 0) {
+        req.body.createWebsite = validation.validateWebsite(
+          req.body.createWebsite
+        );
+      }
     } catch (e) {
       errors.add(e);
     }
@@ -184,46 +198,158 @@ router
     }
   }
 
-    if (errors.size > 0) {
-      return res.status(400).render("createBar", {
-        errors: errors,
-        isError: true,
-      });
-    } else {
-      return res.redirect("/bars/" + theBar._id);
-    }
-  });
+  if (errors.size > 0) {
+    return res.status(400).render("createBar", {
+      errors: errors,
+      isError: true,
+      barName: req.body.createName,
+      description: req.body.createDesc,
+      location: location,
+      email: req.body.createEmail,
+      website: req.body.createWebsite,
+      phone: req.body.createPhone,
+    });
+  } else {
+    return res.redirect("/bars/" + theBar._id);
+  }
+});
 });
 
 router.route("/searchBar").post(async (req, res) => {
   if (!req.body) {
-    return res.status(400).render("error", { 
-      error: { status: 400, message: "Missing input." },
-      message: "Search input is needed!",
-    });
+    return res.status(400).render("success", { message: "Input is needed!" });
   }
-  let searcCriteria = req.body.searchInput;
+  let searchCriteria = req.body.searchInput;
   try {
-    searcCriteria = validation.validateRequiredStr(searcCriteria);
+    searchCriteria = validation.validateRequiredStr(searchCriteria);
   } catch (e) {
-    return res.status(400).render("bars", { error: e.msg, isError: true });
+    return res.status(400).render("success", { message: e });
   }
   let allBars;
   try {
-    const searchBar = await barData.barSearch(searcCriteria);
+    const searchBar = await barData.barSearch(searchCriteria);
     allBars = await filtersHelp.allBarsPlus(searchBar);
   } catch (e) {
     if (e.code === 404) {
-      res.status(404).render("bars", { error: e.msg, isError: true });
+      res.status(404).render("bars", { error: e, isError: true, tags: [
+        "Sport",
+        "Grill",
+        "Margaritas",
+        "Tacos",
+        "Dance",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
+      ],  });
     } else if (e.code === 400) {
-      res.status(400).render("bars", { error: e.msg, isError: true });
+      res.status(400).render("bars", { error: e, isError: true, tags: [
+        "Sport",
+        "Grill",
+        "Margaritas",
+        "Tacos",
+        "Dance",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
+      ], });
     } else {
-      res.status(500).render("bars", { error: e.msg, isError: true });
+      res.status(500).render("bars", { error: e, isError: true, tags: [
+        "Sport",
+        "Grill",
+        "Margaritas",
+        "Tacos",
+        "Dance",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
+      ], });
     }
   }
   renderedList = allBars;
   res.render("bars", {
     bars: allBars,
+	tags: [
+        "Sport",
+        "Grill",
+        "Margaritas",
+        "Tacos",
+        "Dance",
+        "Cocktails",
+        "Mixology",
+        "CraftBeer",
+        "WineWednesday",
+        "BarEvents",
+        "DrinkSpecials",
+        "ThirstyThursday",
+        "LiveMusic",
+        "BeerTasting",
+        "MixandMingle",
+        "LadiesNight",
+        "BarCrafting",
+        "Tapas",
+        "ChampagneNight",
+        "AfterWorkDrinks",
+        "SignatureCocktails",
+        "WhiskeyTasting",
+        "HappyHourDeals",
+        "CraftCocktails",
+        "Shots",
+        "BarHopping",
+      ],
   });
 });
 
@@ -263,7 +389,7 @@ router.route("/update").post(async (req, res) => {
     const state = req.body.updateState;
     const zipCode = req.body.updateZipCode;
     let location = { streetAddress, city, state, zipCode };
-    
+
     if (!req.body) {
       errors.add("Information needs to be provided");
       return res.render("editBar", { error: errors, isError: true });
@@ -310,9 +436,9 @@ router.route("/update").post(async (req, res) => {
   } catch (e) {
     errors.add(e.msg);
   }
-  await photoErrorHandler(req, err); /**Photos error handler */
-  if (errors.size === 0) {  /**No errors, then create a bar with photo */
-    let images = req.file;
+  const images = await optionalPhoto(req, err); /**Optional Photos error handler */
+  if (errors.size === 0) {  /**No errors, then edit a bar with optional photo */
+
   try {
     const theBar = await barData.barProfileUpdate(
       req.body.updateBarId,
@@ -327,25 +453,24 @@ router.route("/update").post(async (req, res) => {
     filtersHelp.barDistanceHelper(true);
     res.redirect("/bars/" + req.body.updateBarId);
   } catch (e) {
-    if (e.code === 404) {
-      errors.add(e.msg);
-    } else if (e.code === 400) {
-      errors.add(e.msg);
-    } else {
-      return res.render("error", {
-        error: { status: 500, message: e.msg },
-        message: e.msg,
-      });
-    }
+      errors.add(e);
    }
   }//close if
-  if (errors.size > 0) {
-    return res.status(400).render("editBar", {
+  if (errors.length > 0) {
+    res.status(400).render("editBar", {
       errors: errors,
       hasErrors: true,
-      barInfo: req.body,
+      id: req.body.updateBarId,
+      barName: req.body.updateName,
+      description: req.body.updateDesc,
+      location: location,
+      email: req.body.updateEmail,
+      website: req.body.updateWebsite,
+      phone: req.body.updatePhone,
+      //images
     });
-  } 
+  }
+    
  });
 });
 
@@ -366,15 +491,11 @@ router.route("/deleteBar").post(async (req, res) => {
     });
   }
 
-  let theBar = await barData.barById(req.body.barIdToDelete)
-  console.log(theBar)
+  let theBar = await barData.barById(req.body.barIdToDelete);
   let isOwner = false;
   if (req.session.user) {
-    console.log(req.session.user);
-    console.log(req.session.user.accountId);
-    console.log(theBar.ownerId)
     isOwner = theBar.ownerId === req.session.user.accountId;
-  } 
+  }
   
   if (!isOwner) {
     return res.status(403).render("error", {
@@ -387,9 +508,8 @@ router.route("/deleteBar").post(async (req, res) => {
   try {
     await barData.removeBar(req.body.barIdToDelete);
     filtersHelp.barDistanceHelper(true);
-    return res.render("error", {
-      error: { status: ":(", message: "The Bar has been deleted succesfully!" },
-      message: "",
+    return res.render("success", {
+      message: "The Bar has been deleted succesfully!",
     });
   } catch (e) {
     return res.status(500).render("error", {
@@ -416,9 +536,7 @@ router.route("/:barId").get(async (req, res) => {
     let reviewEmpty = true;
     if (req.session.user) {
         isOwner = theBar.ownerId === req.session.user.accountId;
-        const account = await accountData.getAccount(
-            req.session.user.accountId
-        );
+        const account = await accountData.getAccount(req.session.user.accountId);
         const user = await userData.getUser(account.userId);
         user.favorites.forEach((favorite) => {
             if (favorite.barId === theBar._id.toString()) {
@@ -455,7 +573,13 @@ router.route("/:barId").get(async (req, res) => {
       images: pathImagesArray
     });
   } catch (e) {
-    res.status(404).json({ error: "Bar not found!" });
+    return res.status(404).render("error", {
+      title: "Error",
+      error: {
+        status: 404,
+        message: "That bar does not exist.",
+      },
+      });
   }
 });
 
@@ -464,6 +588,7 @@ router.route("/barsByFilters").post(async (req, res) => {
 
   Object.values(req.body).forEach((filter) => {
     filters.push(filter);
+    appliedFilters.push(filter);
   });
 
   if (filters.length == 0) {
@@ -588,6 +713,75 @@ const photoPath = (theBar) => {
     pathImagesArray = "/public/images/no_image.jpeg";
   }
   return pathImagesArray;
+}
+
+/**Optional Photos error handler */
+const optionalPhoto = async (req, err) => {
+  let images;
+  if(req.file === undefined || req.file.length <= 0) //throw "You must select at least 1 photo.";
+  {
+    const barId = req.body.updateBarId;
+    if (!barId) return images;
+    const theBar = await barData.barById(barId);
+    if(theBar.images) images = theBar.images;
+  }
+  else{
+    await photoErrorHandlerEdit(req, err);
+    images = req.file;
+  }
+  return images;
+}
+
+const photoErrorHandlerEdit = async(req, err) => {
+  if (err) {
+    try {
+      if (err.code === "LIMIT_UNEXPECTED_FILE") throw "Too many files to upload.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "MISSING_FIELD_NAME") throw "Field name missing for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_COUNT") throw "Too many fields for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_VALUE") throw "Field value too long for photos.";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FIELD_KEY") throw "Field name too long for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FILE_COUNT") throw "Too many files for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_FILE_SIZE") throw "File too large for photos";
+    } catch (e) {
+      errors.add(e);
+    }
+
+    try {
+      if (err.code === "LIMIT_PART_COUNT") throw "Too many parts for photos";
+    } catch (e) {
+      errors.add(e);
+    }   
+}
 }
 
 export default router;
