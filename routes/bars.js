@@ -237,110 +237,104 @@ router.route("/searchBar").post(async (req, res) => {
     allBars = await filtersHelp.allBarsPlus(searchBar);
   } catch (e) {
     if (e.code === 404) {
-      res
-        .status(404)
-        .render("bars", {
-          error: e,
-          isError: true,
-          tags: [
-            "Sport",
-            "Grill",
-            "Margaritas",
-            "Tacos",
-            "Dance",
-            "Cocktails",
-            "Mixology",
-            "CraftBeer",
-            "WineWednesday",
-            "BarEvents",
-            "DrinkSpecials",
-            "ThirstyThursday",
-            "LiveMusic",
-            "BeerTasting",
-            "MixandMingle",
-            "LadiesNight",
-            "BarCrafting",
-            "Tapas",
-            "ChampagneNight",
-            "AfterWorkDrinks",
-            "SignatureCocktails",
-            "WhiskeyTasting",
-            "HappyHourDeals",
-            "CraftCocktails",
-            "Shots",
-            "BarHopping",
-          ],
-        });
+      res.status(404).render("bars", {
+        error: e,
+        isError: true,
+        tags: [
+          "Sport",
+          "Grill",
+          "Margaritas",
+          "Tacos",
+          "Dance",
+          "Cocktails",
+          "Mixology",
+          "CraftBeer",
+          "WineWednesday",
+          "BarEvents",
+          "DrinkSpecials",
+          "ThirstyThursday",
+          "LiveMusic",
+          "BeerTasting",
+          "MixandMingle",
+          "LadiesNight",
+          "BarCrafting",
+          "Tapas",
+          "ChampagneNight",
+          "AfterWorkDrinks",
+          "SignatureCocktails",
+          "WhiskeyTasting",
+          "HappyHourDeals",
+          "CraftCocktails",
+          "Shots",
+          "BarHopping",
+        ],
+      });
     } else if (e.code === 400) {
-      res
-        .status(400)
-        .render("bars", {
-          error: e,
-          isError: true,
-          tags: [
-            "Sport",
-            "Grill",
-            "Margaritas",
-            "Tacos",
-            "Dance",
-            "Cocktails",
-            "Mixology",
-            "CraftBeer",
-            "WineWednesday",
-            "BarEvents",
-            "DrinkSpecials",
-            "ThirstyThursday",
-            "LiveMusic",
-            "BeerTasting",
-            "MixandMingle",
-            "LadiesNight",
-            "BarCrafting",
-            "Tapas",
-            "ChampagneNight",
-            "AfterWorkDrinks",
-            "SignatureCocktails",
-            "WhiskeyTasting",
-            "HappyHourDeals",
-            "CraftCocktails",
-            "Shots",
-            "BarHopping",
-          ],
-        });
+      res.status(400).render("bars", {
+        error: e,
+        isError: true,
+        tags: [
+          "Sport",
+          "Grill",
+          "Margaritas",
+          "Tacos",
+          "Dance",
+          "Cocktails",
+          "Mixology",
+          "CraftBeer",
+          "WineWednesday",
+          "BarEvents",
+          "DrinkSpecials",
+          "ThirstyThursday",
+          "LiveMusic",
+          "BeerTasting",
+          "MixandMingle",
+          "LadiesNight",
+          "BarCrafting",
+          "Tapas",
+          "ChampagneNight",
+          "AfterWorkDrinks",
+          "SignatureCocktails",
+          "WhiskeyTasting",
+          "HappyHourDeals",
+          "CraftCocktails",
+          "Shots",
+          "BarHopping",
+        ],
+      });
     } else {
-      res
-        .status(500)
-        .render("bars", {
-          error: e,
-          isError: true,
-          tags: [
-            "Sport",
-            "Grill",
-            "Margaritas",
-            "Tacos",
-            "Dance",
-            "Cocktails",
-            "Mixology",
-            "CraftBeer",
-            "WineWednesday",
-            "BarEvents",
-            "DrinkSpecials",
-            "ThirstyThursday",
-            "LiveMusic",
-            "BeerTasting",
-            "MixandMingle",
-            "LadiesNight",
-            "BarCrafting",
-            "Tapas",
-            "ChampagneNight",
-            "AfterWorkDrinks",
-            "SignatureCocktails",
-            "WhiskeyTasting",
-            "HappyHourDeals",
-            "CraftCocktails",
-            "Shots",
-            "BarHopping",
-          ],
-        });
+      res.status(500).render("bars", {
+        error: e,
+        isError: true,
+        tags: [
+          "Sport",
+          "Grill",
+          "Margaritas",
+          "Tacos",
+          "Dance",
+          "Cocktails",
+          "Mixology",
+          "CraftBeer",
+          "WineWednesday",
+          "BarEvents",
+          "DrinkSpecials",
+          "ThirstyThursday",
+          "LiveMusic",
+          "BeerTasting",
+          "MixandMingle",
+          "LadiesNight",
+          "BarCrafting",
+          "Tapas",
+          "ChampagneNight",
+          "AfterWorkDrinks",
+          "SignatureCocktails",
+          "WhiskeyTasting",
+          "HappyHourDeals",
+          "CraftCocktails",
+          "Shots",
+          "BarHopping",
+        ],
+      });
     }
   }
   renderedList = allBars;
@@ -422,38 +416,38 @@ router.route("/update").post(async (req, res) => {
     try {
       req.body.updateBarId = validation.validateId(req.body.updateBarId);
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
       res.render("editBar", { error: errors, isError: true });
     }
 
     try {
       req.body.updateName = validation.validateRequiredStr(req.body.updateName);
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
     }
 
     try {
       req.body.updateDesc = validation.validateRequiredStr(req.body.updateDesc);
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
     }
 
     try {
       location = validation.validateLocation(location);
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg); // Check if the location is e.msg or just e
     }
 
     try {
       req.body.updateEmail = validation.validateEmail(req.body.updateEmail);
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
     }
 
     try {
       req.body.updatePhone = validation.validatePhone(req.body.updatePhone);
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
     }
 
     try {
@@ -461,12 +455,15 @@ router.route("/update").post(async (req, res) => {
         req.body.updateWebsite
       );
     } catch (e) {
-      errors.add(e);
+      errors.add(e.msg);
     }
-    //await photoErrorHandler(req, err); /**Photos error handler */
+    const images = await optionalPhoto(
+      req,
+      err
+    ); /**Optional Photos error handler */
     if (errors.size === 0) {
-      /**No errors, then create a bar with photo */
-      //let images = req.file;
+      /**No errors, then edit a bar with optional photo */
+
       try {
         const theBar = await barData.barProfileUpdate(
           req.body.updateBarId,
@@ -475,31 +472,75 @@ router.route("/update").post(async (req, res) => {
           location,
           req.body.updateEmail,
           req.body.updateWebsite,
-          req.body.updatePhone
-          //images
+          req.body.updatePhone,
+          images
         );
         filtersHelp.barDistanceHelper(true);
         res.redirect("/bars/" + req.body.updateBarId);
       } catch (e) {
         errors.add(e);
       }
-
-      if (errors.length > 0) {
-        res.status(400).render("editBar", {
-          errors: errors,
-          hasErrors: true,
-          id: req.body.updateBarId,
-          barName: req.body.updateName,
-          description: req.body.updateDesc,
-          location: location,
-          email: req.body.updateEmail,
-          website: req.body.updateWebsite,
-          phone: req.body.updatePhone,
-          //images
-        });
-      }
+    } //close if
+    if (errors.length > 0) {
+      res.status(400).render("editBar", {
+        errors: errors,
+        hasErrors: true,
+        id: req.body.updateBarId,
+        barName: req.body.updateName,
+        description: req.body.updateDesc,
+        location: location,
+        email: req.body.updateEmail,
+        website: req.body.updateWebsite,
+        phone: req.body.updatePhone,
+        //images
+      });
     }
   });
+});
+
+router.route("/deleteBar").post(async (req, res) => {
+  if (!req.body.barIdToDelete) {
+    return res.status(400).render("error", {
+      error: { status: 400, message: "Bar info missing!" },
+      message: "Missing bar information",
+    });
+  }
+
+  try {
+    req.body.barIdToDelete = validation.validateId(req.body.barIdToDelete);
+  } catch (e) {
+    return res.status(400).render("error", {
+      error: { status: 400, message: "Invalid bar id!" },
+      message: "Invalid bar id",
+    });
+  }
+
+  let theBar = await barData.barById(req.body.barIdToDelete);
+  let isOwner = false;
+  if (req.session.user) {
+    isOwner = theBar.ownerId === req.session.user.accountId;
+  }
+
+  if (!isOwner) {
+    return res.status(403).render("error", {
+      error: { status: "403", message: "Prohibited function" },
+      message:
+        "You are not the owner of this bar. Only owners can delete bars!",
+    });
+  }
+
+  try {
+    await barData.removeBar(req.body.barIdToDelete);
+    filtersHelp.barDistanceHelper(true);
+    return res.render("success", {
+      message: "The Bar has been deleted succesfully!",
+    });
+  } catch (e) {
+    return res.status(500).render("error", {
+      error: { status: "500", message: "Server Error!" },
+      message: "Was not able to remove the Bar!",
+    });
+  }
 });
 
 router.route("/deleteBar").post(async (req, res) => {
